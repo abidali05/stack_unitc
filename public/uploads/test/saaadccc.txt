@@ -1,0 +1,1153 @@
+<?php
+
+namespace App\Http\Controllers\superadmin;
+
+use Carbon\Carbon;
+use App\Models\City;
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Color;
+use App\Models\Feature;
+use App\Models\BodyType;
+use App\Models\Document;
+use App\Models\location;
+use App\Models\Province;
+use App\Models\Whishlist;
+use App\Models\PriceAlert;
+use App\Models\ContactInfo;
+use App\Models\MainFeature;
+use App\Models\MakeCompany;
+use App\Mail\PriceAlertMail;
+use App\Models\ModelCompany;
+use Illuminate\Http\Request;
+use App\Jobs\SendFcmNotification;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use App\Mail\Ad_accepted;
+use App\Mail\Ad_rejected;
+use App\Mail\Ad_inactive;
+
+class SuperadminAddsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $users = User::where('role', 1)->get();
+		if($request->search)
+        {
+           
+
+      $query = Post::withTrashed()->orderBy('feature_ad', 'DESC')->orderBy('created_at', 'DESC')->query();
+
+$search = $request->search;
+
+// Check for matching make and model
+$check = MakeCompany::where('name', $request->search)->first();
+$check2 = ModelCompany::where('name', $request->search)->first();
+
+// Safely extract IDs
+$makeId = $check ? $check->id : null;
+$modelId = $check2 ? $check2->id : null;
+
+// Search in multiple columns
+$query->where(function ($q) use ($search, $makeId, $modelId) {
+    $q->where('title', 'like', '%' . $search . '%')
+        ->orWhere(function ($query) use ($makeId) {
+            if ($makeId) {
+                $query->where('make', 'like', '%' . $makeId . '%');
+            }
+        })
+        ->orWhere(function ($query) use ($modelId) {
+            if ($modelId) {
+                $query->where('model', 'like', '%' . $modelId . '%');
+            }
+        })
+        ->orWhere('year', $search)
+        ->orWhere('dealer_comment', 'like', '%' . $search . '%');
+});
+
+// Include relationships if necessary
+$posts = $query->with(['document' => function ($q) {
+        $q->orderBy('position', 'asc');
+    }])->paginate(10);
+
+        }
+        elseif ($request->post_id) {
+            $posts = Post::withTrashed()->with(['feature', 'document' => function ($q) {
+        $q->orderBy('position', 'asc');
+    }, 'location', 'contact'])->orderby('id', 'desc')->where('dealer_id', $request->post_id)->paginate(10);
+        } else {
+            $posts = Post::withTrashed()->with(['feature', 'document' => function ($q) {
+        $q->orderBy('position', 'asc');
+    }, 'location', 'contact'])->orderby('id', 'desc')->paginate(10);
+        }
+
+        return view('superadmin.post.adds', compact('posts', 'users'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+		$post=Post::where(['submitedby'=>'superadmin','status'=>2])->latest()->first();
+        return view('superadmin.post.create', compact('users', 'makes', 'models', 'colors', 'provinces', 'cities', 'features', 'bodytypes'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+	// dd($request->all());
+	$request->validate([
+            'makecompany' => 'required',
+            'model' => 'required',
+            'year' => 'required',
+            'mileage' => 'required',
+            'bodyType' => 'required',
+            'doorcount' => 'required',
+            'fuelType' => 'required',
+            'seatingCapacity' => 'required',
+            'engineCapacity' => 'required',
+            'transmission' => 'required',
+            'driveType' => 'required',
+            'exterior_color' => 'required',
+       
+            'Features' => 'required',
+ 
+            // 'filedata' => 'required',
+            'country' => 'required',
+            'province' => 'required',
+            'city' => 'required',
+            'street_address' => 'required',
+            'firstName' => 'required',
+            'secondName' => 'required',
+            'email' => 'required|email',
+           // 'area' => 'required',
+            'number' => 'required|string',
+        ]);
+      
+
+ $post = Post::where(['submitedby' => 'superadmin', 'status' => 2])->latest()->firstOrNew();
+
+
+        $post->fill([
+        'dealer_id' => $request->dealer,
+        'title' => $request->title,
+        'condition' => $request->condition,
+        'assembly' => $request->assembly,
+        'company_conection' => $request->dealerType,
+        'currency' => $request->currency,
+        'price' => $request->price,
+        'negotiated_price' => $request->negotiatedPrice === 'on' ? 1 : 0,
+        'make' => $request->makecompany,
+        'model' => $request->model,
+        'year' => $request->year,
+        'milleage' => $request->mileage,
+        'body_type' => $request->bodyType,
+        'doors' => $request->doorcount,
+        'fuel' => $request->fuelType,
+        'seating_capacity' => $request->seatingCapacity,
+        'engine_capacity' => $request->engineCapacity,
+        'transmission' => $request->transmission,
+        'drive_type' => $request->driveType,
+        'exterior_color' => $request->exterior_color,
+        'dealer_comment' => $request->dealer_comment,
+        'submitedby' => 'superadmin',
+        'status' => 2,
+        'feature_ad' => $request->feature_ad === 'on' ? 1 : 0,
+    ]);
+    $post->save();
+    
+$user = User::find($post->dealer_id);
+		$dealerId = $user->role == 2 ? $user->dealer_id : $user->id;
+        $totalAds = Post::where('dealer_id', $dealerId)->count();
+        $baseLimit = 20;
+
+        // Calculate featured ad limit
+        $additionalAds = max(0, $totalAds - $baseLimit);    
+        $maxFeaturedAds = $baseLimit + floor($additionalAds / 2);
+
+        // Count current featured ads
+        $currentFeaturedAds = Post::where('dealer_id', $dealerId)->where('feature_ad', 1)->count();
+
+        // Check if the ad can be featured
+        $isFeatureAd = $request->feature_ad === 'on' ? 1 : 0;
+        if ($isFeatureAd && $currentFeaturedAds >= $maxFeaturedAds) {
+            $post->feature_ad = 0;
+        }
+        else{
+            $post->feature_ad = $isFeatureAd;
+        }
+        $user->ads_count+=1;
+        $user->save();
+
+        $this->handleFeatures($post->id, $request->Features);
+    
+
+   
+        // $this->validateStep($request, ['filedata' => 'required']);
+		    if ($request->filedata) {
+        $this->handleFileUpload($post->id, $request->filedata);
+			}
+    
+
+    if ($request->file('document_brochure') || $request->file('document_auction')) {
+        $this->handleDocuments($post->id, $request);
+    }
+
+    // if ($request->step >= 8) {
+        $this->handleLocation($post->id, $request);
+    // }
+
+    // if ($request->step == 9) {
+        $this->handleContactInfo($post->id, $request);
+        $this->updatePostStatus();
+    // }
+    $user = User::find($post->dealer_id);
+    $user->ads_count+=1;
+    $user->save();
+    return response()->json(['success' => true, 'redirect' => url('superadmin/thankyou')]);
+	}
+	private function handleStepFour($post, $request)
+{
+   
+}
+
+private function handleFeatures($postId, $features)
+{
+    foreach ($features as $category => $items) {
+        foreach ($items as $key => $value) {
+            $data = MainFeature::where(['feature' => $category, 'Sub_feature' => $key])->first();
+            if ($data) {
+                Feature::updateOrCreate(
+                    ['post_id' => $postId, 'feature' => $category, 'feature_id' => $data->id],
+                    ['feature_name' => trim($key, "'"), 'status' => $value === 'on' ? 1 : 0]
+                );
+            }
+        }
+    }
+}
+
+
+// private function handleDocuments($postId, $request)
+// {
+//     $this->uploadDocument($postId, $request->file('document_brochure'), 'Brochure Document');
+//     $this->uploadDocument($postId, $request->file('document_auction'), 'Auction Document');
+// }
+
+// private function uploadDocument($postId, $file, $type)
+// {
+//     if ($file) {
+//         $filename = now()->format('His') . $file->getClientOriginalName();
+//         $file->move(public_path('posts/doc/'), $filename);
+//         Document::create([
+//             'post_id' => $postId,
+//             'doc_name' => $filename,
+//             'doc_type' => $type,
+//         ]);
+//     }
+// }
+
+
+private function handleDocuments($postId, $request)
+{
+    $this->uploadDocument($postId, $request->file('document_brochure'), 'Brochure Document');
+    $this->uploadDocument($postId, $request->file('document_auction'), 'Auction Document');
+}
+
+private function uploadDocument($postId, $file, $type)
+{
+    if ($file) {
+        $filename = now()->format('His') . $file->getClientOriginalName();
+        // $file->move(public_path('posts/doc/'), $filename);
+        $post = post::find($postId);
+        if($type == 'Brochure Document'){
+            // $oldFile = public_path('posts/brochure/' . $post->document_brochure);
+            // if (file_exists($oldFile)) {
+            //     unlink($oldFile);
+            // }
+    $file->move(public_path('posts/brocuhre/'), $filename);
+            $post->document_brochure = $filename;
+        }
+        else{
+            $oldFile = public_path('posts/auction/' . $post->document_auction);
+            // if (file_exists($oldFile)) {
+            //     unlink($oldFile);
+            // }
+    $file->move(public_path('posts/auction/'), $filename);
+            $post->document_auction = $filename;
+        }
+        $post->save();
+        Document::create([
+            'post_id' => $postId,
+            'doc_name' => $filename,
+            'doc_type' => $type,
+        ]);
+    }
+}
+
+private function handleLocation($postId, $request)
+{
+    Location::updateOrCreate(
+        ['post_id' => $postId],
+        [
+            'country' => $request->country,
+            'province' => $request->province,
+            'city' => $request->city,
+            'area' => $request->area,
+            'address' => $request->street_address,
+        ]
+    );
+}
+
+private function handleContactInfo($postId, $request)
+{
+    ContactInfo::updateOrCreate(
+        ['post_id' => $postId],
+        [
+            'first_name' => $request->firstName,
+            'last_name' => $request->secondName,
+            'email' => $request->email,
+            'number' => $request->number,
+            'website' => $request->website ?? 'https://autojazera.pk/',
+            'linkedIn' => $request->linkedin,
+            'twitter' => $request->twitter,
+        ]
+    );
+}
+
+private function updatePostStatus()
+{
+    $post = Post::where(['submitedby' => 'superadmin', 'status' => 2])->latest()->first();
+    if ($post) {
+        $post->status = 0;
+        $post->save();
+    }
+}
+
+private function validateStep($request, $rules)
+{
+    $validator = Validator::make($request->all(), $rules);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+}
+// private function handleFileUpload($postId, $filedata)
+// {
+//     foreach ($filedata as $file) {
+//         // if (!$file || !$file->isValid()) {
+//         //     // Skip invalid files
+//         //     continue;
+//         // }
+    
+//         $doc = new Document();
+//         $doc->post_id = $postId;
+
+//         // Generate filename and move the file
+//         $filename = date('His') . '_' . $file->getClientOriginalName();
+//         $file->move(public_path('posts/doc/'), $filename);
+//         $doc->doc_name = $filename;
+//         $post = post::find($postId);
+//         if($type == 'Brochure Document'){
+            
+//             $post->document_brochure = $filename;
+//         }
+//         else{
+//             $post->document_auction = $filename;
+//         }
+//         $post->save();
+//         // Determine file type
+//         $fileExtension = strtolower($file->getClientOriginalExtension());
+
+//         if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+//             $doc->doc_type = 'image';
+//         } elseif (in_array($fileExtension, ['mp4', 'mov', 'avi'])) {
+//             $doc->doc_type = 'video';
+//         } elseif ($fileExtension === 'pdf') {
+//             $doc->doc_type = 'pdf';
+//         } else {
+//             $doc->doc_type = 'other';
+//         }
+
+//         $doc->save();
+//     }
+// }
+
+private function handleFileUpload($postId, $filedata)
+{
+    foreach ($filedata as $i=>$file) {
+        // if (!$file || !$file->isValid()) {
+        //     // Skip invalid files
+        //     continue;
+        // }
+
+        $doc = new Document();
+        $doc->post_id = $postId;
+
+        // Generate filename and move the file
+        $filename = date('His') . '_' . $file->getClientOriginalName();
+        $file->move(public_path('posts/doc/'), $filename);
+        $doc->doc_name = $filename;
+
+        // Determine file type
+        $fileExtension = strtolower($file->getClientOriginalExtension());
+
+        if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+            $doc->doc_type = 'image';
+        } elseif (in_array($fileExtension, ['mp4', 'mov', 'avi'])) {
+            $doc->doc_type = 'video';
+        } elseif ($fileExtension === 'pdf') {
+            $doc->doc_type = 'pdf';
+        } else {
+            $doc->doc_type = 'other';
+        }
+		if($i=0){
+				
+				$doc->thumbnail = 1;
+				//dd($doc);
+			}
+
+        $doc->save();
+    }
+}
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $users = User::where('role', 1)->get();
+        $post = Post::withTrashed()->find($id);
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $provinces = Province::all();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        return view('superadmin.post.edit', compact('users', 'makes', 'models', 'colors', 'provinces', 'cities', 'post', 'features', 'bodytypes'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+//     public function update(Request $request, string $id)
+//     {
+//         // dd($request->all());
+		
+// 		$validationRules = [];
+
+// switch (true) {
+//     case $request->step <= 4:
+//         $validationRules = array_merge($validationRules, [
+//             'makecompany' => 'required',
+//             'model' => 'required',
+//             'year' => 'required',
+//             'mileage' => 'required',
+//             'bodyType' => 'required',
+//             'doorcount' => 'required',
+//             'fuelType' => 'required',
+//             'seatingCapacity' => 'required',
+//             'engineCapacity' => 'required',
+//             'transmission' => 'required',
+//             'driveType' => 'required',
+//             'exterior_color' => 'required',
+//         ]);
+// 		   break;
+//         // No break here as we want to add further rules for higher steps.
+
+//     case $request->step <= 5:
+//         $validationRules = array_merge($validationRules, [
+//             'Features' => 'required',
+//         ]);
+// 		   break;
+//         // No break here as we want to add further rules for higher steps.
+
+//     case $request->step <= 6:
+//         $validationRules = array_merge($validationRules, [
+//             'filedata' => 'required',
+//         ]);
+// 		   break;
+//         // No break here as we want to add further rules for higher steps.
+
+//     case $request->step <= 8:
+//         $validationRules = array_merge($validationRules, [
+//             'country' => 'required',
+//             'province' => 'required',
+//             'city' => 'required',
+//             'street_address' => 'required',
+//         ]);
+// 		   break;
+//         // No break here as we want to add further rules for higher steps.
+
+//     case $request->step <= 9:
+//         $validationRules = array_merge($validationRules, [
+//             'firstName' => 'required',
+//             'secondName' => 'required',
+//             'email' => 'required|email',
+//             'area' => 'required',
+//             'number' => 'required|string',
+//         ]);
+//         break;
+// }
+
+// $validator = Validator::make($request->all(), $validationRules);
+
+//   if ($validator->fails()) {
+//     return response()->json(['errors' => $validator->errors()], 422);
+// }
+ 
+//         $post = Post::find($id);
+
+//     // Step-based data handling
+		
+//     if ($request->step >= 4) {
+//         $post->fill([
+//         'dealer_id' => $request->dealer,
+//         'title' => $request->title,
+//         'condition' => $request->condition,
+//         'assembly' => $request->assembly,
+//         'company_conection' => $request->dealerType,
+//         'currency' => $request->currency,
+//         'price' => $request->price,
+//         'negotiated_price' => $request->negotiatedPrice === 'on' ? 1 : 0,
+//         'make' => $request->makecompany,
+//         'model' => $request->model,
+//         'year' => $request->year,
+//         'milleage' => $request->mileage,
+//         'body_type' => $request->bodyType,
+//         'doors' => $request->doorcount,
+//         'fuel' => $request->fuelType,
+//         'seating_capacity' => $request->seatingCapacity,
+//         'engine_capacity' => $request->engineCapacity,
+//         'transmission' => $request->transmission,
+//         'drive_type' => $request->driveType,
+//         'exterior_color' => $request->exterior_color,
+//         'dealer_comment' => $request->dealer_comment,
+//         'submitedby' => 'superadmin',
+      
+//         'feature_ad' => $request->feature_ad === 'on' ? 1 : 0,
+//     ]);
+//     $post->save();
+//     }
+
+//     if (isset($request->Features)) {
+//         $this->handleFeatures($post->id, $request->Features);
+//     }
+
+//     if ($request->step >= 6) {
+//         $this->validateStep($request, ['filedata' => 'required']);
+// 		    if ($request->filedata) {
+//         $this->handleFileUpload($post->id, $request->filedata);
+// 			}
+//     }
+
+//     if ($request->file('document_brochure') || $request->file('document_auction')) {
+//         $this->handleDocuments($post->id, $request);
+//     }
+
+//     if ($request->step >= 8) {
+//         $this->handleLocation($post->id, $request);
+//     }
+
+//     if ($request->step == 9) {
+//         $this->handleContactInfo($post->id, $request);
+//         $this->updatePostStatus();
+//     }
+//    return response()->json(['success' => true, 'redirect' => url('superadmin/ads')]);
+//     }
+
+
+public function update(Request $request, string $id)
+    {
+
+        // dd($request->all());
+
+        $validationRules = [];
+
+            $request->validate([
+                    'makecompany' => 'required',
+                    'model' => 'required',
+                    'year' => 'required',
+                    'mileage' => 'required',
+                    'bodyType' => 'required',
+                    'doorcount' => 'required',
+                    'fuelType' => 'required',
+                    'seatingCapacity' => 'required',
+                    'engineCapacity' => 'required',
+                    'transmission' => 'required',
+                    'driveType' => 'required',
+                    'exterior_color' => 'required',
+                
+                    'Features' => 'required',
+                    // 'filedata' => 'required',
+                    'country' => 'required',
+                    'province' => 'required',
+                    'city' => 'required',
+                    'street_address' => 'required',
+                    'firstName' => 'required',
+                    'secondName' => 'required',
+                    'email' => 'required|email',
+                  //  'area' => 'required',
+                    'number' => 'required|string',
+                ]);
+
+       
+
+        $post = Post::withTrashed()->find($id);
+if($post->price != $request->price){
+                   $sendfcm = true;
+                }
+                else{
+                    $sendfcm = false;
+                }
+        // Step-based data handling
+
+        // if ($request->step >= 4 || $request->step == "3" || $request->step1 == "1" || $request->step1 == "2") {
+	$oldprice = $post->price;
+            $post->fill([
+                'dealer_id' => $request->dealer,
+                'title' => $request->title,
+                'condition' => $request->condition,
+                'assembly' => $request->assembly,
+                'company_conection' => $request->dealerType,
+                'currency' => $request->currency,
+                //'price' => $request->price,
+                'negotiated_price' => $request->negotiatedPrice === 'on' ? 1 : 0,
+                'make' => $request->makecompany,
+                'model' => $request->model,
+                'year' => $request->year,
+                'milleage' => $request->mileage,
+                'body_type' => $request->bodyType,
+                'doors' => $request->doorcount,
+                'fuel' => $request->fuelType,
+                'seating_capacity' => $request->seatingCapacity,
+                'engine_capacity' => $request->engineCapacity,
+                'transmission' => $request->transmission,
+                'drive_type' => $request->driveType,
+                'exterior_color' => $request->exterior_color,
+                'dealer_comment' => $request->dealer_comment,
+                'submitedby' => 'superadmin',
+                'status' => 2,
+
+                'feature_ad' => $request->feature_ad === 'on' ? 1 : 0,
+            ]);
+			$user = User::find($post->dealer_id);
+			$dealerId = $user->role == 2 ? $user->dealer_id : $user->id;
+        $totalAds = Post::where('dealer_id', $dealerId)->count();
+        $baseLimit = 20;
+
+        // Calculate featured ad limit
+        $additionalAds = max(0, $totalAds - $baseLimit);    
+        $maxFeaturedAds = $baseLimit + floor($additionalAds / 2);
+
+        // Count current featured ads
+        $currentFeaturedAds = Post::where('dealer_id', $dealerId)->where('feature_ad', 1)->count();
+
+        // Check if the ad can be featured
+        $isFeatureAd = $request->feature_ad === 'on' ? 1 : 0;
+        if ($isFeatureAd && $currentFeaturedAds >= $maxFeaturedAds) {
+            $post->feature_ad = 0;
+        }
+        else{
+            $post->feature_ad = $isFeatureAd;
+        }
+	if ($request->has('price') && $request->price != $post->price) {
+			//dd($oldprice,$request->price,$post->price);
+            // Store the previous price
+            $post->previous_price = $oldprice;
+
+            // Update the current price
+            $post->price = $request->price;
+
+            // Calculate the percentage difference if the previous price is not zero
+
+            $difference = $request->price - $oldprice; // Difference between new and previous price
+            $percentageChange = ($difference / $oldprice) * 100; // Calculate percentage change
+            $post->percentage_diff = round($percentageChange, 2); // Round to 2 decimal places
+
+        }
+            $post->update();
+            //dd($post);
+        // }
+
+        if (isset($request->Features)) {
+            $this->handleFeatures($post->id, $request->Features);
+        }
+
+        // if ($request->step >= 6) {
+        //     $this->validateStep($request, ['filedata' => 'required']);
+            if ($request->filedata) {
+                $this->handleFileUpload($post->id, $request->filedata);
+            }
+        // }
+
+        if ($request->file('document_brochure') || $request->file('document_auction')) {
+            $this->handleDocuments($post->id, $request);
+        }
+
+        // if ($request->step >= 8) {
+            $this->handleLocation($post->id, $request);
+        // }
+
+        // if ($request->step == 9) {
+            $this->handleContactInfo($post->id, $request);
+            $this->updatePostStatus();
+        // }
+	if($sendfcm == true){
+        $user_ids = PriceAlert::where('post_id', $request->id)->where('status',1)->pluck('user_id')->toArray();
+        if(count($user_ids) > 0){
+            // dd($post->makecompany);
+            $fcm_tokens = User::wherein('id', $user_ids)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+            if($fcm_tokens){
+            // dd('zaid');
+            SendFcmNotification::sendPriceAlertNotification($fcm_tokens, ['title'=>'Price Alert','body'=>'Vehicle '. $post->makecompany->name.' '.$post->modelcompany->name.' has been updated']);
+            }
+            $post = Post::with(['modelcompany','makecompany'])->where('id' , $post->id)->first();
+			$mainDoc = $post->document->first() ?? null;
+		$post->setAttribute('image', $mainDoc ? url('posts/doc/' . $mainDoc->doc_name) : url('web/images/default-car.jpg'));
+
+		// Set icons for mileage, transmission, and fuel
+		
+            $url = url('/');
+        $url = $url.'/car-detail/'.$request->id;
+            $post->url = $url;
+            // $post->url = route('cardetail', $post->id);
+            $post->updated_at = Carbon::parse($post->updated_at)->format('d M Y');
+            foreach($user_ids as $id){
+                $user = User::find($id);
+                if($user){
+                    
+                    $body = view('emails.price_alert', compact('post'));
+                   sendMail($user->name, $user->email , 'Auto Jazeera', 'Auto Jazeera Price Alert', $body);
+					//Mail::to($user->email)->send(new PriceAlertMail($post));
+                }
+            }
+        }
+	}
+        return response()->json(['success' => true, 'redirect' => url('superadmin/ads')]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request, string $id)
+    {
+        $post = Post::withTrashed()->where('id',$request->deleted_id)->first();
+        $post->forceDelete();
+        return redirect()->back()->with('danger', 'Post Deleted Successfully');
+    }
+    public function change_status($id)
+    {
+        $post = Post::withTrashed()->find($id);
+        if ($post->status == 0) {
+            $post->status = 1;
+        } else {
+            $post->status = 0;
+        }
+        $post->update();
+        return redirect()->back()->with('warning', 'status change successfully');
+    }
+    public function Cars_data(Request $request, $name)
+    {
+			//dd($request->all());
+		        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        if ($request->post_id) {
+            $posts = Post::with('feature', 'document', 'location', 'contact')->orderBy('feature_ad', 'DESC')->orderBy('created_at', 'DESC')->where(['id' => $request->post_id,'status'=>1])->paginate(100);
+			
+        } else {
+            $posts = Post::with('feature', 'document', 'location', 'contact')->orderBy('feature_ad', 'DESC')->orderBy('created_at', 'DESC')->where(['condition'=>$name,'status'=>1])->paginate(100);
+        }
+		foreach ($posts as $post) {
+        $dealer = User::find($post->dealer_id);
+	//dd($dealer);
+	
+        $post->user_type = $dealer->userType;
+	//dd($post->user_type);
+    }
+        return view('superadmin.Cars.index', compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes'));
+    }
+    public function comingsoon()
+    {
+        return view('superadmin.bike.coming_soon');
+    }
+	  public function bike_details()
+    {
+        return view('superadmin.bike.bike_details');
+    }
+    public function welcome(Request $request)
+    {
+
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        // if($request->search)
+        // {
+
+        //      $posts = Post::where('status', 0)
+        //      ->when($request->bodytype, function ($query) use ($request) {
+        //          return $query->where('body_type', $request->bodytype);
+        //      })
+        //      ->when($request->model, function ($query) use ($request) {
+        //          return $query->where('model', $request->model);
+        //      })
+        //      ->when($request->make, function ($query) use ($request) {
+        //          return $query->where('make', $request->make);
+        //      })
+        //      ->with(['bodytype1','make1','location' => function ($query) use ($request) {
+        //          $query->when($request->province, function ($query) use ($request) {
+        //              $query->where('province', $request->province);
+        //          })
+        //          ->when($request->city, function ($query) use ($request) {
+        //              $query->where('city', $request->city);
+        //          });
+        //      }])
+        //      ->get();
+
+
+        // }
+		$posts = Post::with(['bodytype1', 'make1'])->where('status',1)->orderBy('feature_ad', 'DESC')->orderBy('created_at', 'DESC')->latest()->take(12)->get();
+        $featured_new_posts = Post::with(['bodytype1', 'make1'])->where('status',1)->where('feature_ad', '1')->where('condition','new')->orderBy('created_at', 'DESC')->latest()->take(12)->get();
+
+        $featured_used_posts = Post::with(['bodytype1', 'make1'])->where('status',1)->where('feature_ad', '1')->where('condition','used')->orderBy('created_at', 'DESC')->latest()->take(12)->get();
+
+        return view('welcome', compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes','featured_new_posts','featured_used_posts'));
+    }
+    public function carlist(Request $request)
+    {
+        $page = $request->input('page', 1);
+        //dd($request->all());
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        $posts = Post::where('status', 1)
+    ->orderBy('feature_ad', 'DESC')
+    ->orderBy('created_at', 'DESC')
+    ->when($request->bodytype, function ($query) use ($request) {
+        return $query->whereIn('body_type', is_array($request->bodytype) ? $request->bodytype : [$request->bodytype]);
+    })
+    ->when($request->model, function ($query) use ($request) {
+        return $query->whereIn('model', is_array($request->model) ? $request->model : [$request->model]);
+    })
+    ->when($request->make, function ($query) use ($request) {
+        return $query->where('make', $request->make);
+    })
+    ->when($request->filled('province_'), function ($query) use ($request) {
+        // Filter by province
+        $locations = Location::where('province', $request->province_)->pluck('post_id');
+        // dd($locations);
+        $query->whereIn('id', $locations);
+    })
+    ->when($request->filled('city'), function ($query) use ($request) {
+        // Filter by city
+		$cities = is_array($request->city) ? $request->city : [$request->city];
+        $locations = Location::whereIn('city', $cities)->pluck('post_id');
+        $query->whereIn('id', $locations);
+    })
+			->when($request->exterior_color, function ($query) use ($request) {
+        return $query->where('exterior_color',  is_array($request->exterior_color) ? $request->exterior_color : [$request->exterior_color]);
+    })
+    ->with(['bodytype1', 'make1', 'location'])
+    ->paginate(100, ['*'], 'page', $page); // Adjust as needed
+foreach ($posts as $post) {
+        $dealer = User::find($post->dealer_id);
+	//dd($dealer);
+	
+        $post->user_type = $dealer->userType;
+	//dd($post->user_type);
+    }
+	
+        return view('carlisting', compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes'));
+    }
+    public function check_price_range(Request $request)
+    {
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        // $posts = Post::where('status', 0)
+        //     ->where('price', '<=',$request->min)
+        //     ->orWhere('price','>=',$request->max)
+        //     ->get();
+          
+
+
+        $posts = Post::where('status', 1)->orderBy('feature_ad', 'DESC')
+			->orderBy('created_at', 'DESC')
+    ->where(function($query) use ($request) {
+        $query->where('price', '>=', intval($request->min))
+              ->where('price', '<=', intval($request->max));
+    })
+    ->paginate(30);
+foreach ($posts as $post) {
+        $dealer = User::find($post->dealer_id);
+	//dd($dealer);
+	
+        $post->user_type = $dealer->userType;
+	//dd($post->user_type);
+    }
+        return view('carlisting', compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes'));
+    }
+    public function cardetail($id)
+    {
+
+        $post = Post::withTrashed()->with('feature','dealer','location')->find($id);
+        $posts = Post::where('make', $post->make)
+        ->where('id', '!=', $post->id) // Exclude the current post
+        ->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $price_alert = PriceAlert::where('post_id', $id)->where('user_id', Auth::id())->first();
+        if($price_alert){
+
+            return view('postdetail', compact('post','posts','makes','models','price_alert'));
+        }
+        else{
+
+            return view('postdetail', compact('post','posts','makes','models'));
+        }
+    }
+	    public function preview($id)
+    {
+
+        $post = Post::with('feature', 'dealer')->find($id);
+        $posts = Post::where('make', $post->make)
+            ->where('id', '!=', $post->id) // Exclude the current post
+            ->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        return view('user.post.preview', compact('post', 'posts', 'makes', 'models'));
+    }
+    public function add_to_wishlist($postid, $dealerid)
+    {
+
+        
+        $wishlist=Whishlist::where('post_id',$postid)->where('user_id', $dealerid)->first();
+        // dd($wishlist);
+        if(!$wishlist)
+        {
+            $wishlist=new Whishlist();
+            $wishlist->post_id=$postid;
+            $wishlist->user_id=Auth::id();
+            $wishlist->status=1;
+            $wishlist->save();
+            $user = Auth::user();
+        //    if($user->fcm_token){
+         //       $tokens[]= $user->fcm_token;
+         //   $notificationInstance = new SendFcmNotification();
+         //   $notificationInstance->sendAddWishlistNotification($tokens, ["title"=>'Wishlist Notification', "body"=> 'Added to wishlist successfully']);
+          //  }
+            return redirect()->back()->with('warning','Whishlist item add  ');
+        }
+        else{
+            $wishlist->delete();
+            $user = Auth::user();
+         //   if($user->fcm_token){
+           //     $tokens[]= $user->fcm_token;
+         //   $notificationInstance = new SendFcmNotification();
+         //   $notificationInstance->sendAddWishlistNotification($tokens, ["title"=>'Wishlist Notification', "body"=> 'Wishlist item removed successfully']);
+          //  }
+            return redirect()->back()->with('warning','Whishlist item removed  ');
+        }
+       
+ 
+
+    }
+    public function add_price_alert($postid,$dealerid)
+    {
+
+        
+        $price_alert=PriceAlert::where(['post_id'=>$postid,'user_id'=>$dealerid])->first();
+        // dd($price_alert);
+        if(!$price_alert)
+        {
+            $price_alert=new PriceAlert();
+            $price_alert->post_id=$postid;
+            $price_alert->user_id=$dealerid;
+            $price_alert->status=1;
+            $price_alert->save();
+            $user = Auth::user();
+         //   if($user->fcm_token){
+           //     $tokens[]= $user->fcm_token;
+           // $notificationInstance = new SendFcmNotification();
+          //  $notificationInstance->sendAddWishlistNotification($tokens, ["title"=>'Price Alert', "body"=> 'Price Alert Added successfully']);
+          //  }
+			//dd('zaid');
+            return redirect()->back()->with('price_alert','Price Alert Added successfully');
+        }
+        else{
+            $price_alert->delete();
+            $user = Auth::user();
+           // if($user->fcm_token){
+             //   $tokens[]= $user->fcm_token;
+           // $notificationInstance = new SendFcmNotification();
+           // $notificationInstance->sendAddWishlistNotification($tokens, ["title"=>'Price Alert', "body"=> 'Price Alert removed successfully']);
+          //  }
+            return redirect()->back()->with('price_alert','Price Alert removed successfully');
+        }
+       
+ 
+
+    }
+    public function search_data($id,$type)
+    {
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        if($type =='bodytype')
+        {
+            $posts = Post::where('status', 1)
+				->orderBy('feature_ad', 'DESC')
+				->orderBy('created_at', 'DESC')
+     ->where('body_type',$id)
+            ->paginate(30);
+        }
+        if($type == 'make')
+        {
+            $posts = Post::where('status', 1)
+				->orderBy('feature_ad', 'DESC')
+				->orderBy('created_at', 'DESC')
+            ->where('make',$id)
+            ->paginate(30);
+        }
+		foreach ($posts as $post) {
+        $dealer = User::find($post->dealer_id);
+	//dd($dealer);
+	
+        $post->user_type = $dealer->userType;
+	//dd($post->user_type);
+    }
+      
+        return view('carlisting', compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes')); 
+    }
+
+
+    public function change_post_status(Request $request)
+    {
+        $post = Post::withTrashed()->with(['makecompany','modelcompany'])->where('id',$request->post_id)->first();
+        $post->status = $request->status;
+        $user = User::find($post->dealer_id);
+		
+		//dd($request->status);
+		if($request->status == 0 || $request->status == '0') {
+			$user = User::find($post->dealer_id);
+			Mail::to($user->email)->send(new Ad_inactive($post));
+		}
+        elseif($request->status == 2 || $request->status == '2'){
+            $post->rejected_reason = $request->rejected_reason;
+
+            $user = User::find($post->dealer_id);
+            //$body = view('emails.ad_rejected', compact('post'));
+			
+			
+           // sendMail($user->name, $user->email , 'Auto Jazeera', 'Your Ad for ' .$post->makecompany->name . ' '.$post->modelcompany->name . ' is rejected', $body);
+			
+			Mail::to($user->email)->send(new Ad_rejected($post));
+			
+            if($user && $user->fcm_token){
+                $tokens[]= $user->fcm_token;
+            $notificationInstance = new SendFcmNotification();
+            $notificationInstance->sendAddWishlistNotification($tokens, ["title"=>'Your Ad for ' .$post->makecompany->name . ' '.$post->modelcompany->name . ' is rejected'  , "body"=> 'Reason: '. $request->rejected_reason]);
+            }
+        }
+        else{
+            //$body = view('emails.ad_accepted', compact('post'));
+            
+			Mail::to($user->email)->send(new Ad_accepted($post));
+			//sendMail($user->name, $user->email , 'Auto Jazeera', 'Your Ad for ' .$post->makecompany->name . ' '.$post->modelcompany->name . ' is active', $body);
+			
+			
+        }
+        $post->save();
+        return redirect()->back()->with('warning', 'status change successfully');
+    }
+
+    public function allDealerAds($id)
+    {
+        $users = User::where('role', 1)->get();
+        $makes = MakeCompany::where('status', 1)->get();
+        $models = ModelCompany::where('status', 1)->get();
+        $colors = Color::all();
+        $provinces = Province::all();
+        $bodytypes = BodyType::where('status', 1)->get();
+        $cities = City::all();
+        $features = MainFeature::where('status', 1)->get();
+        $posts = Post::with('feature', 'document', 'location', 'contact')->where(['dealer_id' => $id, 'status' => "1"])->paginate(30);
+		$dealer = User::find($id);
+    
+        return view('superadmin.Cars.dealer_other_ads',  compact('users', 'makes', 'models', 'posts', 'colors', 'provinces', 'cities',  'features', 'bodytypes','dealer'));
+    }
+	
+	public function deletepostold_image($post_id, $image_id)
+    {
+        // dd($request);
+        $documentCount =  Document::where('post_id', $post_id)->count();
+        if ($documentCount > 1) {
+            $document =  Document::find($image_id);
+            if ($document) {
+                $document->delete();
+                return redirect()->back()->with('imgdelete', 'Image Deleted Successfully');
+                // return response()->json(['status' => 200, 'message' => "Deleted Successfully", 'id' => $image_id]);
+            } else {
+                return redirect()->back()->with('imgdelete', 'Image Not Found');
+                // return response()->json(['status' => 402, 'message' => "Not Found"]);
+            }
+        }
+        else{
+            return redirect()->back()->with('imgdelete', 'At least one image is required');
+            // return response()->json(['status' => 402, 'message' => "At least one image is required"]);
+        }
+    }
+		public function thankyou()
+    {
+        return view('superadmin.post.add_submition');
+    }
+}

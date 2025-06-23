@@ -1,0 +1,59 @@
+body {
+    padding: 0%;
+    margin: 0%;
+}
+
+* {
+    padding: 0%;
+    margin: 0%;
+}
+.filess{
+    font-family: "Montserrat", serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0C5097;
+}
+.twentyfourblack{
+    font-family: "Montserrat", serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: black;
+}
+.eighteenblack{
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: black;
+}
+.buttones{
+    color: white;
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #0C5097;
+    background-color: #0C5097;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+.buttoness{
+ border: none;
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    font-weight: 500;
+    border-top: 1px solid #0C5097;
+    border-bottom: 1px solid #0C5097;
+    background-color: #F2F2F2;;
+    padding: 10px 20px;
+   width: 100%;
+}
+
+.dash-buttones {
+    color: white;
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    font-weight: 800;
+    border: 1px solid #0C5097;
+    background-color: #0C5097;
+    padding: 0px 8px;
+    border-radius: 5px;
+}

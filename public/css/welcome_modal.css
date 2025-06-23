@@ -1,0 +1,194 @@
+body {
+    padding: 0%;
+    margin: 0%;
+}
+
+* {
+    padding: 0%;
+    margin: 0%;
+}
+
+.backcolor {
+    background-color: #14a085;
+}
+
+.good {
+    font-size: 46px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.good1 {
+    font-size: 32px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.good11 {
+    font-size: 18px;
+    font-weight: 300;
+    color: #ffffff;
+}
+
+.close {
+    border: none !important;
+    background-color: lightgray;
+}
+
+/* General styling for the container */
+.notification-container {
+    padding: 20px;
+}
+
+/* Notification item styles */
+.notification-item {
+    background-color: white;
+    backdrop-filter: blur(2px);
+    border: 1px solid #dcdada;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.notification-icon {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+/* Red dot on the icon */
+.notification-icon .red-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+/* Title styling */
+.notification-title {
+    flex-grow: 1;
+    margin-left: 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Arrow styling */
+.notification-arrow {
+    font-size: 18px;
+    color: #333;
+}
+
+/* Extra large circular elements */
+.large-circle {
+    position: absolute;
+    bottom: 0;
+    left: 92%;
+    width: 90px;
+    height: 90px;
+    background-color: #d89c0c;
+    border-radius: 50%;
+    z-index: -1;
+    transform: translateX(-50%);
+    /* Center horizontally */
+    animation: moveUpward 3s infinite ease-in-out;
+}
+
+.green-circle {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    /* Center horizontally */
+    width: 90px;
+    height: 90px;
+    background-color: #2ca04b;
+    border-radius: 50%;
+    transform: translateX(50%);
+    /* Adjust horizontal centering */
+    animation: moveVertical 4s infinite ease-in-out;
+    /* Animation */
+}
+
+.emailcolor {
+    color: #036ab2;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.black5 {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@keyframes colorChange {
+    0% {
+        background-color: #407cbd;
+        /* Start color */
+        color: #fff;
+        /* Text color */
+    }
+
+    100% {
+        background-color: #2ca04b;
+        /* End color */
+        color: #fff;
+    }
+}
+
+.animate-bg {
+    animation: colorChange 5s infinite;
+    /* 5-second infinite animation */
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+}
+
+.parent-div {
+    position: relative;
+
+    overflow: hidden;
+}
+
+@keyframes moveVertical {
+    0% {
+        transform: translateX(0%) translateY(0);
+        /* Start position */
+    }
+
+    50% {
+        transform: translateX(0%) translateY(50%);
+        /* Move to 50% of parent */
+    }
+
+    100% {
+        transform: translateX(0%) translateY(0);
+        /* Return to start */
+    }
+}
+
+@keyframes moveUpward {
+    0% {
+        transform: translateX(-50%) translateY(0);
+        /* Start at bottom */
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-50%);
+        /* Move up halfway */
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0);
+        /* Return to bottom */
+    }
+}

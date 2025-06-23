@@ -1,0 +1,199 @@
+#view-project-status {
+    background: rgba(33, 151, 215, 0.1);
+    color: #2197D7;
+}
+
+#view-project-status[data-status="completed"] {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+#view-project-status[data-status="hold"] {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+#view-project-status[data-status="inprogress"] {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+}
+
+#view-project-status[data-status="todo"] {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+/* Smooth transitions */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal.fade .modal-content {
+    transition: opacity 0.3s ease-out;
+}
+
+/* Document styles */
+#view-project-document a {
+    color: #2197D7;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#view-project-document a:hover {
+    text-decoration: underline;
+}
+
+.modal-dialog {
+    max-width: 900px;
+}
+
+.description-content::-webkit-scrollbar,
+.notes-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.description-content::-webkit-scrollbar-thumb,
+.notes-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+.note-content {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+.nav-tabs .nav-link {
+    font-weight: 500;
+    font-size: 12px;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+.nav-tabs .nav-link.active {
+    color: #2197D7;
+    border-bottom: 2px solid #2197D7;
+    background: none;
+}
+
+.badge {
+    padding: 0.5em 0.8em;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    text-align: center;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 2px;
+}
+
+#statusHistory::-webkit-scrollbar {
+    width: 8px;
+}
+
+#statusHistory::-webkit-scrollbar-thumb {
+    background-color: #0C5097;
+    border-radius: 4px;
+}
+
+#statusHistory::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.project-list {
+    color: black;
+    background: #edf0f2;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0;
+    min-height: 40px;
+    list-style: none;
+}
+
+.project-list .project-list-item {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.project-list-item {
+    padding: 10px;
+    position: relative;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 10px 10px 40px rgb(139 177 209 / 10%);
+    -webkit-box-shadow: 10px 10px 40px rgb(139 177 209 / 10%);
+    -moz-box-shadow: 10px 10px 40px rgb(139 177 209 / 10%);
+}
+
+.project-list .project-list-item .list-item-header {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.list-item-header .TaskTitle {
+    font-weight: 600;
+    padding-right: 17px;
+}
+
+.project-list.todo .project-list-item .list-item-header>.task-assign-to {
+    color: #036ab2;
+}
+
+.project-list .project-list-item .list-item-header>.task-assign-to {
+    padding: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    width: 100%;
+    text-align: left;
+}
+
+.project-list .project-list-item .list-item-header .collapse-task {
+    position: absolute;
+    right: 0px;
+    top: 0;
+}
+
+.project-list-item .list-content {
+    position: relative;
+    margin-bottom: 10px;
+    max-height: 61px;
+    overflow: hidden;
+}
+
+.project-list-item .list-footer {
+    position: relative;
+}
+
+.color-green {
+    color: #10aa2e !important;
+}
+
+.collapse-panel-arrow {
+    transition: transform 0.3s ease-in;
+}
+
+.collapse:not(.show) {
+    display: none;
+}
+
+/* Smooth transition for content */
+.content {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+}
+
+.content.show {
+    opacity: 1;
+    max-height: 500px;
+}
+
+#filter {
+    transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
+}
+

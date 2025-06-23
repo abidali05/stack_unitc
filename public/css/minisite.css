@@ -1,0 +1,53 @@
+#pageDetails {
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+#pageDetails .card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+#pageDetails .card-header {
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #4a6fa5, #28547b);
+    color: white;
+    border-bottom: none;
+}
+
+#pageDetails .card-title {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+#pageDetails .card-body {
+    padding: 20px;
+}
+
+.page-image-container {
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-image {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.page-image:hover {
+    transform: scale(1.02);
+}
+
+.page-description {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+

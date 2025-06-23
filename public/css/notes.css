@@ -1,0 +1,109 @@
+.add-notes-btn {
+    display: flex;
+    width: 80%;
+    height: 200px;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 4px 4px 10px 0px #0000001a;
+}
+
+.add-notes-btn:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+#imagePreview {
+    width: 100px;
+    height: 100px;
+    background: #f8f9fa;
+    background-size: cover;
+    background-position: center;
+    border: 2px dashed #ddd;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.img-label {
+    position: relative;
+    left: 65px;
+    top: 70px;
+    border: 1px solid black;
+    background: white;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.notes-container {
+    padding: 12px;
+    display: flex;
+    height: 150px;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 4px 4px 10px 0px #0000001a;
+    position: relative;
+    overflow: hidden;
+}
+
+.notes-container .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.icon-container {
+    display: flex;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.icon-container a i {
+    color: white;
+}
+
+.view-icon i:hover {
+    color: green;
+}
+
+.edit-icon i:hover {
+    color: blue;
+}
+
+.delete-icon i:hover {
+    color: red;
+}
+
+.notes-container:hover .overlay {
+    opacity: 1;
+}
+
+.icon-container a {
+    color: white;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-container a:hover {
+    color: #4dc0b5;
+    transform: scale(1.1);
+}
+
+.editor-data1 {
+    font-weight: bold;
+    font-size: 10px;
+    margin-bottom: 0px;
+}
+

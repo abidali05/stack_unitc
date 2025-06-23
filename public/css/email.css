@@ -1,0 +1,159 @@
+.clickable-div {
+    width: 100%;
+    border: none;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #0c5097;
+    cursor: pointer; /* Add cursor pointer */
+}
+
+.clickable-div p {
+    color: white;
+    text-align: center;
+    margin: 0; /* Remove default margins */
+    line-height: 30px;
+}
+
+.toggle-div {
+    display: flex;
+    justify-content: right;
+    transition: display 0.3s; /* Smooth transition (optional) */
+}
+
+/* Other styles */
+.content-div {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.profile-section {
+    justify-content: space-between;
+    display: flex;
+    margin: 10px 0;
+}
+
+.profile-details {
+    display: flex;
+}
+
+.profile-img img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.info {
+    padding-left: 10px;
+}
+
+.date-info {
+    color: #79747e;
+    font-size: 11px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.dropdown-item {
+    padding: 10px;
+    text-align: left;
+    border: none;
+    background-color: white;
+    width: 100%;
+}
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.email-item {
+    background-color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.email-item.read-email {
+    background-color: #e3e3e3eb;
+}
+
+a {
+    text-decoration: none;
+}
+
+.link-item p {
+    color: #565454;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 10px;
+    border-radius: 4px;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.active p {
+    color: #ffffff;
+    background-color: #0c5097;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.link-item:hover p {
+    background-color: #f0f0f0;
+    color: #0c5097;
+    width: fit-content;
+}
+
+.active {
+    padding: 0px;
+    width: fit-content;
+}
+
+/* .folder-item {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.folder-item:hover {
+    background-color: #e9ecef;
+} */
+
+.folder-item {
+    transition: box-shadow 0.2s ease;
+    cursor: grab;
+}
+
+.folder-item:active {
+    cursor: grabbing;
+}
+
+.folder-item:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#foldersContainer {
+    border-radius: 8px;
+}
+
+#foldersContainer.drag-over {
+    background-color: #d1ecf1;
+}
+

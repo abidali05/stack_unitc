@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    background-image: url('/images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    /* Full viewport height */
+}
+
+* {
+    margin: 0%;
+    padding: 0%;
+}
+
+.form-select {
+    background-color: white;
+    border: 1.5px solid #0C5097;
+    color: #0C5097;
+
+}
+
+.form-select:focus {
+    border-color: #0C5097;
+    box-shadow: none;
+}
+
+.backgroundcolor {
+    background-color: white;
+    border-radius: 20px;
+}
+
+.unit {
+    font-size: 60px;
+    font-weight: 700;
+    color: #0C5097;
+    font-family: "Kadwa", serif;
+}
+
+.imagesize {
+    width: 50px;
+    height: 50px;
+}
+
+.welcome {
+    font-size: 16px;
+    color: #0C5097;
+    font-weight: 500;
+    font-family: "Montserrat", serif;
+}
+
+.dashbord {
+    font-size: 28px;
+    color: #0C5097;
+    font-weight: 700;
+    font-family: "Montserrat", serif;
+}
+
+.label {
+    font-size: 16px;
+    color: #0C5097;
+    font-weight: 600;
+    margin-left: 85px;
+    font-family: "Montserrat", serif;
+}
+
+.full-width-input {
+    width: 77%;
+    margin-left: 85px;
+    border: 1.5px solid #0C5097;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 12px;
+
+    color: #79747E;
+}
+
+.full-width-input:focus {
+    outline: none;
+    border-color: #0C5097;
+}
+
+.ankertag {
+    font-size: 12px;
+    margin-left: 85px;
+    color: #DE1414;
+    font-weight: 500;
+    font-family: "Montserrat", serif;
+    text-decoration: none;
+}
+
+.forgetsec {
+    color: #0C5097;
+    font-weight: 500;
+    font-size: 26px;
+    margin-left: 85px;
+    font-family: "Montserrat", serif;
+    text-decoration: none;
+}
+.ankertag:hover{
+    color: #0C5097;
+}
+.buttonclas {
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #0C5097;
+    padding: 7px 20px;
+}
+.buttonclas:hover{
+    background-color: white;
+    color:#0C5097;
+    border: 1px solid #0C5097;
+}
+.imgs{
+    height: 30px ;
+    width: 30px;
+}
+.buttonclasse {
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #0C5097;
+    padding: 0px 25px;
+}
+.buttonclasse:hover{
+    background-color: white;
+    color:#0C5097;
+}
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1.5px solid #0C5097;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
+.input-container img {
+    width: 24px;
+    height: 24px;
+
+}
+
+.styled-input {
+    border: none;
+    text-align: center;
+    outline: none;
+    color: #0C5097;
+    font-size: 18px;
+}
+
+
+.input-container:focus-within {
+    border-color: #074070;
+}
+
+.gradient-border {
+    width: 3px;
+
+    height: 100%;
+    background: linear-gradient(to bottom,
+            #0C509700, #0C509780, #0C5097,
+            #0C509780,
+            #0C509700);
+}
+
+.buttonwidth {
+    display: flex;
+
+
+    padding: 5px;
+    background-color: #ffffff;
+    border: 1.5px solid #0C5097;
+    color: #0C5097;
+
+    font-size: 16px;
+}
+.buttonwidth {
+    width:80%;
+    border: 1.5px solid #0C5097;
+    background-color: white;
+    color: #0C5097;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 5px;
+}
+.buttonwidth:hover{
+background-color: #0C5097;
+color:white
+}
+.google-logo {
+    width: 20px;
+}
+
+.buttonclass {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #0C5097;
+    padding: 5px 25px;
+}
+
+
+@media (min-width: 350px) and (max-width: 768px) {
+    .dashbord {
+        font-size: 15px;
+        color: #0C5097;
+        font-weight: 700;
+        font-family: "Montserrat", serif;
+    }
+
+    .welcome {
+        font-size: 12px;
+        color: #0C5097;
+        font-weight: 500;
+        font-family: "Montserrat", serif;
+    }
+
+
+    .forgetsec {
+        color: #0C5097;
+        font-weight: 500;
+        font-size: 20px;
+        font-family: "Montserrat", serif;
+        text-decoration: none;
+    }
+
+
+    .unit {
+        font-size: 36px;
+        font-weight: 700;
+        color: #0C5097;
+        font-family: "Kadwa", serif;
+    }
+
+    .imagesize {
+        width: 40px;
+        height: 40px;
+    }
+
+    .grad {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .buttonclass {
+        display: none;
+    }
+}

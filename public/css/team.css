@@ -1,0 +1,112 @@
+.add-team-btn {
+    display: flex;
+    width: 80%;
+    height: 200px;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 4px 4px 10px 0px #0000001a;
+}
+
+.add-team-btn:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.team-container {
+    padding: 12px;
+    display: flex;
+    height: 200px;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 4px 4px 10px 0px #0000001a;
+    position: relative;
+    overflow: hidden;
+}
+
+.team-container .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.icon-container {
+    display: flex;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.icon-container a i {
+    color: white;
+}
+
+.view-icon i:hover {
+    color: green;
+}
+
+.edit-icon i:hover {
+    color: blue;
+}
+
+.delete-icon i:hover {
+    color: red;
+}
+
+.team-container:hover .overlay {
+    opacity: 1;
+}
+
+.icon-container a {
+    color: white;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-container a:hover {
+    color: #4dc0b5;
+    transform: scale(1.1);
+}
+
+.modal-body {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.modal-info {
+    margin-bottom: 15px;
+}
+
+.modal-label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 5px;
+    font-size: 15px;
+}
+
+.modal-value {
+    display: inline-block;
+    color: #555;
+    font-size: 16px;
+}
+
+#teamUsers {
+    color: #007bff;
+    font-weight: normal;
+}
+
+.modal-info + .modal-info {
+    margin-top: 10px;
+}

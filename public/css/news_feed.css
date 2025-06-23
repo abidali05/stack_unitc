@@ -1,0 +1,29 @@
+.article-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.article-container:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.article-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.article-container:hover .article-actions {
+    opacity: 1;
+}
+
+.article-actions i {
+    padding: 5px;
+    font-size: 18px;
+    color: #007BFF;
+}
+.article-actions i:nth-child(2) {
+    color: #FF4B4B;
+}

@@ -1,0 +1,193 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+.input-group-text {
+    background-color: white;
+    border-right: none;
+    font-weight: bold;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button,
+html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
+    border: none !important;
+    background: transparent;
+    font-weight: normal;
+    color: #454545;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane {
+    display: none;
+}
+
+.ui-widget-header {
+    border: none;
+    background: transparent;
+    color: #333;
+    font-weight: bold;
+}
+
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+    width: 32%;
+    border: none;
+}
+
+.ui-widget.ui-widget-content {
+    border: 1px solid #c5c5c5;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.form-check-input:checked {
+    background-color: black;
+    border-color: black;
+}
+
+.form-check-input {
+    border-radius: 1.5px !important;
+    border: 1px solid black;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    border: none !important;
+}
+
+.nav-tabs a {
+    text-decoration: none;
+    color: black;
+    //font-weight: bold;
+    padding-bottom: 5px;
+    font-size:small;
+    position: relative;
+}
+
+.location-input {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ced4da;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.location-input i {
+    font-size: 18px;
+    color: black;
+    margin-right: 8px;
+}
+
+.location-input input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: black;
+    width: 100%;
+    background: transparent;
+}
+
+.location-input input::placeholder {
+    color: #b3b3b3;
+}
+
+.custom-select-container {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #ced4da;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.custom-select-container select {
+    border: none;
+    background: transparent;
+    appearance: none;
+    width: 100%;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    border: none !important;
+}
+
+.custom-select-container select:focus {
+    outline: none;
+}
+
+.newchek {
+    position: absolute;
+    left: 0;
+    font-size: 25px;
+    pointer-events: none;
+}
+
+.custom-radio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.custom-radio input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    cursor: pointer;
+}
+
+.custom-radio input[type="radio"]:checked::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: block;
+}
+
+.custom-radio label {
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+}
+.divheeight {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.fc-scrollgrid-sync-inner a {
+    text-decoration: none;
+    color: inherit;
+ }
+
+ .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+    background-color: #0C5097;
+    border-color: #0C5097;
+ }
