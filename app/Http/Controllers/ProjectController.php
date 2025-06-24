@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $users = User::where('id', '!=', auth()->id())->get();
@@ -28,14 +25,13 @@ class ProjectController extends Controller
             $project->expected_days = $expectedDays;
             $project->days_used = $daysUsed;
         });
-        // dd($projects);
         $completedProjects = Project::where('status', 'completed')->count();
         $inProgressProjects = Project::where('status', 'inprogress')->count();
         $holdProjects = Project::where('status', 'hold')->count();
         $overdueProjects = Project::where('deadline', '<', DB::raw('DATE(NOW())'))
             ->whereIn('status', ['todo', 'inprogress', 'hold'])
             ->count();
-        //
+
         $emails = Email::with('receiver')->where('receiver_id', auth()->id())->get();
 
         $media = Media::where('user_id', auth()->id())->get();
@@ -68,7 +64,6 @@ class ProjectController extends Controller
             // 'document' => 'required',
         ]);
 
-        //dd('1');
         $data = [
             'project_name' => $request->input('project_name'),
             'user_id' => $request->input('user_id'),
@@ -87,7 +82,6 @@ class ProjectController extends Controller
             $data['document'] = 'documents/' . $fileName;
         }
 
-        //dd($data);
         Project::create($data);
 
         return response()->json(['status' => 'success', 'message' => 'Project created successfully!']);
@@ -100,7 +94,6 @@ class ProjectController extends Controller
     {
         $project->increment('view_count');
         $project = Project::with('user')->findOrFail($project->id);
-        //dd($project->toArray());
         return response()->json([
             'project_name'    => $project->project_name,
             'user_name'       => $project->user->name,
@@ -123,26 +116,6 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, Project $project)
-    // {
-    //     $request->validate([
-    //         'project_name' => 'string',
-    //         'user_id' => 'nullable|exists:users,id',
-    //         'task' => 'string',
-    //         'deadline' => 'date',
-    //         'status' => 'string',
-    //     ]);
-
-    //     $project->update($request->except(['_token', '_method']));
-
-    //     return response()->json([
-    //         'message' => 'Project updated successfully.',
-    //         'project' => $project
-    //     ]);
-    // }
     public function update(Request $request, Project $project)
     {
         $request->validate([
@@ -167,7 +140,7 @@ class ProjectController extends Controller
             'start_date' => $request->input('start_date', $project->start_date),
             'deadline' => $request->input('deadline', $project->deadline),
         ];
-        // dd($data);
+
         if ($request->status === 'reopen') {
             $data['end_date'] = null;
         }
@@ -178,7 +151,7 @@ class ProjectController extends Controller
             $file->move(public_path('documents'), $fileName);
             $data['document'] = 'documents/' . $fileName;
         }
-        //dd($request->all());
+
         $project->update($data);
 
         if ($statusChanged) {
@@ -244,7 +217,6 @@ class ProjectController extends Controller
 
     public function getProjectDetails($id)
     {
-        //dd($id);
         $project = Project::with(['user', 'statuses', 'assignedBy'])->findOrFail($id);
         return response()->json([
             'id' => $project->id,

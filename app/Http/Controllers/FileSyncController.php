@@ -34,139 +34,150 @@ class FileSyncController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $uploadType = $request->input('upload_type');
+    {
+        $uploadType = $request->input('upload_type');
 
-    try {
-        switch ($uploadType) {
-            case 'file':
-                $request->validate(['file' => 'required|file']);
+        try {
+            switch ($uploadType) {
+                case 'file':
+                    $request->validate(['file' => 'required|file']);
 
-                $file = $request->file('file');
-                $fileName = $file->getClientOriginalName();
-                $fileMimeType = $file->getMimeType();
-                $fileSize = $file->getSize();
-                $destinationPath = public_path('uploads');
-                $file->move($destinationPath, $fileName);
-                $newFilePath = "uploads/$fileName";
-
-                $fileRecord = FileSync::create([
-                    'name' => $fileName,
-                    'path' => $newFilePath,
-                    'type' => 'file',
-                    'mime_type' => $fileMimeType,
-                    'size' => $fileSize,
-                    'user_id' => auth()->id(),
-                ]);
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'File uploaded successfully!',
-                    'file' => [
-                        'id' => $fileRecord->id,
-                        'name' => $fileName,
-                        'path' => asset($newFilePath), // Full URL to the file
-                        'type' => $this->getFileType($fileName),
-                        'image_path' => $this->getFileIcon($fileName),
-                    ]
-                ]);
-
-            case 'folder':
-                $request->validate(['folder_name' => 'required|string', 'files.*' => 'required|file']);
-
-                $folderName = $request->input('folder_name');
-                $folderPath = public_path("uploads/$folderName");
-
-                $folder = FileSync::firstOrCreate([
-                    'path' => "uploads/$folderName",
-                    'user_id' => auth()->id(),
-                ], [
-                    'name' => $folderName,
-                    'type' => 'folder',
-                    'size' => null,
-                    'mime_type' => null,
-                ]);
-
-                $uploadedFiles = [];
-                foreach ($request->file('files') as $file) {
+                    $file = $request->file('file');
                     $fileName = $file->getClientOriginalName();
                     $fileMimeType = $file->getMimeType();
                     $fileSize = $file->getSize();
-                    $filePath = "uploads/$folderName/$fileName";
-                    $file->move($folderPath, $fileName);
+                    $destinationPath = public_path('uploads');
+                    $file->move($destinationPath, $fileName);
+                    $newFilePath = "uploads/$fileName";
 
                     $fileRecord = FileSync::create([
                         'name' => $fileName,
-                        'path' => $filePath,
+                        'path' => $newFilePath,
                         'type' => 'file',
                         'mime_type' => $fileMimeType,
                         'size' => $fileSize,
                         'user_id' => auth()->id(),
-                        'parent_id' => $folder->id,
                     ]);
 
-                    $uploadedFiles[] = [
-                        'id' => $fileRecord->id,
-                        'name' => $fileName,
-                        'path' => asset($filePath),
-                        'type' => $this->getFileType($fileName),
-                        'image_path' => $this->getFileIcon($fileName),
-                    ];
-                }
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'File uploaded successfully!',
+                        'file' => [
+                            'id' => $fileRecord->id,
+                            'name' => $fileName,
+                            'path' => asset($newFilePath), // Full URL to the file
+                            'type' => $this->getFileType($fileName),
+                            'image_path' => $this->getFileIcon($fileName),
+                        ]
+                    ]);
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Folder uploaded successfully!',
-                    'files' => $uploadedFiles
-                ]);
+                case 'folder':
+                    $request->validate(['folder_name' => 'required|string', 'files.*' => 'required|file']);
 
-            default:
-                return response()->json(['success' => false, 'message' => 'Upload Failed!']);
+                    $folderName = $request->input('folder_name');
+                    $folderPath = public_path("uploads/$folderName");
+
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0777, true);
+                    }
+
+                    $folder = FileSync::firstOrCreate([
+                        'path' => "uploads/$folderName",
+                        'user_id' => auth()->id(),
+                    ], [
+                        'name' => $folderName,
+                        'type' => 'folder',
+                        'size' => null,
+                        'mime_type' => null,
+                    ]);
+
+                    $uploadedFiles = [];
+                    foreach ($request->file('files') as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $fileMimeType = $file->getMimeType();
+                        $fileSize = $file->getSize();
+                        $filePath = "uploads/$folderName/$fileName";
+                        $file->move($folderPath, $fileName);
+
+                        $fileRecord = FileSync::create([
+                            'name' => $fileName,
+                            'path' => $filePath,
+                            'type' => 'file',
+                            'mime_type' => $fileMimeType,
+                            'size' => $fileSize,
+                            'user_id' => auth()->id(),
+                            'parent_id' => $folder->id,
+                        ]);
+
+                        $uploadedFiles[] = [
+                            'id' => $fileRecord->id,
+                            'name' => $fileName,
+                            'path' => asset($filePath),
+                            'type' => $this->getFileType($fileName),
+                            'image_path' => $this->getFileIcon($fileName),
+                        ];
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Folder uploaded successfully!',
+                        'folder' => [
+                            'id' => $folder->id,
+                            'name' => $folderName,
+                            'path' => asset("uploads/$folderName"),
+                            'type' => 'folder',
+                            'image_path' => asset('images/folder-icon.png'), // Adjust path as needed
+                        ],
+                        'files' => $uploadedFiles
+                    ]);
+
+                default:
+                    return response()->json(['success' => false, 'message' => 'Upload Failed!']);
+            }
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Upload Failed: ' . $e->getMessage()]);
         }
-    } catch (Exception $e) {
-        return response()->json(['success' => false, 'message' => 'Upload Failed: ' . $e->getMessage()]);
-    }
-}
-
-// Helper method to determine file type
-private function getFileType($filename)
-{
-    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
-    return match ($extension) {
-        'pdf' => 'pdf',
-        'doc', 'docx' => 'word',
-        'xls', 'xlsx' => 'xlsx',
-        'ppt', 'pptx' => 'ppt',
-        'zip', 'rar' => 'zip',
-        'jpg', 'jpeg', 'png', 'gif' => 'image',
-        default => 'file',
-    };
-}
-
-// Helper method to get appropriate icon
-private function getFileIcon($filename)
-{
-    $type = $this->getFileType($filename);
-    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
-    $imagePaths = [
-        'pdf' => asset('files/pdf.jpg'),
-        'word' => asset('files/word.jpg'),
-        'xlsx' => asset('files/xlsx.jpg'),
-        'ppt' => asset('files/ppt.jpg'),
-        'zip' => asset('files/zip.jpg'),
-        'folder' => asset('files/folder.png'),
-        'file' => asset('files/file.png'),
-    ];
-
-    // If it's an image file, return the actual image path
-    if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-        return asset("uploads/$filename");
     }
 
-    return $imagePaths[$type] ?? $imagePaths['file'];
-}
+    // Helper method to determine file type
+    private function getFileType($filename)
+    {
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        return match ($extension) {
+            'pdf' => 'pdf',
+            'doc', 'docx' => 'word',
+            'xls', 'xlsx' => 'xlsx',
+            'ppt', 'pptx' => 'ppt',
+            'zip', 'rar' => 'zip',
+            'jpg', 'jpeg', 'png', 'gif' => 'image',
+            default => 'file',
+        };
+    }
+
+    // Helper method to get appropriate icon
+    private function getFileIcon($filename)
+    {
+        $type = $this->getFileType($filename);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        $imagePaths = [
+            'pdf' => asset('files/pdf.jpg'),
+            'word' => asset('files/word.jpg'),
+            'xlsx' => asset('files/xlsx.jpg'),
+            'ppt' => asset('files/ppt.jpg'),
+            'zip' => asset('files/zip.jpg'),
+            'folder' => asset('files/folder.png'),
+            'file' => asset('files/file.png'),
+        ];
+
+        // If it's an image file, return the actual image path
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+            return asset("uploads/$filename");
+        }
+
+        return $imagePaths[$type] ?? $imagePaths['file'];
+    }
     /**
      * Display the specified resource.
      */

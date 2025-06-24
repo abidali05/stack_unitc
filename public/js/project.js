@@ -219,6 +219,26 @@ $(document).ready(function () {
         table.draw();
     });
 
+    $('#projectFilter').on('change', function () {
+        const selectedProjectId = $(this).val();
+        const allRows = $('#projects-table .project-row');
+
+        if (selectedProjectId === 'all') {
+            allRows.show();
+        } else {
+            allRows.each(function () {
+                const rowProjectId = $(this).find('.project-name').data('id').toString();
+                if (rowProjectId === selectedProjectId) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        table.draw(); // Redraw the DataTable
+    });
+
 
     $(document).on('click', '.edit-btn', function () {
         const projectId = $(this).data('id');
