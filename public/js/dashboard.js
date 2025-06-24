@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('emailTableBody').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Error fetching emails:', error);
-        });
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('emailTableBody').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching emails:', error);
+            });
     }
 });
 
@@ -78,7 +78,10 @@ function renameFile(fileId) {
                         text: "File renamed successfully.",
                         icon: "success",
                     }).then(() => {
-                        location.reload();
+                        const fileCard = document.getElementById(`file-${fileId}`);
+                        if (fileCard) {
+                            fileCard.querySelector('p').textContent = newName;
+                        }
                     })
                 } else {
                     Swal.fire({
@@ -317,7 +320,7 @@ if (shareFileForm) {
 document.addEventListener("DOMContentLoaded", function () {
     const maximizeIcon = document.getElementById('maximize-icon');
     const minimizeIcon = document.getElementById('minimize-icon');
-    const emailTable = document.getElementById('email-table');
+    // const emailTable = document.getElementById('email-table');
     const emailTable2 = document.querySelector('.email-table');
     const feed = document.getElementById('feed');
     const dashTable = document.querySelector('.dash-table');
