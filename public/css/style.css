@@ -451,6 +451,13 @@ td {
     100% { transform: rotate(360deg); }
 }
 
+#content2 {
+    height: calc(100vh - 120px); /* Adjust based on your header height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Disable horizontal scrolling */
+    padding-right: 8px; /* Prevents scrollbar from overlapping content */
+}
+
 /* Base Styles */
 .task-board-wrapper {
     position: relative;
@@ -474,171 +481,103 @@ td {
     padding: 0 8px;
 }
 
-/* Task Column Styles */
-.task-column {
-    width: 272px;
-    min-width: 272px;
-    background-color: #ebecf0;
-    border-radius: 3px;
-    max-height: 100%;
+/* Column Styles */
+.project-col {
+    height: 100%;
+    min-width: 280px;
+    max-width: 280px;
     display: flex;
     flex-direction: column;
 }
 
-.column-header {
-    padding: 10px 8px;
-    position: relative;
-    border-radius: 3px 3px 0 0;
-    color: white;
+.col-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.column-header h5 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    padding-left: 4px;
-}
-
-.task-count {
-    background-color: rgba(0,0,0,0.15);
-    border-radius: 10px;
-    padding: 0 6px;
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.column-content {
-    padding: 8px;
-    overflow-y: auto;
+/* Task List Styles */
+.project-list {
     flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 8px;
     scrollbar-width: thin;
 }
 
-.column-content::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+.project-list::-webkit-scrollbar {
+    width: 6px;
 }
 
-.column-content::-webkit-scrollbar-thumb {
-    background-color: #c1c1c1;
-    border-radius: 4px;
-}
-
-/* Task Card Styles */
-.task-card {
-    background-color: white;
+.project-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
     border-radius: 3px;
-    box-shadow: 0 1px 0 rgba(9,30,66,.25);
-    margin-bottom: 8px;
-    padding: 8px;
-    cursor: pointer;
+}
+
+.project-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.project-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.project-list-item {
     transition: all 0.2s ease;
 }
 
-.task-card:hover {
-    background-color: #f5f6f8;
-    box-shadow: 0 1px 0 rgba(9,30,66,.25), 0 2px 4px rgba(9,30,66,.15);
+.project-list-item:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
 }
 
-.task-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
+.task-meta {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
 }
 
-.task-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: #172b4d;
-}
-
-.task-actions {
+.task-meta i {
     color: #5e6c84;
-    opacity: 0;
-    transition: opacity 0.2s ease;
 }
 
-.task-card:hover .task-actions {
-    opacity: 1;
-}
-
-.task-body {
-    font-size: 12px;
-    color: #5e6c84;
-    margin-bottom: 8px;
-}
-
-.task-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.task-attachments {
-    color: #5e6c84;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.task-members {
-    display: flex;
-}
-
-.member-avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: #172b4d;
-}
-
-/* Add Task Button */
-.add-task {
-    margin-top: 8px;
-}
-
-.add-task-btn {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    background: none;
-    color: #5e6c84;
-    text-align: left;
+.badge {
+    padding: 3px 6px;
     border-radius: 3px;
-    cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-.add-task-btn:hover {
-    background-color: #091e4214;
-    color: #172b4d;
+.list-footer {
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #666;
+    word-wrap: break-word;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 5px 5px;
+    flex-wrap: wrap; /* allow wrapping if needed */
 }
+
+/* In your CSS file */
+.name-todo { color: #5e6c84; }
+.name-inprogress { color: #00b8d9; }
+.name-hold { color: #ff991f; }
+.name-completed { color: #5aac44; }
+.capitalize { text-transform: capitalize; }
+
 
 /* Responsive Design */
 @media (max-width: 1024px) {
     .task-board-wrapper {
         height: auto;
         min-height: calc(100vh - 120px);
-        overflow-x: auto;
-        overflow-y: hidden;
     }
 
-    .task-board {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 16px;
-    }
-
-    .task-column {
+    .project-col {
         min-height: 400px;
     }
 }
@@ -648,17 +587,13 @@ td {
         padding: 0 8px;
     }
 
-    .task-column {
-        width: 240px;
+    .project-col {
         min-width: 240px;
     }
 }
 
 @media (max-width: 576px) {
-    .task-column {
-        width: 200px;
+    .project-col {
         min-width: 200px;
     }
 }
-
-

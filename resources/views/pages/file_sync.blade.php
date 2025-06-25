@@ -50,7 +50,7 @@
                             <a href="#" class="text-decoration-none text-dark">
                                 <div class="col-12 p-2 border-bottom d-flex align-items-center p-0 m-0">
                                     <i class="fas fa-file-medical" style="color:white;"></i>
-                                    <p class="ms-1 p-0 m-0"><a
+                                    <p class="ms-1 p-0 m-0"><a id="show-all-files"
                                             style="text-decoration: none; color: inherit; padding-left: 10px;"
                                             class="filter-type" href="#" data-type="all">All</a></p>
                                 </div>
@@ -91,7 +91,6 @@
                         </div>
                     </div>
                     <div class="col-10 px-2" style="column-gap: 10px">
-
                         {{-- Welcome Section --}}
                         <div class="row mb-4" id="welcome-section">
                             <div class="col-md-6 p-5" style="background-color:#F4F4F4; border-radius:0px 10px 10px 0px;">
@@ -120,9 +119,10 @@
                             </div>
                         </div>
 
+                        <div class="row" id="filtered-content-section" style="column-gap: 10px; display: none;"></div>
+
                         {{-- Uploaded Files Section --}}
                         <div class="row" id="filtered-content" style="column-gap: 10px"></div>
-
                     </div>
 
                 </div>
@@ -302,49 +302,49 @@
                         if (data.file) {
                             const file = data.file;
                             const fileCard = `
-<div class="col-md-2 col-sm-3 col-4 mb-3">
-    <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-        data-path="${file.path}"
-        data-type="${file.type}"
-        id="file-${file.id}"
-        ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
-        style="background-color: #fff; position: relative;">
+                                    <div class="col-md-2 col-sm-3 col-4 mb-3">
+                                        <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                                            data-path="${file.path}"
+                                            data-type="${file.type}"
+                                            id="file-${file.id}"
+                                            ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
+                                            style="background-color: #fff; position: relative;">
 
-        <img src="${file.image_path}" class="img-fluid mb-2"
-            alt="${file.name}"
-            style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                                            <img src="${file.image_path}" class="img-fluid mb-2"
+                                                alt="${file.name}"
+                                                style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
 
-        <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
-            ${file.name}
-        </p>
-        <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="2" cy="2" r="2" fill="black"></circle>
-                    <circle cx="10" cy="2" r="2" fill="black"></circle>
-                    <circle cx="18" cy="2" r="2" fill="black"></circle>
-                </svg>
-            </div>
-            <div class="dropdown-menu">
-                <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}">
-                    <i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}
-                </button>
-                <button class="dropdown-item" onclick="renameFile('${file.id}')">
-                    <i class="fas fa-edit me-1"></i> Rename
-                </button>
-                <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')">
-                    <i class="fas fa-download me-1"></i> Download
-                </button>
-                <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')">
-                    <i class="fas fa-share me-1"></i> Share
-                </button>
-                <button class="dropdown-item delete-file" data-id="${file.id}">
-                    <i class="fas fa-trash-alt me-1"></i> Delete
-                </button>
-            </div>
-        </div>
-    </div>
-</div>`;
+                                            <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
+                                                ${file.name}
+                                            </p>
+                                            <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                                                <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                                    <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                                        <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                                        <circle cx="18" cy="2" r="2" fill="black"></circle>
+                                                    </svg>
+                                                </div>
+                                                <div class="dropdown-menu">
+                                                    <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}">
+                                                        <i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="renameFile('${file.id}')">
+                                                        <i class="fas fa-edit me-1"></i> Rename
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')">
+                                                        <i class="fas fa-download me-1"></i> Download
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')">
+                                                        <i class="fas fa-share me-1"></i> Share
+                                                    </button>
+                                                    <button class="dropdown-item delete-file" data-id="${file.id}">
+                                                        <i class="fas fa-trash-alt me-1"></i> Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
 
                             filteredContent.insertAdjacentHTML('beforeend', fileCard);
 
@@ -354,49 +354,49 @@
                         } else if (data.folder) {
                             const folder = data.folder;
                             const folderCard = `
-<div class="col-md-2 col-sm-3 col-4 mb-3">
-    <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-        data-path="${folder.path}"
-        data-type="folder"
-        id="file-${folder.id}"
-        ondblclick="handleDoubleClick('${folder.path}', 'folder')"
-        style="background-color: #fff; position: relative;">
+                                    <div class="col-md-2 col-sm-3 col-4 mb-3">
+                                        <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                                            data-path="${folder.path}"
+                                            data-type="folder"
+                                            id="file-${folder.id}"
+                                            ondblclick="handleDoubleClick('${folder.path}', 'folder')"
+                                            style="background-color: #fff; position: relative;">
 
-        <img src="${folder.path}" class="img-fluid mb-2"
-            alt="${folder.name}"
-            style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                                            <img src="${folder.path}" class="img-fluid mb-2"
+                                                alt="${folder.name}"
+                                                style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
 
-        <p class="text-center text-truncate mb-1" title="${folder.name}" style="font-size: 13px; width: 100%;">
-            ${folder.name}
-        </p>
-        <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="2" cy="2" r="2" fill="black"></circle>
-                    <circle cx="10" cy="2" r="2" fill="black"></circle>
-                    <circle cx="18" cy="2" r="2" fill="black"></circle>
-                </svg>
-            </div>
-            <div class="dropdown-menu">
-                <button class="dropdown-item file" data-path="${folder.path}" data-type="folder">
-                    <i class="fas fa-folder-open me-1"></i> Open Folder
-                </button>
-                <button class="dropdown-item" onclick="renameFile('${folder.id}')">
-                    <i class="fas fa-edit me-1"></i> Rename
-                </button>
-                <button class="dropdown-item" onclick="downloadFile('${folder.path}', 'folder')">
-                    <i class="fas fa-download me-1"></i> Download
-                </button>
-                <button class="dropdown-item" onclick="openShareModal('${folder.id}', '${folder.path}')">
-                    <i class="fas fa-share me-1"></i> Share
-                </button>
-                <button class="dropdown-item delete-file" data-id="${folder.id}">
-                    <i class="fas fa-trash-alt me-1"></i> Delete
-                </button>
-            </div>
-        </div>
-    </div>
-</div>`;
+                                            <p class="text-center text-truncate mb-1" title="${folder.name}" style="font-size: 13px; width: 100%;">
+                                                ${folder.name}
+                                            </p>
+                                            <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                                                <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                                    <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                                        <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                                        <circle cx="18" cy="2" r="2" fill="black"></circle>
+                                                    </svg>
+                                                </div>
+                                                <div class="dropdown-menu">
+                                                    <button class="dropdown-item file" data-path="${folder.path}" data-type="folder">
+                                                        <i class="fas fa-folder-open me-1"></i> Open Folder
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="renameFile('${folder.id}')">
+                                                        <i class="fas fa-edit me-1"></i> Rename
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="downloadFile('${folder.path}', 'folder')">
+                                                        <i class="fas fa-download me-1"></i> Download
+                                                    </button>
+                                                    <button class="dropdown-item" onclick="openShareModal('${folder.id}', '${folder.path}')">
+                                                        <i class="fas fa-share me-1"></i> Share
+                                                    </button>
+                                                    <button class="dropdown-item delete-file" data-id="${folder.id}">
+                                                        <i class="fas fa-trash-alt me-1"></i> Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
 
                             filteredContent.insertAdjacentHTML('beforeend', folderCard);
 
@@ -404,49 +404,49 @@
                             if (data.files && data.files.length > 0) {
                                 data.files.forEach(file => {
                                     const fileCard = `
-<div class="col-md-2 col-sm-3 col-4 mb-3">
-    <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-        data-path="${file.path}"
-        data-type="${file.type}"
-        id="file-${file.id}"
-        ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
-        style="background-color: #fff; position: relative;">
+                                        <div class="col-md-2 col-sm-3 col-4 mb-3">
+                                            <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                                                data-path="${file.path}"
+                                                data-type="${file.type}"
+                                                id="file-${file.id}"
+                                                ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
+                                                style="background-color: #fff; position: relative;">
 
-        <img src="${file.path}" class="img-fluid mb-2"
-            alt="${file.name}"
-            style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                                                <img src="${file.path}" class="img-fluid mb-2"
+                                                    alt="${file.name}"
+                                                    style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
 
-        <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
-            ${file.name}
-        </p>
-        <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="2" cy="2" r="2" fill="black"></circle>
-                    <circle cx="10" cy="2" r="2" fill="black"></circle>
-                    <circle cx="18" cy="2" r="2" fill="black"></circle>
-                </svg>
-            </div>
-            <div class="dropdown-menu">
-                <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}">
-                    <i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}
-                </button>
-                <button class="dropdown-item" onclick="renameFile('${file.id}')">
-                    <i class="fas fa-edit me-1"></i> Rename
-                </button>
-                <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')">
-                    <i class="fas fa-download me-1"></i> Download
-                </button>
-                <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')">
-                    <i class="fas fa-share me-1"></i> Share
-                </button>
-                <button class="dropdown-item delete-file" data-id="${file.id}">
-                    <i class="fas fa-trash-alt me-1"></i> Delete
-                </button>
-            </div>
-        </div>
-    </div>
-</div>`;
+                                                <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
+                                                    ${file.name}
+                                                </p>
+                                                <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                                                    <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                                        <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                                            <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                                            <circle cx="18" cy="2" r="2" fill="black"></circle>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu">
+                                                        <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}">
+                                                            <i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}
+                                                        </button>
+                                                        <button class="dropdown-item" onclick="renameFile('${file.id}')">
+                                                            <i class="fas fa-edit me-1"></i> Rename
+                                                        </button>
+                                                        <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')">
+                                                            <i class="fas fa-download me-1"></i> Download
+                                                        </button>
+                                                        <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')">
+                                                            <i class="fas fa-share me-1"></i> Share
+                                                        </button>
+                                                        <button class="dropdown-item delete-file" data-id="${file.id}">
+                                                            <i class="fas fa-trash-alt me-1"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`;
 
                                     filteredContent.insertAdjacentHTML('beforeend', fileCard);
                                 });
@@ -544,225 +544,111 @@
                 .catch(error => console.error('Error loading folder contents:', error));
         }
 
-        // function downloadFile(filePath, fileType) {
-        //     let fileId = null;
-        //     document.querySelectorAll('.file-card').forEach(card => {
-        //         if (card.getAttribute('data-path') === filePath) {
-        //             fileId = card.id.replace('file-', '');
-        //         }
-        //     });
-        //     if (!fileId) {
-        //         Swal.fire('Error', 'File ID not found for download.', 'error');
-        //         return;
-        //     }
+        // Add event listener for 'All' filter to show files as cards (not table) and hide welcome section and upload dropdown
+        document.getElementById('show-all-files').addEventListener('click', function(e) {
+            document.getElementById('pageLoader').style.display = 'flex';
+            e.preventDefault();
+            // Clear uploaded files/cards section before fetching all files
+            const filteredContent = document.getElementById('filtered-content');
+            if (filteredContent) filteredContent.innerHTML = '';
+            // Hide upload dropdown
+            const uploadDropdownDiv = document.querySelector('.dropdown.py-2');
+            if (uploadDropdownDiv) uploadDropdownDiv.style.display = 'none';
+            fetch('/file-syncs/all', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('pageLoader').style.display = 'none';
+                    // Replace welcome section with filtered content
+                    const welcomeSection = document.getElementById('welcome-section');
+                    const filteredContentSection = document.getElementById('filtered-content-section');
+                    if (welcomeSection) welcomeSection.style.display = 'none';
+                    filteredContentSection.style.display = 'flex';
+                    filteredContentSection.innerHTML = '';
 
-        //     window.location.href = downloadUrl + fileId;
-        //     document.getElementById('pageLoader').style.display = 'none';
-        // }
+                    // Add Back button
+                    // Add Back button container
+                    const backBtnContainer = document.createElement('div');
+                    backBtnContainer.className = 'd-flex justify-content-end mb-2';
 
-        // function renameFile(fileId) {
-        //     console.log('Renaming file with ID:', fileId); // Debug
+                    // Create Back button
+                    const backBtn = document.createElement('button');
+                    backBtn.className = 'btn btn-sm btn-outline-secondary';
+                    backBtn.innerText = 'Back';
+                    backBtn.onclick = function() {
+                        // Restore welcome section and upload dropdown
+                        if (welcomeSection) welcomeSection.style.display = '';
+                        if (uploadDropdownDiv) uploadDropdownDiv.style.display = '';
+                        filteredContentSection.style.display = 'none';
+                        filteredContentSection.innerHTML = '';
+                    };
 
-        //     // Set the file ID and clear previous input
-        //     document.getElementById('renameFileId').value = fileId;
-        //     document.getElementById('renameInput').value = ''; // Clear previous input
-        //     document.getElementById('renameError').textContent = ''; // Clear error message
+                    // Append button to container, then to filtered section
+                    backBtnContainer.appendChild(backBtn);
+                    filteredContentSection.appendChild(backBtnContainer);
 
-        //     // Show the rename modal
-        //     const renameModal = new bootstrap.Modal(document.getElementById('renameModal'));
-        //     renameModal.show();
+                    // Support both array and {success, files} response
+                    let files = Array.isArray(data) ? data : (data.files || []);
+                    if (files.length > 0) {
+                        files.forEach(file => {
+                            const fileCard = `
+                        <div class="col-md-2 col-sm-3 col-4 mb-3">
+                            <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                                data-path="${file.path}"
+                                data-type="${file.type}"
+                                id="file-${file.id}"
+                                ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
+                                style="background-color: #fff; position: relative;">
 
-        //     // Handle rename confirmation
-        //     document.getElementById('renameConfirm').onclick = function() {
-        //         const newName = document.getElementById('renameInput').value.trim();
-        //         if (!newName) {
-        //             document.getElementById('renameError').textContent = 'Name cannot be empty';
-        //             return;
-        //         }
+                                ${(file.type === 'image') ? `<img src="${file.path}" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
+                                (file.type === 'folder') ? `<img src="/files/folder.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
+                                `<img src="/files/file.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">`}
 
-        //         fetch(renameUrl + fileId, {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Content-Type': 'application/json',
-        //                     'X-CSRF-TOKEN': csrfToken
-        //                 },
-        //                 body: JSON.stringify({
-        //                     new_name: newName
-        //                 })
-        //             })
-        //             .then(res => res.json())
-        //             .then(data => {
-        //                 if (data.success) {
-        //                     renameModal.hide();
-        //                     alert('Renamed! ' + data.message); // Simple alert as feedback
-        //                     // Update the file name in the UI
-        //                     const fileCard = document.getElementById(`file-${fileId}`);
-        //                     if (fileCard) {
-        //                         fileCard.querySelector('p').textContent = newName;
-        //                     }
-        //                 } else {
-        //                     document.getElementById('renameError').textContent = data.message || 'Rename failed';
-        //                 }
-        //             })
-        //             .catch(error => {
-        //                 document.getElementById('renameError').textContent = 'Failed to rename file';
-        //                 console.error('Rename error:', error);
-        //             });
-        //     };
-        // }
-
-        // document.addEventListener('click', function(e) {
-        //     if (e.target.classList.contains('delete-file')) {
-        //         const fileId = e.target.getAttribute('data-id');
-        //         console.log('Delete triggered for file ID:', fileId); // Debug
-
-        //         // Set the file ID and show the delete modal
-        //         document.getElementById('deleteFileId').value = fileId;
-        //         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        //         deleteModal.show();
-
-        //         // Handle delete confirmation
-        //         document.getElementById('confirmDelete').onclick = function() {
-        //             fetch(`${deleteUrl}${fileId}`, {
-        //                     method: 'DELETE',
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': csrfToken
-        //                     }
-        //                 })
-        //                 .then(res => res.json())
-        //                 .then(data => {
-        //                     if (data.success) {
-        //                         deleteModal.hide();
-        //                         alert('Deleted! ' + data.message); // Simple alert as feedback
-        //                         // Remove the file card from the UI
-        //                         const card = document.getElementById('file-' + fileId);
-        //                         if (card) {
-        //                             card.remove();
-        //                             // Clear and re-query filteredContent to ensure updated DOM state
-        //                             const filteredContent = document.getElementById('filtered-content');
-        //                             filteredContent.innerHTML = ''; // Explicitly clear all content
-        //                             filteredContent.offsetHeight; // Force reflow
-        //                             console.log('filteredContent children after clear:', Array.from(
-        //                                 filteredContent.children).map(child => child.id || child
-        //                                 .nodeName));
-        //                             if (filteredContent && filteredContent.children.length === 0) {
-        //                                 const welcomeSection = document.getElementById('welcome-section');
-        //                                 if (welcomeSection) welcomeSection.style.display = '';
-        //                             }
-        //                         }
-        //                     } else {
-        //                         alert('Error: ' + (data.message || 'Failed to delete file'));
-        //                     }
-        //                 })
-        //                 .catch(error => {
-        //                     alert('Error: Failed to delete file');
-        //                     console.error('Delete error:', error);
-        //                 });
-        //         };
-        //     }
-        // });
-
-        // document.addEventListener('click', function(e) {
-        //     if (e.target.classList.contains('delete-file')) {
-        //         const fileId = e.target.getAttribute('data-id');
-        //         console.log('Delete triggered for file ID:', fileId); // Debug
-
-        //         // Set the file ID and show the delete modal
-        //         document.getElementById('deleteFileId').value = fileId;
-        //         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        //         deleteModal.show();
-
-        //         // Handle delete confirmation
-        //         document.getElementById('confirmDelete').onclick = function() {
-        //             fetch(`${deleteUrl}${fileId}`, {
-        //                     method: 'DELETE',
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': csrfToken
-        //                     }
-        //                 })
-        //                 .then(res => res.json())
-        //                 .then(data => {
-        //                     if (data.success) {
-        //                         deleteModal.hide();
-        //                         alert('Deleted! ' + data.message); // Simple alert as feedback
-        //                         // Remove only the specific file card from the UI
-        //                         const card = document.getElementById('file-' + fileId);
-        //                         if (card) {
-        //                             card.remove();
-        //                             // Re-query filteredContent to get updated DOM state
-        //                             const filteredContent = document.getElementById('filtered-content');
-        //                             filteredContent.offsetHeight; // Force reflow
-        //                             console.log('filteredContent children after delete:', Array.from(filteredContent.children).map(child => child.id || child.nodeName));
-        //                             // Check if no files remain and show welcome section
-        //                             if (filteredContent && filteredContent.children.length === 0) {
-        //                                 const welcomeSection = document.getElementById('welcome-section');
-        //                                 if (welcomeSection) welcomeSection.style.display = '';
-        //                             }
-        //                         }
-        //                     } else {
-        //                         alert('Error: ' + (data.message || 'Failed to delete file'));
-        //                     }
-        //                 })
-        //                 .catch(error => {
-        //                     alert('Error: Failed to delete file');
-        //                     console.error('Delete error:', error);
-        //                 });
-        //         };
-        //     }
-        // });
-
-        // function openShareModal(fileId, filePath) {
-        //     // Show modal
-        //     const modal = new bootstrap.Modal(document.getElementById('shareModal'));
-        //     document.getElementById('fileId').value = fileId;
-        //     // Fetch users and teams
-        //     fetch(getUsersUrl)
-        //         .then(res => res.json())
-        //         .then(users => {
-        //             const usersSelect = document.getElementById('users');
-        //             usersSelect.innerHTML = '';
-        //             users.forEach(user => {
-        //                 const option = document.createElement('option');
-        //                 option.value = user.id;
-        //                 option.textContent = user.name + ' (' + user.email + ')';
-        //                 usersSelect.appendChild(option);
-        //             });
-        //         });
-        //     fetch(getTeamsUrl)
-        //         .then(res => res.json())
-        //         .then(teams => {
-        //             const teamsSelect = document.getElementById('teams');
-        //             teamsSelect.innerHTML = '';
-        //             teams.forEach(team => {
-        //                 const option = document.createElement('option');
-        //                 option.value = team.id;
-        //                 option.textContent = team.team_name;
-        //                 teamsSelect.appendChild(option);
-        //             });
-        //         });
-        //     modal.show();
-        // }
-
-        // document.getElementById('shareFileForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-        //     const formData = new FormData(this);
-        //     fetch(shareUrl, {
-        //             method: 'POST',
-        //             headers: {
-        //                 'X-CSRF-TOKEN': csrfToken
-        //             },
-        //             body: formData
-        //         })
-        //         .then(res => res.json())
-        //         .then(data => {
-        //             if (data.success) {
-        //                 Swal.fire('Shared!', data.message, 'success');
-        //                 bootstrap.Modal.getInstance(document.getElementById('shareModal')).hide();
-        //             } else {
-        //                 Swal.fire('Error', data.message, 'error');
-        //             }
-        //         });
-        // });
+                                <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
+                                    ${file.name}
+                                </p>
+                                <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                                    <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                        <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                            <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                            <circle cx="18" cy="2" r="2" fill="black"></circle>
+                                        </svg>
+                                    </div>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}"><i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}</button>
+                                        <button class="dropdown-item" onclick="renameFile('${file.id}')"><i class="fas fa-edit me-1"></i> Rename</button>
+                                        <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')"><i class="fas fa-download me-1"></i> Download</button>
+                                        <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')"><i class="fas fa-share me-1"></i> Share</button>
+                                        <button class="dropdown-item delete-file" data-id="${file.id}"><i class="fas fa-trash-alt me-1"></i> Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                            filteredContentSection.insertAdjacentHTML('beforeend', fileCard);
+                        });
+                        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(element => {
+                            new bootstrap.Dropdown(element);
+                        });
+                    } else {
+                        // Append message after back button container
+                        const noFilesMsg = document.createElement('p');
+                        noFilesMsg.textContent = 'No files found.';
+                        filteredContentSection.appendChild(noFilesMsg);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('pageLoader').style.display = 'none';
+                    const filteredContentSection = document.getElementById('filtered-content-section');
+                    filteredContentSection.innerHTML = '<p>Error loading files.</p>';
+                    console.error('Error fetching files:', error);
+                });
+        });
     </script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
 @endpush

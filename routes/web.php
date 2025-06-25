@@ -138,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-folder-content/{folderPath}', [FileSyncController::class, 'getFolderContent'])->where('folderPath', '.*');
     Route::delete('/file-sync/delete', [FileSyncController::class, 'destroy']);
     Route::get('/file-sync/download/{id}', [FileSyncController::class, 'downloadFile'])->name('file-sync.download');
+    Route::get('/file-syncs/all', [FileSyncController::class, 'all'])->name('file-syncs.all');
 
     //Minisite
     Route::controller(MinisiteController::class)->group(function () {

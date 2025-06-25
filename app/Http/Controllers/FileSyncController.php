@@ -480,4 +480,27 @@ class FileSyncController extends Controller
         }
         return response()->download($filePath, $file->name);
     }
+
+    /**
+     * Return all FileSync files for the authenticated user (for AJAX table view)
+     */
+    public function all(Request $request)
+    {
+        $files = FileSync::where('user_id', auth()->id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        $result = $files->map(function ($file) {
+            $type = $file->type === 'folder' ? 'folder' : $this->getFileType($file->name);
+            $isImage = $type === 'image';
+            return [
+                'id' => $file->id,
+                'name' => $file->name,
+                'type' => $type,
+                'url' => $isImage ? asset($file->path) : null,
+                'path' => $file->path,
+            ];
+        });
+        return response()->json($result);
+    }
 }
