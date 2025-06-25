@@ -189,9 +189,12 @@ function deleteFile(fileId) {
                             'Deleted Successfully.',
                             'success'
                         ).then(() => {
-                            document.querySelector(`#file-${fileId}`).remove();
-                        }).then(() => {
-                            location.reload();
+                            const fileCard = document.querySelector(`#file-${fileId}`);
+                            if (fileCard) fileCard.remove();
+                            // Check if any .file-card elements remain
+                            if (document.querySelectorAll('.file-card').length === 0) {
+                                window.location.reload();
+                            }
                         });
                     } else {
                         Swal.fire({

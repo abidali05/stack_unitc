@@ -347,84 +347,134 @@
             </div>
         </div>
 
-<div class="tab-pane board-tab fade h-screen-90 active content" id="content2" style="margin-bottom: 10px">
-    <div class="task-board-wrapper">
-        <div class="task-board-container">
-            <div class="task-board d-flex flex-nowrap">
-                @php
-                    $statuses = [
-                        'todo' => ['name' => 'To Do', 'color' => '#5e6c84'],
-                        'inprogress' => ['name' => 'In Progress', 'color' => '#00b8d9'],
-                        'hold' => ['name' => 'On Hold', 'color' => '#ff991f'],
-                        'completed' => ['name' => 'Done', 'color' => '#5aac44'],
-                    ];
-                @endphp
+        @php
+            $nameColors = [
+                'todo' => '#5e6c84',
+                'inprogress' => '#00b8d9',
+                'hold' => '#ff991f',
+                'completed' => '#5aac44',
+            ];
+        @endphp
 
-                @foreach ($statuses as $status => $config)
-                    <div class="col-3 project-col {{ $status }}-col pl-2 pr-2">
-                        <div class="col-content" id="{{ $status == 'todo' ? 'RikyasTodoTasks' :
-                                                    ($status == 'inprogress' ? 'RikyasInProgressTasks' :
-                                                    ($status == 'hold' ? 'RikyasOnHoldTasks' : 'RikyasCompletedTasks')) }}"
-                             style="background-color: #fff; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                            <!-- Column Header -->
-                            <h5 class="text-center py-2 mb-0"
-                                style="background-color: {{ $config['color'] }}; color: white; border-radius: 5px 5px 0 0;">
-                                {{ $config['name'] }}
-                            </h5>
+        <div class="tab-pane board-tab fade h-screen-90 active content" id="content2" style="margin-bottom: 10px">
+            <div class="task-board-wrapper">
+                <div class="task-board-container">
+                    <div class="task-board d-flex flex-nowrap">
+                        @php
+                            $statuses = [
+                                'todo' => ['name' => 'To Do', 'color' => '#5e6c84'],
+                                'inprogress' => ['name' => 'In Progress', 'color' => '#00b8d9'],
+                                'hold' => ['name' => 'On Hold', 'color' => '#ff991f'],
+                                'completed' => ['name' => 'Done', 'color' => '#5aac44'],
+                            ];
+                        @endphp
 
-                            <ul class="project-list {{ $status }} p-3" data-status="{{ $status }}"
-                                style="list-style: none; margin: 0; border-top: 1px solid #ddd;">
-                                @foreach ($projects->where('status', $status) as $task)
-                                    <li class="project-list-item mb-3" data-id="{{ $task->id }}"
-                                        style="background-color: #f9f9f9; border-radius: 5px; padding: 10px; border: 1px solid #ddd;">
-                                        <!-- Task Header -->
-                                        <div class="list-item-header d-flex justify-content-between align-items-center">
-                                            <div class="task-assign-to">
-                                                <span class="project-name v-align-middle"
-                                                    style="cursor: pointer; color: #0C5097;"
-                                                    data-id="{{ $task->id }}" data-bs-toggle="modal"
-                                                    data-bs-target="#statusHistoryModal2">
-                                                    {{ $task->user->name }}
-                                                </span>
-                                            </div>
-                                            <div class="collapse-task">
-                                                <span class="d-inline-block tooltip-customize"
-                                                    data-bs-toggle="tooltip" title="Toggle Task Details">
-                                                    <i class="fas fa-chevron-down fw-bold collapse-panel-arrow collapse-task-trigger"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#taskCollapse{{ $task->id }}"
-                                                        aria-expanded="false"
-                                                        aria-controls="taskCollapse{{ $task->id }}"
-                                                        data-toggle-icon></i>
-                                                </span>
-                                            </div>
-                                        </div>
+                        @foreach ($statuses as $status => $config)
+                            <div class="col-3 project-col {{ $status }}-col pl-2 pr-2">
+                                <div class="col-content"
+                                    id="{{ $status == 'todo'
+                                        ? 'RikyasTodoTasks'
+                                        : ($status == 'inprogress'
+                                            ? 'RikyasInProgressTasks'
+                                            : ($status == 'hold'
+                                                ? 'RikyasOnHoldTasks'
+                                                : 'RikyasCompletedTasks')) }}"
+                                    style="background-color: #fff; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 100%; display: flex; flex-direction: column;">
+                                    <!-- Column Header -->
+                                    <h5 class="text-center py-2 mb-0"
+                                        style="background-color: {{ $config['color'] }}; color: white; border-radius: 5px 5px 0 0;">
+                                        {{ $config['name'] }}
+                                    </h5>
 
-                                        <!-- Task Content (Collapsible) -->
-                                        <div class="collapse project-list-collapse p-2"
-                                            id="taskCollapse{{ $task->id }}">
-                                            <div class="list-content" style="color: #333; font-size: 14px;">
-                                                {{ $task->task }}
-                                            </div>
+                                    <ul class="project-list {{ $status }} p-3" data-status="{{ $status }}"
+                                        style="list-style: none; margin: 0; border-top: 1px solid #ddd; overflow-y: auto; flex-grow: 1;">
+                                        @foreach ($projects->where('status', $status) as $task)
+                                            <li class="project-list-item mb-3" data-id="{{ $task->id }}"
+                                                style="background-color: #f9f9f9; border-radius: 5px; padding: 10px; border: 1px solid #ddd;">
+                                                <!-- Task Header -->
+                                                <div
+                                                    class="list-item-header d-flex justify-content-between align-items-center">
+                                                    <div class="task-assign-to">
+                                                        <div class="task-assign-to">
+                                                            <span
+                                                                class="project-name v-align-middle name-{{ $status }} capitalize"
+                                                                style="cursor: pointer;" data-id="{{ $task->id }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#statusHistoryModal2">
+                                                                {{ $task->user->name }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="collapse-task">
+                                                        <span class="d-inline-block tooltip-customize"
+                                                            data-bs-toggle="tooltip" title="Toggle Task Details">
+                                                            <i class="fas fa-chevron-down fw-bold collapse-panel-arrow collapse-task-trigger"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#taskCollapse{{ $task->id }}"
+                                                                aria-expanded="false"
+                                                                aria-controls="taskCollapse{{ $task->id }}"
+                                                                data-toggle-icon></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
 
-                                            <!-- Task Footer -->
-                                            <div class="list-footer d-flex align-items-center mt-2">
-                                                <i class="fas fa-paperclip v-align-middle cursor-pointer ml-2 mr-1"
-                                                    style="color: #0C5097;" data-bs-toggle="modal"
-                                                    data-bs-target="#CreateProjectTaskFileUpload"
-                                                    data-task-id="{{ $task->id }}"></i>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                                                <!-- Date Information (added above the task content) -->
+                                                <div class="task-meta d-flex justify-content-between mt-2 mb-2"
+                                                    style="font-size: 12px; color: #666;">
+                                                    <div>
+                                                        <i class="far fa-calendar-alt me-1"></i>
+                                                        @if ($task->start_date && $task->end_date)
+                                                            {{ $task->start_date->format('M d') }} -
+                                                            {{ $task->end_date->format('M d') }}
+                                                            ({{ $task->start_date->diffInDays($task->end_date) }} days)
+                                                        @elseif($task->deadline)
+                                                            Due: {{ $task->deadline->format('M d, Y') }}
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                        <span class="badge"
+                                                            style="background-color: {{ $task->getCategoryColor($task->category) }}; color: white;">
+                                                            {{ ucfirst($task->category) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Task Content (Collapsible) -->
+                                                <div class="collapse project-list-collapse p-2"
+                                                    id="taskCollapse{{ $task->id }}">
+                                                    <div class="list-content" style="color: #333; font-size: 14px;">
+                                                        {{ $task->task }}
+                                                    </div>
+
+                                                    <div
+                                                        class="list-footer d-flex align-items-center justify-content-between mt-2">
+                                                        <div>
+                                                            @if ($task->document)
+                                                                <i class="fas fa-paperclip v-align-middle cursor-pointer"
+                                                                    style="color: #0C5097;" data-bs-toggle="modal"
+                                                                    data-bs-target="#CreateProjectTaskFileUpload"
+                                                                    data-task-id="{{ $task->id }}"></i>
+                                                                <small
+                                                                    class="ms-1">{{ basename($task->document) }}</small>
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                            <small class="text-muted">Assigned by:
+                                                                {{ $task->assignedBy->name }}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
     </div>
 

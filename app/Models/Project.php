@@ -12,10 +12,23 @@ class Project extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
         'deadline' => 'date',
         'end_date' => 'date',
         'deadline' => 'date',
     ];
+
+    public function getCategoryColor($category)
+    {
+        return match ($category) {
+            'task' => '#5e6c84',
+            'tweak' => '#00b8d9',
+            'bug' => '#ff5630',
+            'custom' => '#6554c0',
+            default => '#5e6c84',
+        };
+    }
 
     //protected $dates = ['start_date', 'end_date'];
 
