@@ -158,7 +158,9 @@ $(document).ready(function () {
     $('#clear-date-filter').on('click', function () {
         $('#min-date').val('');
         $('#max-date').val('');
-        table.draw();
+        selectedProjectId = 'all'; // Update global variable
+        $('#projectFilter').val('all').trigger('change'); // Sync grid view dropdown
+        table.draw(); // Redraw DataTable
     });
 
     $('#all').on('click', function () {
@@ -219,8 +221,10 @@ $(document).ready(function () {
         table.draw();
     });
 
+    let selectedProjectId = 'all'; // Default to 'all'
+
     $('#projectFilter').on('change', function () {
-        const selectedProjectId = $(this).val();
+        selectedProjectId = $(this).val(); // Update selected project ID
         const allRows = $('#projects-table .project-row');
 
         if (selectedProjectId === 'all') {
@@ -578,13 +582,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (filterSection) filterSection.classList.remove("d-none");
             if (dropdownSection) dropdownSection.classList.add("d-none");
 
-            // Fetch updated projects when switching to content1
-            fetchUpdatedProjects();
+            // Reapply project filter for list view
+            $('#projectFilter').val(selectedProjectId).trigger('change');
         } else {
             content2.classList.add("show");
             content1.classList.remove("show");
             if (filterSection) filterSection.classList.add("d-none");
             if (dropdownSection) dropdownSection.classList.remove("d-none");
+
+            // Sync projectDropdown with projectFilter and filter tasks
+            $('#projectDropdown').val(selectedProjectId).trigger('change');
         }
     }
 
@@ -735,10 +742,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdown = document.getElementById("projectDropdown");
     const tasks = document.querySelectorAll(".project-list-item");
 
-    function filterTasks(selectedProject) {
+    function filterTasks(selectedProjectId) {
         tasks.forEach(task => {
-            const projectName = task.querySelector(".selected-project").textContent.toLowerCase();
-            if (selectedProject === "" || projectName.includes(selectedProject)) {
+            const taskProjectId = task.getAttribute("data-project-id"); // Assuming each task has a data-project-id attribute
+            if (selectedProjectId === "all" || taskProjectId === selectedProjectId) {
                 task.style.display = "block"; // Show task
             } else {
                 task.style.display = "none"; // Hide task
@@ -746,15 +753,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Set the first project as default and trigger filtering
+    // Set initial dropdown value based on selectedProjectId
     if (dropdown.options.length > 0) {
-        dropdown.selectedIndex = 0; // Select first project after "Select a Project"
-        filterTasks(dropdown.value.toLowerCase()); // Filter tasks based on the first project
+        dropdown.value = selectedProjectId;
+        filterTasks(selectedProjectId);
     }
 
-    // Listen for dropdown changes
+    // Update selectedProjectId and filter tasks on dropdown change
     dropdown.addEventListener("change", function () {
-        filterTasks(this.value.toLowerCase());
+        selectedProjectId = this.value; // Update selected project ID
+        $('#projectFilter').val(selectedProjectId); // Sync list view dropdown
+        filterTasks(selectedProjectId);
     });
 });
 

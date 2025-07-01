@@ -1,0 +1,41 @@
+/* Professional Trello-style modal enhancements for statusHistoryModal */
+#statusHistoryModal .modal-content {
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+    border-radius: 18px;
+}
+#statusHistoryModal .modal-header {
+    border-bottom: none;
+}
+#statusHistoryModal .modal-body {
+    background: #f7f9fb;
+}
+#statusHistoryModal .card {
+    border-radius: 12px;
+}
+#statusHistoryModal .badge.projectStatus {
+    font-size: 1rem;
+    background: #0C5097;
+}
+#statusHistoryModal .nav-tabs .nav-link.active {
+    background: #0C5097;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+}
+#statusHistoryModal .nav-tabs .nav-link {
+    color: #0C5097;
+    font-weight: 500;
+}
+#statusHistoryModal .table {
+    background: #fff;
+    border-radius: 8px;
+}
+#statusHistoryModal .comment-input .form-control {
+    border-radius: 8px 0 0 8px;
+}
+#statusHistoryModal .comment-input .btn {
+    border-radius: 0 8px 8px 0;
+}
+#statusHistoryModal .attachments-container .attachment {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}

@@ -52,7 +52,7 @@ class EmailController extends Controller
                 $emails = Email::where('receiver_id', auth()->id())->get();
                 break;
         }
-        // dd($emails);
+
         return view('pages.email', compact('emails', 'type', 'folders', 'media'));
     }
 

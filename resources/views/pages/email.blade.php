@@ -7,49 +7,54 @@
 
     <div class="container" id="email-content" style="position: absolute; top: 190px; left: 85px;">
         <div class="row">
-                   <div class="col-lg-1 col-md-1 "  style="background-color:#F4F4F4 ;border-radius:10px 0px 0px 10px"">
-                <div style="display: flex; flex-direction: column; padding-left: 5px; gap: 7px;">
-              
+            <div class="col-lg-2 col-md-3" style="background-color:#F4F4F4; border-right: 1px solid #ddd; border-radius: 10px 0px 0px 10px; padding: 15px;">
+                <div class="sidebar-menu" style="display: flex; flex-direction: column; padding-left: 5px; gap: 7px;">
+
                     <div class="mt-3">
                         <a href="{{ route('email.index', 'inbox') }}"
-                            class="{{ request()->is('email/inbox') ? 'active' : '' }} link-item">
-                            <p>Inbox</p>
+                            class="{{ request()->is('email/inbox') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-inbox"></i>
+                            <p class="mb-0">Inbox</p>
                         </a>
                     </div>
                     <div>
                         <a href="{{ route('email.index', 'unread') }}"
-                            class="{{ request()->is('email/unread') ? 'active' : '' }} link-item">
-                            <p>Unread</p>
+                            class="{{ request()->is('email/unread') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-envelope-open-text"></i>
+                            <p class="mb-0">Unread</p>
                         </a>
                     </div>
                     <div>
                         <a href="{{ route('email.index', 'starred') }}"
-                            class="{{ request()->is('email/starred') ? 'active' : '' }} link-item">
-                            <p>Starred</p>
+                            class="{{ request()->is('email/starred') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-star"></i>
+                            <p class="mb-0">Starred</p>
                         </a>
                     </div>
                     <div>
                         <a href="{{ route('email.index', 'sent') }}"
-                            class="{{ request()->is('email/sent') ? 'active' : '' }} link-item">
-                            <p>Sent</p>
+                            class="{{ request()->is('email/sent') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-paper-plane"></i>
+                            <p class="mb-0">Sent</p>
                         </a>
                     </div>
-                    <a href="{{ route('email.index', 'draft') }}"
-                        class="{{ request()->is('email/draft') ? 'active' : '' }} link-item">
-                        <p>Draft</p>
-                    </a>
-                    <!-- <div>
-                                                        <p>Junk</p>
-                                                    </div>
-                                                    <div>
-                                                        <p>Outbox</p>
-                                                    </div> -->
-                    <a href="{{ route('email.index', 'trash') }}"
-                        class="{{ request()->is('email/trash') ? 'active' : '' }} link-item">
-                        <p>Trash</p>
-                    </a>
-                       <div class="folder static-folder" onclick="toggleFolders()"
-                    style="
+                    <div>
+                        <a href="{{ route('email.index', 'draft') }}"
+                            class="{{ request()->is('email/draft') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-file-alt"></i>
+                            <p class="mb-0">Draft</p>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ route('email.index', 'trash') }}"
+                            class="{{ request()->is('email/trash') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
+                            <i class="fas fa-trash"></i>
+                            <p class="mb-0">Trash</p>
+                        </a>
+                    </div>
+
+                    <div class="folder static-folder" onclick="toggleFolders()"
+                        style="
                             position: relative;
                             padding: 5px;
                             border: 1px solid #ddd;
@@ -57,45 +62,47 @@
                             background-color: #e7e9eb;
                             margin-bottom: 10px;
                             cursor: pointer;">
-                    <span style="font-size: 12px; font-weight: bold;">Folders</span>
-                    <span style="position: absolute; right: 3px;    top: 10px; font-size: 12px; cursor: pointer;">&#9660;</span>
-                </div>
+                        <span style="font-size: 12px; font-weight: bold;">Folders</span>
+                        <span
+                            style="position: absolute; right: 3px;    top: 10px; font-size: 12px; cursor: pointer;">&#9660;</span>
+                    </div>
 
-                <div id="foldersContainer" class="folders-container" style="display: none;">
-                    @foreach ($folders as $folder)
-                        <div class="folder-container" style="margin-bottom: 5px" data-id="{{ $folder->id }}">
-                            <div class="folder" draggable="true" ondragover="event.preventDefault()"
-                                ondrop="handleFolderDrop(event, {{ $folder->id }})"
-                                onclick="loadFolderEmails({{ $folder->id }})"
-                                style="
+                    <div id="foldersContainer" class="folders-container" style="display: none;">
+                        @foreach ($folders as $folder)
+                            <div class="folder-container" style="margin-bottom: 5px" data-id="{{ $folder->id }}">
+                                <div class="folder" draggable="true" ondragover="event.preventDefault()"
+                                    ondrop="handleFolderDrop(event, {{ $folder->id }})"
+                                    onclick="loadFolderEmails({{ $folder->id }})"
+                                    style="
                                     position: relative;
                                     padding: 5px;
                                     border: 1px solid #ddd;
                                     border-radius: 5px;
                                     background-color: #f8f9fa;
                                     cursor: pointer;">
-                                <span style="font-size: 12px">{{ $folder->name }}</span>
-                                <span
-                                    style="position:absolute; top:12px; right:5px; color: red; cursor: pointer; font-size:8px"
-                                    title="Delete folder"
-                                    onclick="deleteFolder({{ $folder->id }}, this.closest('.folder')); event.stopPropagation();">
-                                    &#10006;
-                                </span>
+                                    <span style="font-size: 12px">{{ $folder->name }}</span>
+                                    <span
+                                        style="position:absolute; top:12px; right:5px; color: red; cursor: pointer; font-size:8px"
+                                        title="Delete folder"
+                                        onclick="deleteFolder({{ $folder->id }}, this.closest('.folder')); event.stopPropagation();">
+                                        &#10006;
+                                    </span>
+                                </div>
+                                <!-- Emails will load below this folder -->
+                                <ul class="emails-container" style="margin-left: 20px; padding-left: 10px; display:none;">
+                                </ul>
                             </div>
-                            <!-- Emails will load below this folder -->
-                            <ul class="emails-container" style="margin-left: 20px; padding-left: 10px; display:none;"></ul>
-                        </div>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
 
-                <div id="backdrop-outlook"
-                    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000;">
-                </div>
+                    <div id="backdrop-outlook"
+                        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000;">
+                    </div>
 
-                <div id="emailModal" class="modal"
-                    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1100; backdrop-filter: blur(5px);">
-                    <div class="modal-content"
-                        style="
+                    <div id="emailModal" class="modal"
+                        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1100; backdrop-filter: blur(5px);">
+                        <div class="modal-content"
+                            style="
                         background-color: white;
                         border-radius: 12px;
                         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
@@ -106,8 +113,8 @@
                         padding: 2rem;
                         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
                     ">
-                        <span id="closeModal"
-                            style="
+                            <span id="closeModal"
+                                style="
                             position: absolute;
                             top: 1.5rem;
                             right: 1.5rem;
@@ -126,81 +133,90 @@
                             }
                         ">&times;</span>
 
-                        <h2 id="emailSubject"
-                            style="
+                            <h2 id="emailSubject"
+                                style="
                             margin: 0 0 1.5rem 0;
                             color: #1a1a1a;
                             font-size: 1.5rem;
                             font-weight: 600;
                             padding-right: 2rem;
                         ">
-                            Email Subject</h2>
+                                Email Subject</h2>
 
-                        <div
-                            style="
+                            <div
+                                style="
                             padding: 1rem;
                             background-color: #f8f9fa;
                             border-radius: 8px;
                             margin-bottom: 1.5rem;
                         ">
-                            <p
-                                style="
+                                <p
+                                    style="
                                 margin: 0 0 0.5rem 0;
                                 color: #666;
                                 font-size: 0.9rem;
                             ">
-                                <strong>From:</strong> <span id="emailSender" style="color: #2c5282;">Sender Email</span>
-                            </p>
-                        </div>
+                                    <strong>From:</strong> <span id="emailSender" style="color: #2c5282;">Sender
+                                        Email</span>
+                                </p>
+                            </div>
 
-                        <div
-                            style="
+                            <div
+                                style="
                             background-color: white;
                             border: 1px solid #e2e8f0;
                             border-radius: 8px;
                             padding: 1.5rem;
                         ">
-                            <p
-                                style="
+                                <p
+                                    style="
                                 margin: 0;
                                 line-height: 1.6;
                                 color: #4a5568;
                             ">
-                                <span id="emailBody">Email Body</span></p>
+                                    <span id="emailBody">Email Body</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
-         
-     
-            <div class="col-lg-5 col-md-5" style="    background-color:#F4F4F4 !important;    box-shadow: var(--bs-box-shadow-sm) !important;border-radius:0px 10px 10px 0px">
-                <div style="display: flex; align-items: center; flex-direction: column; " class="mt-3">
-        
-                    <!-- Create Folder Button -->
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFolderModal"
-    style="width: 100%; margin-bottom: 10px; color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important">
-    Create Folder
-</button>
 
-<!-- Create Folder Modal -->
-<div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header" style="border:none">
-        <h5 class="modal-title" id="createFolderModalLabel">Create New Folder</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" style="border:none">
-        <input type="text" id="folderNameInput" class="form-control" placeholder="Enter folder name">
-      </div>
-      <div class="modal-footer" style="border:none">
-        <button type="button" class="btn btn-secondary" style="color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" style="color:white !important; border:1px solid #0C5097 !important ; background-color:#0C5097 !important" onclick="submitCreateFolder()">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+            <div class="col-lg-4 col-md-5">
+                <div style="display: flex; align-items: center; flex-direction: column; " class="mt-3">
+
+                    <!-- Create Folder Button -->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFolderModal"
+                        style="width: 100%; margin-bottom: 10px; color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important">
+                        Create Folder
+                    </button>
+
+                    <!-- Create Folder Modal -->
+                    <div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header" style="border:none">
+                                    <h5 class="modal-title" id="createFolderModalLabel">Create New Folder</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="border:none">
+                                    <input type="text" id="folderNameInput" class="form-control"
+                                        placeholder="Enter folder name">
+                                </div>
+                                <div class="modal-footer" style="border:none">
+                                    <button type="button" class="btn btn-secondary"
+                                        style="color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary"
+                                        style="color:white !important; border:1px solid #0C5097 !important ; background-color:#0C5097 !important"
+                                        onclick="submitCreateFolder()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="clickable-div" id="clickDiv" onclick="hideDiv()">
                         <p>New Email</p>
@@ -225,10 +241,8 @@
                                         </svg>
                                     </div>
                                     <div class="dropdown-menu">
-                                        <button class="dropdown-item star-email"
-                                            data-id="{{ $email->id }}"
-                                            data-starred ="{{ $email->is_starred ? 'true' : 'false' }}"
-                                            >{{ $email->is_starred ? 'Unstar' : 'Star' }}</button>
+                                        <button class="dropdown-item star-email" data-id="{{ $email->id }}"
+                                            data-starred ="{{ $email->is_starred ? 'true' : 'false' }}">{{ $email->is_starred ? 'Unstar' : 'Star' }}</button>
                                         <button class="dropdown-item delete-email"
                                             data-id="{{ $email->id }}">Delete</button>
                                     </div>
@@ -244,7 +258,8 @@
                                 justify-content: space-between;
                                 display: flex;margin-bottom: -15px; padding:5px">
                                     <div>
-                                        <p style="font-size: 12px; font-weight: 500;">{{ $email->receiver->email ?? 'Unknown' }}</p>
+                                        <p style="font-size: 12px; font-weight: 500;">
+                                            {{ $email->receiver->email ?? 'Unknown' }}</p>
                                     </div>
                                     <div>
                                         <p style="font-size: 12px; font-weight: 500;">
@@ -280,7 +295,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-6 col-md-4">
                 <div id="toggleDiv"
                     style="display:none; width: auto;
                     height: auto;
@@ -348,7 +363,8 @@
                             <label for="body" class="form-label">Body</label>
                             <textarea name="body" id="editor" class="form-control" rows="5"></textarea>
                         </div>
-                        <button id="sendBtn" type="submit" class="btn btn-primary w-100" style="background: #0c5097">Send
+                        <button id="sendBtn" type="submit" class="btn btn-primary w-100"
+                            style="background: #0c5097">Send
                             Email</button>
                     </form>
                 </div>
@@ -367,33 +383,35 @@
     </script>
     <script src="{{ asset('js/email.js') }}"></script>
     <script>
-function submitCreateFolder() {
-    const folderName = document.getElementById('folderNameInput').value.trim();
+        function submitCreateFolder() {
+            const folderName = document.getElementById('folderNameInput').value.trim();
 
-    if (!folderName) {
-        alert("Folder name cannot be empty!");
-        return;
-    }
+            if (!folderName) {
+                alert("Folder name cannot be empty!");
+                return;
+            }
 
-    fetch(folderStoreRoute, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: folderName }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const folderContainer = document.getElementById('foldersContainer');
-            const newFolder = document.createElement('div');
-            newFolder.className = 'folder';
-            newFolder.setAttribute('data-id', data.folder.id);
-            newFolder.setAttribute('draggable', 'true');
-            newFolder.setAttribute('ondragover', 'event.preventDefault()');
-            newFolder.setAttribute('ondrop', `handleFolderDrop(event, ${data.folder.id})`);
-            newFolder.style = `
+            fetch(folderStoreRoute, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: folderName
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const folderContainer = document.getElementById('foldersContainer');
+                        const newFolder = document.createElement('div');
+                        newFolder.className = 'folder';
+                        newFolder.setAttribute('data-id', data.folder.id);
+                        newFolder.setAttribute('draggable', 'true');
+                        newFolder.setAttribute('ondragover', 'event.preventDefault()');
+                        newFolder.setAttribute('ondrop', `handleFolderDrop(event, ${data.folder.id})`);
+                        newFolder.style = `
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -405,38 +423,37 @@ function submitCreateFolder() {
                 cursor: pointer;
             `;
 
-            const folderNameSpan = document.createElement('span');
-            folderNameSpan.textContent = data.folder.name;
+                        const folderNameSpan = document.createElement('span');
+                        folderNameSpan.textContent = data.folder.name;
 
-            const deleteIcon = document.createElement('span');
-            deleteIcon.innerHTML = '&#10006;';
-            deleteIcon.style = `
+                        const deleteIcon = document.createElement('span');
+                        deleteIcon.innerHTML = '&#10006;';
+                        deleteIcon.style = `
                 color: red;
                 margin-left: 10px;
                 cursor: pointer;
             `;
-            deleteIcon.title = 'Delete folder';
-            deleteIcon.addEventListener('click', (event) => {
-                event.stopPropagation();
-                deleteFolder(data.folder.id, newFolder);
-            });
+                        deleteIcon.title = 'Delete folder';
+                        deleteIcon.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            deleteFolder(data.folder.id, newFolder);
+                        });
 
-            newFolder.appendChild(folderNameSpan);
-            newFolder.appendChild(deleteIcon);
-            folderContainer.appendChild(newFolder);
+                        newFolder.appendChild(folderNameSpan);
+                        newFolder.appendChild(deleteIcon);
+                        folderContainer.appendChild(newFolder);
 
-            // Close modal and clear input
-            const modal = bootstrap.Modal.getInstance(document.getElementById('createFolderModal'));
-            modal.hide();
-            document.getElementById('folderNameInput').value = '';
+                        // Close modal and clear input
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('createFolderModal'));
+                        modal.hide();
+                        document.getElementById('folderNameInput').value = '';
 
-            location.reload();
-        } else {
-            alert('An error occurred while creating the folder.');
+                        location.reload();
+                    } else {
+                        alert('An error occurred while creating the folder.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
-
+    </script>
 @endpush

@@ -196,4 +196,35 @@ tbody, td, tfoot, th, thead, tr {
 #filter {
     transition: opacity 0.4s ease-in-out, max-height 0.4s ease-in-out;
 }
+.avatar-sm {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .progress {
+        border-radius: 10px;
+    }
+
+    .badge {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .description-content {
+        line-height: 1.6;
+    }
+
+    .comment-input .form-control {
+        border-radius: 20px;
+    }
 

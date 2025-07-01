@@ -125,59 +125,22 @@
                                                         <use xlink:href="#image0_246_337" transform="scale(0.0175439)" />
                                                     </pattern>
                                                     <image id="image0_246_337" width="57" height="57"
-                                                        xlink:href="data:image/png;base64,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" />
+                                                        xlink:href="data:image/png;base64,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" />
                                                 </defs>
                                             </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" style="margin-left: -10px;">
-                                <div style="border: 0.73px solid #C2692E; border-radius: 5px;">
-                                    <div class="row" style="padding: 5px;">
-                                        <div class="col-lg-8">
-                                            <div>
-                                                <p style="font-size: 12px; margin-bottom: 0px;color: #C2692E;">Task on Hold
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p id="holdProjectsCount"
-                                                    style="font-size: 20px;font-weight: bold;color: #C2692E; margin-bottom: 0px;">
-                                                    {{ $holdProjects }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4"
-                                            style="display: flex;
-                                            align-items: center;
-                                            justify-content: center;">
-                                            <svg width="40" viewBox="0 0 52 53" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                <rect x="0.131348" y="0.486328" width="51.6011" height="51.6011"
-                                                    fill="url(#pattern0_246_340)" />
-                                                <defs>
-                                                    <pattern id="pattern0_246_340" patternContentUnits="objectBoundingBox"
-                                                        width="1" height="1">
-                                                        <use xlink:href="#image0_246_340" transform="scale(0.0175439)" />
-                                                    </pattern>
-                                                    <image id="image0_246_340" width="57" height="57"
-                                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAGjElEQVRoBc1a224cNRgeDuIoCCCOotCShmRtT6JCCKcWaKhaQdpSIOGQStwgwV3o2t40XKFIPAHPwGUvkOABeAokys7MBlVCvEXR581Mdz2/vZ7Z2QyRolnb/9j/Z/9nTxTN4O/P60uPpLvs5VTGryU98X6mxEeZFlupFtupFFcTyb5EO5Picr8Xn010Z/UvuTz/b2/l4Rmw09yUN/Xik6kWa4lmHwNI3X8AH3T5qXRvfq457qaY6fZ+dDdOIFXxpbqgfO8lUnyQqPiF21F01xRs1nsVix70ll7qS37Fx2RjYz128aZcfL4etzXeghhlmp1vDEAF0c40e3fmegtjkij2RTBALbZhdAay8x70ta/4K6nsLPe77NVM8tcTJdarSgMMFkS4xvn4X4HuJSp+OwTcoRVd619fOfbHPr/PP/NwdLB/4oFMs+P9buetTPLPQ9bBRjWmq2A0VfzcpIUTzT9Mv+MvYkNCgLloft8/ey+MGazspDVTzc9Mu14EgLBwvsUgjrMwCrlxS3X8qW99iHxtoHhx0gnCn93+LLrHdSpN9GOjBz3+hhdoV5yuJbpeHVRi86DLnmsCROgcg27nhE9fseGhcxm6YUhGRy2whv2dhUcrTdgQMaIqY9gcbidYbeAHXW4CAP/5dvWhhniuNc2ge+oxF1D035LHHvRODLl2OnolNts6QZvp/s7CU66DgJrZ9GNthGouBT9qHRxjjGj0d+OTLl6za/EzxCtRBGvqij4qKzW5QvOdLuOYyfgCuZrJJgiFhh+ctZsgGQroHEZKYos6UVLyXOlSsMUKYGoWJKnqLFIgESSMrWcSXuIUEaqNEQY2smtLS5kS3ySSfdLfWbjf9xqqCKgUpIp/jbDQR0uNQc3IRF2L7TFPgAyB2o06ixofq/gvqWK/mX8pfqCYQ5+x5or/dIeW34DldNG7+g+6MaP472vBi3eonYDPqRMTZpp9VTB9CNR1mlAFm7aO9EA3jTRY0lgYIFN0sgbNrmixVuxChR8QU5txV6I7LJ0cnni+IZJfqbBcQWpyVgsHgCOriVwhHPLBYoYKP9oC6TJAxsqibFiSZy22QxNeG39rIPfm50o4pLgKIxihLmoPwjfazIe22wIJI0aGelA7ALJBQr5DQdl0bYEEH6liGzYW4y/JiL6m0cFCbYKkjA8Sjigv3Y/uAKpq9gmFttsEmXTF6VEc5rdiG1Gp05jhznIoKJuuTZADxd608aAgFlFOFOU+m/nQdpsgUb2zQUJPI0onUfgNBWXTtQkSN2Q2SKOTVH2zFMHbSDztNkFSmZTxFBR6JM8eHN6htkAaP4lsxg7tdGc1wgWoPYA2gl4vGsdgWyBvSfEEhQPhXuSsCGh23IHD290WSFe6lfRWno6QIVA7gMsXLxrHYFsgqWo/wryidEMZH1SrTZriAOPqNhuWJ8x4av6rK9gf7PJn7bSsyAFdCxD9qABQQQ2AF+Tmjt5SWDALUS6IAn+YRFjyGyPMd32vZlr8eIeW/1znWwHceVLSaDKQfHFMTBJJcRlWK6cLfSKHQ30nk/ydSdUFnDJ2HBb97++XHw9dI6eDtKVKbNr8I8gpVSRcV3QoOOcT/h+fSY/FNkC0scElfnFFTRHjftClU6VJjrgDRtN104UKZIkdiGXaYxcpoLgfLL3QcscwSRbrFL/eiG1oNOgrO9wPtoxrbHmUGymAsLIIDMaI7QY+I6FehliQImBPcARtFNlIlwEPEZLwGznHd3CES0HGgvvBI8DhXAI3Vi49hIUOth9OIwSrpcVWnSq3k+sKAzhBF0C4jMqShsSZOk30IVzC/WAF/qYihZExOnj4lSXF15jjD13NWFsq0x4RY9wP1s1WQvmA+sBaUsDyPmRSofOV6MyN0YQFTGVBdRYnRTalySd0IJKBo3eJZw4QiQQOZMJ0/mEDlKqCjZwoFsSlEdKdaU/WBNuIRYlQLQeWP3GCUwPM4WMiVxCfL5g/YQBM/ROXo3vzc5OYwDj8mskH8XmbR+9G16ilgzkg3xPBAlX4yhennqZ0r9gGgKMuasqGmp8xZRcVX6KqhdQ8eR/cRGUr6gNFjeE7GdcHCTkjM3nihLVYC/aDFPNV+4ZOOb4wE0C2viuxPjFUqwqgCr3JHWGBA3SpyoZAjJEuzVw0q4CFVYTDRvmiqp7l4If6y8/BqJQS3irMHAUtfBxOGMxCj+DMzedsim2YehKemp03xgglUdVZRFWtKDo1zOR/vug05P0Gli0AAAAASUVORK5CYII=" />
-                                                </defs>
-                                            </svg>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row d-none" style="margin-top: 16px; margin-left:0px" id="dropdown">
+                        {{-- <div class="row d-none" style="margin-top: 16px; margin-left:0px" id="dropdown">
                             <select class="form-select" id="projectDropdown">
                                 @foreach ($projects->unique('project_name') as $project)
                                     <option value="{{ $project->project_name }}">{{ $project->project_name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -356,7 +319,7 @@
             ];
         @endphp
 
-        <div class="tab-pane board-tab fade h-screen-90 active content" id="content2" style="margin-bottom: 10px">
+        <div class="tab-pane board-tab fade h-screen-90 content" id="content2" style="margin-bottom: 10px">
             <div class="task-board-wrapper">
                 <div class="task-board-container">
                     <div class="task-board d-flex flex-nowrap">
@@ -390,20 +353,19 @@
                                         style="list-style: none; margin: 0; border-top: 1px solid #ddd; overflow-y: auto; flex-grow: 1;">
                                         @foreach ($projects->where('status', $status) as $task)
                                             <li class="project-list-item mb-3" data-id="{{ $task->id }}"
+                                                data-project-id="{{ $task->project_id ?? $task->id }}"
                                                 style="background-color: #f9f9f9; border-radius: 5px; padding: 10px; border: 1px solid #ddd;">
-                                                <!-- Task Header -->
+                                                <!-- Task Header (Always Visible) -->
                                                 <div
                                                     class="list-item-header d-flex justify-content-between align-items-center">
                                                     <div class="task-assign-to">
-                                                        <div class="task-assign-to">
-                                                            <span
-                                                                class="project-name v-align-middle name-{{ $status }} capitalize"
-                                                                style="cursor: pointer;" data-id="{{ $task->id }}"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#statusHistoryModal2">
-                                                                {{ $task->user->name }}
-                                                            </span>
-                                                        </div>
+                                                        <span
+                                                            class="project-name v-align-middle name-{{ $status }} capitalize selected-project"
+                                                            style="cursor: pointer; font-weight: bold;"
+                                                            data-id="{{ $task->id }}" data-bs-toggle="modal"
+                                                            data-bs-target="#statusHistoryModal2">
+                                                            {{ $task->task }} <!-- Display task heading -->
+                                                        </span>
                                                     </div>
                                                     <div class="collapse-task">
                                                         <span class="d-inline-block tooltip-customize"
@@ -418,32 +380,37 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Date Information (added above the task content) -->
-                                                <div class="task-meta d-flex justify-content-between mt-2 mb-2"
-                                                    style="font-size: 12px; color: #666;">
-                                                    <div>
-                                                        <i class="far fa-calendar-alt me-1"></i>
-                                                        @if ($task->start_date && $task->end_date)
-                                                            {{ $task->start_date->format('M d') }} -
-                                                            {{ $task->end_date->format('M d') }}
-                                                            ({{ $task->start_date->diffInDays($task->end_date) }} days)
-                                                        @elseif($task->deadline)
-                                                            Due: {{ $task->deadline->format('M d, Y') }}
-                                                        @endif
-                                                    </div>
-                                                    <div>
-                                                        <span class="badge"
-                                                            style="background-color: {{ $task->getCategoryColor($task->category) }}; color: white;">
-                                                            {{ ucfirst($task->category) }}
-                                                        </span>
-                                                    </div>
+                                                <!-- Associated Date (Always Visible) -->
+                                                <div class="task-meta mt-2 mb-2" style="font-size: 12px; color: #666;">
+                                                    <i class="far fa-calendar-alt me-1"></i>
+                                                    @if ($task->start_date && $task->end_date)
+                                                        {{ $task->start_date->format('M d') }} -
+                                                        {{ $task->end_date->format('M d') }}
+                                                        ({{ $task->start_date->diffInDays($task->end_date) }} days)
+                                                    @elseif ($task->deadline)
+                                                        Due: {{ $task->deadline->format('M d, Y') }}
+                                                    @else
+                                                        Start:
+                                                        {{ $task->start_date ? $task->start_date->format('M d, Y') : 'N/A' }}
+                                                    @endif
                                                 </div>
 
-                                                <!-- Task Content (Collapsible) -->
+                                                <!-- Collapsible Details -->
                                                 <div class="collapse project-list-collapse p-2"
                                                     id="taskCollapse{{ $task->id }}">
                                                     <div class="list-content" style="color: #333; font-size: 14px;">
-                                                        {{ $task->task }}
+                                                        <!-- Task Details -->
+                                                        <div><strong>Task:</strong> {{ $task->task }}</div>
+                                                        <div><strong>Start Date:</strong>
+                                                            {{ $task->start_date ? $task->start_date->format('M d, Y') : 'N/A' }}
+                                                        </div>
+                                                        <div><strong>Assigned To:</strong> {{ $task->user->name }}</div>
+                                                        <div><strong>Category:</strong>
+                                                            <span class="badge"
+                                                                style="background-color: {{ $task->getCategoryColor($task->category) }}; color: white;">
+                                                                {{ ucfirst($task->category) }}
+                                                            </span>
+                                                        </div>
                                                     </div>
 
                                                     <div
@@ -464,7 +431,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </li>
                                         @endforeach
                                     </ul>
@@ -885,61 +851,118 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <!-- Header with Project Info -->
-                <div class="modal-header" style="background: #0C5097; color: white;">
-                    <div class="d-flex flex-column">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-light text-dark projectId">#0000</span>
-                            <h5 class="modal-title mb-0 projectTitle">
-                                Project Title {{ ' - ' }}<span id="category"></span>
-                            </h5>
+                <div class="modal-header" style="background: #0C5097; color: white; border-radius: 5px 5px 0 0;">
+                    <div class="d-flex flex-column w-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-dark projectId">#0000</span>
+                                <h5 class="modal-title mb-0 projectTitle">Project Title</h5>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
 
-                        <small class="text-white-50 projectPostedDate">Posted on: --</small>
+                        <div class="d-flex align-items-center mt-2 gap-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tag me-1" style="font-size: 12px;"></i>
+                                <span id="category" class="small">Category</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock me-1" style="font-size: 12px;"></i>
+                                <small class="projectPostedDate">Posted on: --</small>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body p-0">
-                    <div class="d-flex">
+                    <div class="d-flex flex-column flex-lg-row">
                         <!-- Left Sidebar - Project Details -->
-                        <div class="bg-light p-3" style="width: 280px; border-right: 1px solid #dee2e6;">
+                        <div class="bg-light p-3"
+                            style="width: 280px; min-height: 100%; border-right: 1px solid #dee2e6;">
                             <div class="project-details">
-                                <div class="mb-3">
-                                    <label class="text-muted small mb-1">Created By</label>
-                                    <div class="fw-medium assignedBy">--</div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="text-muted small mb-1">Assigned To</label>
-                                    <div class="fw-medium text-truncate assignedTo">--</div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-6">
-                                        <label class="text-muted small mb-1">Start Date</label>
-                                        <div class="fw-medium startDate">--</div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="text-muted small mb-1">End Date</label>
-                                        <div class="fw-medium endDate">--</div>
+                                <!-- Status Card -->
+                                <div class="card mb-3 border-0 shadow-sm">
+                                    <div class="card-body p-2">
+                                        <label class="text-muted small mb-1">Status</label>
+                                        <div class="badge bg-success projectStatus w-100 text-start p-2">--</div>
                                     </div>
                                 </div>
 
-                                <div class="row g-3 mb-3">
-                                    <div class="col-6">
-                                        <label class="text-muted small mb-1">Expected Days</label>
-                                        <div class="fw-medium expectedDays">--</div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="text-muted small mb-1">Days Used</label>
-                                        <div class="fw-medium daysUsed">--</div>
+                                <!-- People Card -->
+                                <div class="card mb-3 border-0 shadow-sm">
+                                    <div class="card-body p-2">
+                                        <div class="mb-2">
+                                            <label class="text-muted small mb-1">Created By</label>
+                                            <div class="fw-medium assignedBy d-flex align-items-center gap-2">
+                                                <div
+                                                    class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <span>--</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="text-muted small mb-1">Assigned To</label>
+                                            <div class="fw-medium assignedTo d-flex align-items-center gap-2">
+                                                <div
+                                                    class="avatar-sm bg-info text-white rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <span>--</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="text-muted small mb-1">Status</label>
-                                    <div class="badge bg-success projectStatus">--</div>
+                                <!-- Timeline Card -->
+                                <div class="card mb-3 border-0 shadow-sm">
+                                    <div class="card-body p-2">
+                                        <div class="timeline-item mb-2">
+                                            <label class="text-muted small mb-1">Start Date</label>
+                                            <div class="fw-medium startDate d-flex align-items-center gap-2">
+                                                <i class="fas fa-play-circle text-success"></i>
+                                                <span>--</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item mb-2">
+                                            <label class="text-muted small mb-1">End Date</label>
+                                            <div class="fw-medium endDate d-flex align-items-center gap-2">
+                                                <i class="fas fa-flag-checkered text-danger"></i>
+                                                <span>--</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="progress mt-3" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 50%;"
+                                                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+
+                                        <div class="row g-2 mt-2">
+                                            <div class="col-6">
+                                                <label class="text-muted small mb-1">Expected Days</label>
+                                                <div class="fw-medium expectedDays">--</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="text-muted small mb-1">Days Used</label>
+                                                <div class="fw-medium daysUsed">--</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Labels Card -->
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-2">
+                                        <label class="text-muted small mb-1">Labels</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <span class="badge bg-warning text-dark">Urgent</span>
+                                            <span class="badge bg-info text-dark">Feature</span>
+                                            <span class="badge bg-secondary">Backend</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -947,57 +970,134 @@
                         <!-- Right Content Area -->
                         <div class="flex-grow-1 p-3">
                             <!-- Description Section -->
-                            <div class="mb-4">
-                                <h6 class="text-muted mb-3">Description</h6>
-                                <div class="description-content projectDescription"
-                                    style="max-height: 200px; overflow-y: auto;">
-                                    <p id="descriptionText"></p> <!-- Added a paragraph to display the description -->
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-3 d-flex align-items-center gap-2">
+                                        <i class="fas fa-align-left"></i>
+                                        <span>Description</span>
+                                    </h6>
+                                    <div class="description-content projectDescription"
+                                        style="max-height: 150px; overflow-y: auto;">
+                                        <p id="descriptionText" class="mb-0"></p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Tabs Section -->
-                            <ul class="nav nav-tabs" role="tablist">
-                                {{-- <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#TaskNotes">Notes</button>
-                                </li> --}}
-                                <li class="nav-item active">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#TaskStatus">Status
-                                        History</button>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content mt-3">
-                                <!-- Status History Tab -->
-                                <div class="tab-pane show active" id="TaskStatus" style="font-size:12px">
-                                    <div id="statusHistory" class="table-responsive" style="max-height: 200px;">
-                                        <table class="table table-hover">
-                                            <thead style="position: sticky; top: 0; background: white;">
-                                                <tr>
-                                                    <th>Status</th>
-                                                    <th>Category</th>
-                                                    <th>Date</th>
-                                                    <th>Updated By</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="statusHistoryBody"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- Notes Tab -->
-                                {{-- <div class="tab-pane fade show active" id="TaskNotes">
-                                    <div class="notes-container" id="notesContainer" style="max-height: 200px; overflow-y: auto;"></div>
-
-                                    <!-- Note Input -->
-                                    <div class="note-input mt-3">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Add a note...">
-                                            <button class="btn btn-primary">
-                                                <i class="fas fa-paper-plane"></i>
+                            <!-- Activity Section -->
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <!-- Tabs Navigation -->
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <button class="nav-link active" data-bs-toggle="tab"
+                                                data-bs-target="#TaskStatus">
+                                                <i class="fas fa-history me-1"></i>
+                                                Status History
                                             </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#TaskComments">
+                                                <i class="fas fa-comments me-1"></i>
+                                                Comments
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab"
+                                                data-bs-target="#TaskAttachments">
+                                                <i class="fas fa-paperclip me-1"></i>
+                                                Attachments
+                                            </button>
+                                        </li>
+                                    </ul>
+
+                                    <!-- Tabs Content -->
+                                    <div class="tab-content mt-3">
+                                        <!-- Status History Tab -->
+                                        <div class="tab-pane show active" id="TaskStatus">
+                                            <div id="statusHistory" class="table-responsive" style="max-height: 250px;">
+                                                <table class="table table-hover table-sm">
+                                                    <thead style="position: sticky; top: 0; background: white;">
+                                                        <tr>
+                                                            <th>Status</th>
+                                                            <th>Category</th>
+                                                            <th>Date</th>
+                                                            <th>Updated By</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="statusHistoryBody">
+                                                        <!-- Sample row -->
+                                                        <tr>
+                                                            <td><span class="badge bg-success">Completed</span></td>
+                                                            <td>Development</td>
+                                                            <td>2023-06-15</td>
+                                                            <td>John Doe</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Comments Tab -->
+                                        <div class="tab-pane fade" id="TaskComments">
+                                            <div class="comments-container" style="max-height: 250px; overflow-y: auto;">
+                                                <!-- Sample comment -->
+                                                <div class="comment mb-3">
+                                                    <div class="d-flex gap-2">
+                                                        <div
+                                                            class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="d-flex justify-content-between">
+                                                                <strong>John Doe</strong>
+                                                                <small class="text-muted">2 hours ago</small>
+                                                            </div>
+                                                            <p class="mb-0">This task is progressing well. We should have
+                                                                it completed by Friday.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="comment-input mt-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Add a comment...">
+                                                    <button class="btn btn-primary">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Attachments Tab -->
+                                        <div class="tab-pane fade" id="TaskAttachments">
+                                            <div class="attachments-container"
+                                                style="max-height: 250px; overflow-y: auto;">
+                                                <!-- Sample attachment -->
+                                                <div
+                                                    class="attachment mb-2 p-2 border rounded d-flex align-items-center gap-2">
+                                                    <i class="fas fa-file-pdf text-danger"></i>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between">
+                                                            <strong>Project_Specs.pdf</strong>
+                                                            <small class="text-muted">1.2 MB</small>
+                                                        </div>
+                                                        <small class="text-muted">Uploaded by Jane Smith, 3 days
+                                                            ago</small>
+                                                    </div>
+                                                    <button class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-plus me-1"></i> Add Attachment
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1190,5 +1290,34 @@
                 // Add your filter logic here
             }).trigger('change');
         });
+
+        function showContent(contentId) {
+            let content1 = document.getElementById('content1');
+            let content2 = document.getElementById('content2');
+            let filterSection = document.querySelector('#filter');
+            let dropdownSection = document.querySelector('#dropdown');
+
+            if (contentId === 'content1') {
+                content1.classList.add("show");
+                content2.classList.remove("show");
+                if (filterSection) filterSection.classList.remove("d-none");
+                if (dropdownSection) dropdownSection.classList.add("d-none");
+
+                // Fetch updated projects when switching to content1
+                fetchUpdatedProjects();
+
+                // --- Fix: Re-apply project filter after switching to list view ---
+                let dropdown = document.getElementById("projectDropdown");
+                if (dropdown && typeof filterTasks === 'function') {
+                    let selectedProject = dropdown.value.toLowerCase();
+                    filterTasks(selectedProject);
+                }
+            } else {
+                content2.classList.add("show");
+                content1.classList.remove("show");
+                if (filterSection) filterSection.classList.add("d-none");
+                if (dropdownSection) dropdownSection.classList.remove("d-none");
+            }
+        }
     </script>
 @endpush

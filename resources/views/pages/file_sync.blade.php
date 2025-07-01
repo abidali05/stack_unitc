@@ -353,29 +353,27 @@
                             });
                         } else if (data.folder) {
                             const folder = data.folder;
+                            console.log('folder', data);
                             const folderCard = `
-                                    <div class="col-md-2 col-sm-3 col-4 mb-3">
-                                        <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-                                            data-path="${folder.path}"
-                                            data-type="folder"
-                                            id="file-${folder.id}"
-                                            ondblclick="handleDoubleClick('${folder.path}', 'folder')"
-                                            style="background-color: #fff; position: relative;">
+                                <div class="col-md-2 col-sm-3 col-4 mb-3">
+                                    <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                                        data-path="${folder.path}"
+                                        data-type="folder"
+                                        id="file-${folder.id}"
+                                        ondblclick="handleDoubleClick('${folder.main_path}', 'folder')"
+                                        style="background-color: #fff; position: relative;">
 
-                                            <img src="${folder.path}" class="img-fluid mb-2"
-                                                alt="${folder.name}"
-                                                style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                                        <img src="/files/folder.png" class="img-fluid mb-2" alt="${folder.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
 
-                                            <p class="text-center text-truncate mb-1" title="${folder.name}" style="font-size: 13px; width: 100%;">
-                                                ${folder.name}
-                                            </p>
-                                            <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-                                                <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                                                    <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="2" cy="2" r="2" fill="black"></circle>
-                                                        <circle cx="10" cy="2" r="2" fill="black"></circle>
-                                                        <circle cx="18" cy="2" r="2" fill="black"></circle>
-                                                    </svg>
+                                        <p class="text-center text-truncate mb-1" title="${folder.name}" style="font-size: 13px; width: 100%;">
+                                            ${folder.name}
+                                        </p>
+                                        <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                                            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                                <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                                    <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                                    <circle cx="18" cy="2" r="2" fill="black"></circle>
                                                 </div>
                                                 <div class="dropdown-menu">
                                                     <button class="dropdown-item file" data-path="${folder.path}" data-type="folder">
@@ -396,62 +394,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>`;
+                                    </div>
+                                </div>`;
 
                             filteredContent.insertAdjacentHTML('beforeend', folderCard);
-
-                            // Optionally render contained files
-                            if (data.files && data.files.length > 0) {
-                                data.files.forEach(file => {
-                                    const fileCard = `
-                                        <div class="col-md-2 col-sm-3 col-4 mb-3">
-                                            <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-                                                data-path="${file.path}"
-                                                data-type="${file.type}"
-                                                id="file-${file.id}"
-                                                ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
-                                                style="background-color: #fff; position: relative;">
-
-                                                <img src="${file.path}" class="img-fluid mb-2"
-                                                    alt="${file.name}"
-                                                    style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
-
-                                                <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
-                                                    ${file.name}
-                                                </p>
-                                                <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-                                                    <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                                                        <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <circle cx="2" cy="2" r="2" fill="black"></circle>
-                                                            <circle cx="10" cy="2" r="2" fill="black"></circle>
-                                                            <circle cx="18" cy="2" r="2" fill="black"></circle>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="dropdown-menu">
-                                                        <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}">
-                                                            <i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}
-                                                        </button>
-                                                        <button class="dropdown-item" onclick="renameFile('${file.id}')">
-                                                            <i class="fas fa-edit me-1"></i> Rename
-                                                        </button>
-                                                        <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')">
-                                                            <i class="fas fa-download me-1"></i> Download
-                                                        </button>
-                                                        <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')">
-                                                            <i class="fas fa-share me-1"></i> Share
-                                                        </button>
-                                                        <button class="dropdown-item delete-file" data-id="${file.id}">
-                                                            <i class="fas fa-trash-alt me-1"></i> Delete
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`;
-
-                                    filteredContent.insertAdjacentHTML('beforeend', fileCard);
-                                });
-                            }
-
                             document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(element => {
                                 new bootstrap.Dropdown(element);
                             });
@@ -478,7 +424,18 @@
         function handleDoubleClick(folderPath, type) {
             if (type !== 'folder') return;
 
-            fetch(`/get-folder-content/${encodeURIComponent(folderPath)}`)
+            // Only send the folder name or relative path, not the full URL
+            let folderKey = folderPath;
+            // If folderPath is a URL, extract the last segment (folder name)
+            // try {
+            //     const url = new URL(folderPath);
+            //     folderKey = decodeURIComponent(url.pathname.split('/').pop());
+            // } catch (e) {
+            //     // Not a URL, use as is
+            //     folderKey = folderPath.split('/').pop();
+            // }
+
+            fetch(`/get-folder-content/${folderKey}`)
                 .then(response => response.json())
                 .then(data => {
                     const modalBody = document.getElementById('folderModalBody');
@@ -572,64 +529,60 @@
                     filteredContentSection.innerHTML = '';
 
                     // Add Back button
-                    // Add Back button container
                     const backBtnContainer = document.createElement('div');
                     backBtnContainer.className = 'd-flex justify-content-end mb-2';
-
-                    // Create Back button
                     const backBtn = document.createElement('button');
                     backBtn.className = 'btn btn-sm btn-outline-secondary';
                     backBtn.innerText = 'Back';
                     backBtn.onclick = function() {
-                        // Restore welcome section and upload dropdown
                         if (welcomeSection) welcomeSection.style.display = '';
                         if (uploadDropdownDiv) uploadDropdownDiv.style.display = '';
                         filteredContentSection.style.display = 'none';
                         filteredContentSection.innerHTML = '';
                     };
-
-                    // Append button to container, then to filtered section
                     backBtnContainer.appendChild(backBtn);
                     filteredContentSection.appendChild(backBtnContainer);
 
                     // Support both array and {success, files} response
                     let files = Array.isArray(data) ? data : (data.files || []);
-                    if (files.length > 0) {
-                        files.forEach(file => {
+                    // Show only folders and files not inside any folder (loose files)
+                    const visibleItems = files.filter(file => file.type === 'folder' || (file.type !== 'folder' && (!file.parent_folder_id || file.parent_folder_id === null)));
+                    if (visibleItems.length > 0) {
+                        visibleItems.forEach(file => {
                             const fileCard = `
-                        <div class="col-md-2 col-sm-3 col-4 mb-3">
-                            <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
-                                data-path="${file.path}"
-                                data-type="${file.type}"
-                                id="file-${file.id}"
-                                ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
-                                style="background-color: #fff; position: relative;">
+                <div class="col-md-2 col-sm-3 col-4 mb-3">
+                    <div class="file-card border rounded p-2 shadow-sm h-100 d-flex flex-column align-items-center justify-content-between"
+                        data-path="${file.path}"
+                        data-type="${file.type}"
+                        id="file-${file.id}"
+                        ondblclick="handleDoubleClick('${file.path}', '${file.type}')"
+                        style="background-color: #fff; position: relative;">
 
-                                ${(file.type === 'image') ? `<img src="${file.path}" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
-                                (file.type === 'folder') ? `<img src="/files/folder.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
-                                `<img src="/files/file.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">`}
+                        ${(file.type === 'image') ? `<img src="${file.path}" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
+                        (file.type === 'folder') ? `<img src="/files/folder.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">` :
+                        `<img src="/files/file.png" class="img-fluid mb-2" alt="${file.name}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">`}
 
-                                <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
-                                    ${file.name}
-                                </p>
-                                <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
-                                    <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                                        <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="2" cy="2" r="2" fill="black"></circle>
-                                            <circle cx="10" cy="2" r="2" fill="black"></circle>
-                                            <circle cx="18" cy="2" r="2" fill="black"></circle>
-                                        </svg>
-                                    </div>
-                                    <div class="dropdown-menu">
-                                        <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}"><i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}</button>
-                                        <button class="dropdown-item" onclick="renameFile('${file.id}')"><i class="fas fa-edit me-1"></i> Rename</button>
-                                        <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')"><i class="fas fa-download me-1"></i> Download</button>
-                                        <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')"><i class="fas fa-share me-1"></i> Share</button>
-                                        <button class="dropdown-item delete-file" data-id="${file.id}"><i class="fas fa-trash-alt me-1"></i> Delete</button>
-                                    </div>
-                                </div>
+                        <p class="text-center text-truncate mb-1" title="${file.name}" style="font-size: 13px; width: 100%;">
+                            ${file.name}
+                        </p>
+                        <div class="dropdown position-absolute" style="top: 5px; right: 10px;">
+                            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                <svg width="14" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="2" cy="2" r="2" fill="black"></circle>
+                                    <circle cx="10" cy="2" r="2" fill="black"></circle>
+                                    <circle cx="18" cy="2" r="2" fill="black"></circle>
+                                </svg>
                             </div>
-                        </div>`;
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item file" data-path="${file.path}" data-type="${file.type}"><i class="fas fa-folder-open me-1"></i> ${file.type === 'folder' ? 'Open Folder' : 'Open'}</button>
+                                <button class="dropdown-item" onclick="renameFile('${file.id}')"><i class="fas fa-edit me-1"></i> Rename</button>
+                                <button class="dropdown-item" onclick="downloadFile('${file.path}', '${file.type}')"><i class="fas fa-download me-1"></i> Download</button>
+                                <button class="dropdown-item" onclick="openShareModal('${file.id}', '${file.path}')"><i class="fas fa-share me-1"></i> Share</button>
+                                <button class="dropdown-item delete-file" data-id="${file.id}"><i class="fas fa-trash-alt me-1"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
                             filteredContentSection.insertAdjacentHTML('beforeend', fileCard);
                         });
                         document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(element => {
