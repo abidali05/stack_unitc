@@ -7,7 +7,8 @@
 
     <div class="container" id="email-content" style="position: absolute; top: 190px; left: 85px;">
         <div class="row">
-            <div class="col-lg-2 col-md-3" style="background-color:#F4F4F4; border-right: 1px solid #ddd; border-radius: 10px 0px 0px 10px; padding: 15px;">
+            <div class="col-lg-2 col-md-3"
+                style="background-color:#F4F4F4; border-right: 1px solid #ddd; border-radius: 10px 0px 0px 10px; padding: 15px;">
                 <div class="sidebar-menu" style="display: flex; flex-direction: column; padding-left: 5px; gap: 7px;">
 
                     <div class="mt-3">
@@ -101,8 +102,7 @@
 
                     <div id="emailModal" class="modal"
                         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1100; backdrop-filter: blur(5px);">
-                        <div class="modal-content"
-                            style="
+                        <div class="modal-content" style="
                         background-color: white;
                         border-radius: 12px;
                         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
@@ -111,10 +111,8 @@
                         margin: 5% auto;
                         position: relative;
                         padding: 2rem;
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                    ">
-                            <span id="closeModal"
-                                style="
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;">
+                            <span id="closeModal" style="
                             position: absolute;
                             top: 1.5rem;
                             right: 1.5rem;
@@ -130,50 +128,38 @@
                             transition: background-color 0.2s;
                             &:hover {
                                 background-color: #f5f5f5;
-                            }
-                        ">&times;</span>
+                            }">&times;</span>
 
-                            <h2 id="emailSubject"
-                                style="
+                            <h2 id="emailSubject" style="
                             margin: 0 0 1.5rem 0;
                             color: #1a1a1a;
                             font-size: 1.5rem;
                             font-weight: 600;
-                            padding-right: 2rem;
-                        ">
-                                Email Subject</h2>
+                            padding-right: 2rem;">Email Subject</h2>
 
-                            <div
-                                style="
+                            <div style="
                             padding: 1rem;
                             background-color: #f8f9fa;
                             border-radius: 8px;
-                            margin-bottom: 1.5rem;
-                        ">
-                                <p
-                                    style="
+                            margin-bottom: 1.5rem;">
+                                <p style="
                                 margin: 0 0 0.5rem 0;
                                 color: #666;
-                                font-size: 0.9rem;
-                            ">
+                                font-size: 0.9rem;">
                                     <strong>From:</strong> <span id="emailSender" style="color: #2c5282;">Sender
                                         Email</span>
                                 </p>
                             </div>
 
-                            <div
-                                style="
+                            <div style="
                             background-color: white;
                             border: 1px solid #e2e8f0;
                             border-radius: 8px;
-                            padding: 1.5rem;
-                        ">
-                                <p
-                                    style="
+                            padding: 1.5rem;">
+                                <p style="
                                 margin: 0;
                                 line-height: 1.6;
-                                color: #4a5568;
-                            ">
+                                color: #4a5568;">
                                     <span id="emailBody">Email Body</span>
                                 </p>
                             </div>
@@ -301,16 +287,13 @@
                     height: auto;
                     border-radius: 16px;
                     background: #F2F2F2;
-                    padding: 20px;
-                    ">
+                    padding: 20px;">
                     <div class="toggle-div">
                         <div></div>
-                        <div
-                            style="
+                        <div style="
                             align-items: baseline;
                             display: flex;
-                            gap: 5px;
-                        ">
+                            gap: 5px;">
                             <div>
                                 <p style="color: #707070; font-size: 11px;">1-50 of 13911</p>
                             </div>
@@ -341,8 +324,7 @@
                     height: auto;
                     border-radius: 16px;
                     background: #F2F2F2;
-                    padding: 20px;
-                    ">
+                    padding: 20px;">
                     <form action="{{ route('email.store') }}" method="POST" id="emailForm"
                         class="p-4 border rounded shadow-sm bg-light">
                         @csrf
@@ -353,6 +335,16 @@
                             <label for="email" class="form-label">To</label>
                             <input type="email" name="email" id="email" class="form-control"
                                 placeholder="Enter Email" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="cc" class="form-label">CC</label>
+                            <input type="text" name="cc" id="cc" class="form-control"
+                                placeholder="Add CC (comma separated for multiple)">
+                        </div>
+                        <div class="mb-2">
+                            <label for="bcc" class="form-label">BCC</label>
+                            <input type="text" name="bcc" id="bcc" class="form-control"
+                                placeholder="Add BCC (comma separated for multiple)">
                         </div>
                         <div class="mb-2">
                             <label for="subject" class="form-label">Subject</label>

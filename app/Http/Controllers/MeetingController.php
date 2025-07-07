@@ -129,7 +129,7 @@ class MeetingController extends Controller
                 $meetings[] = $this->addMeetingStatus($response->json());
             }
         }
-        // dd($meetings);
+
         return view('pages.meeting', compact('emails', 'media', 'meetings', 'users'));
     }
 
