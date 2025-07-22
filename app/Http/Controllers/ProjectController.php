@@ -2,317 +2,204 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Email;
 use App\Models\Media;
-use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\ProjectStatus;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', auth()->id())->get();
-        $projects = Project::with('user')->get();
-        $projects->each(function ($project) {
-            $expectedDays = $project->expected_days;
-            $daysUsed = $project->days_used;
+        $users = User::where('id', '!=', Auth::id())->get();
+        $tasks = Task::with(['project', 'assignee'])->get();
 
-            $project->expected_days = $expectedDays;
-            $project->days_used = $daysUsed;
+        $tasks->each(function ($task) {
+            $task->expected_days = $task->due_date && $task->project->start_date
+                ? Carbon::parse($task->project->start_date)->diffInDays($task->due_date)
+                : null;
+            $task->days_used = $task->project->start_date
+                ? Carbon::parse($task->project->start_date)->diffInDays($task->completed_at ?? now())
+                : null;
         });
-        $completedProjects = Project::where('status', 'completed')->count();
-        $inProgressProjects = Project::where('status', 'inprogress')->count();
-        $holdProjects = Project::where('status', 'hold')->count();
-        $overdueProjects = Project::where('deadline', '<', DB::raw('DATE(NOW())'))
-            ->whereIn('status', ['todo', 'inprogress', 'hold'])
+
+        $completedTasks = Task::where('status', 'done')->count();
+        $inProgressTasks = Task::where('status', 'in_progress')->count();
+        $todoTasks = Task::where('status', 'todo')->count();
+        $overdueTasks = Task::where('due_date', '<', now())
+            ->where('status', '!=', 'done')
             ->count();
 
-        $emails = Email::with('receiver')->where('receiver_id', auth()->id())->get();
+        $emails = Email::with('receiver')->where('receiver_id', Auth::id())->get();
+        $media = Media::where('user_id', Auth::id())->get();
 
-        $media = Media::where('user_id', auth()->id())->get();
-
-        return view('pages.project', compact('users', 'projects', 'completedProjects', 'inProgressProjects', 'overdueProjects', 'holdProjects', 'emails', 'media'));
+        return view('pages.project', compact(
+            'users',
+            'tasks',
+            'completedTasks',
+            'inProgressTasks',
+            'todoTasks',
+            'overdueTasks',
+            'emails',
+            'media'
+        ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $users = User::where('id', '!=', Auth::id())->get();
+        return view('pages.project-create', compact('users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-
-        $request->validate([
-            'project_name' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'task' => 'required|string',
-            'category' => 'required|in:task,tweak,bug,custom',
-            'status' => 'required|in:todo,inprogress,hold,completed',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'start_date' => 'nullable|date',
-            'deadline' => 'required|date|after_or_equal:start_date',
-            // 'document' => 'required',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'required|in:not_started,in_progress,completed',
+            'created_by' => 'required|exists:users,id',
+            'tasks.*.title' => 'required|string|max:255',
+            'tasks.*.description' => 'nullable|string',
+            'tasks.*.assigned_to' => 'nullable|exists:users,id',
+            'tasks.*.priority' => 'required|in:low,medium,high',
+            'tasks.*.due_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
-        $data = [
-            'project_name' => $request->input('project_name'),
-            'user_id' => $request->input('user_id'),
-            'task' => $request->input('task'),
-            'category' => $request->input('category'),
-            'status' => $request->input('status'),
-            'start_date' => $request->input('start_date'),
-            'deadline' => $request->input('deadline'),
-            'assigned_by' => auth()->id(),
-        ];
+        $project = Project::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'status' => $validated['status'],
+            'created_by' => $validated['created_by'],
+        ]);
 
-        if ($request->hasFile('document')) {
-            $file = $request->file('document');
-            $fileName = time() . '_' . uniqId() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('documents'), $fileName);
-            $data['document'] = 'documents/' . $fileName;
+        if (!empty($validated['tasks'])) {
+            foreach ($validated['tasks'] as $taskData) {
+                $project->tasks()->create([
+                    'title' => $taskData['title'],
+                    'description' => $taskData['description'],
+                    'assigned_to' => $taskData['assigned_to'],
+                    'status' => 'todo',
+                    'priority' => $taskData['priority'],
+                    'due_date' => $taskData['due_date'],
+                ]);
+            }
         }
 
-        Project::create($data);
-
-        return response()->json(['status' => 'success', 'message' => 'Project created successfully!']);
+        return response()->json(['status' => 'success', 'message' => 'Project and tasks created successfully!']);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Project $project)
     {
-        $project->increment('view_count');
-        $project = Project::with('user')->findOrFail($project->id);
-        return response()->json([
-            'project_name'    => $project->project_name,
-            'user_name'       => $project->user->name,
-            'task'            => $project->task,
-            'category'        => ucfirst($project->category), // Adding category data
-            'status'          => ucfirst($project->status),
-            'view_count'      => $project->view_count,
-            'deadline' => $project->deadline ? \Carbon\Carbon::parse($project->deadline)->format('d-m-Y') : '',
-            'start_date' => $project->start_date ? \Carbon\Carbon::parse($project->start_date)->format('d-m-Y') : '',
-            'end_date' => $project->end_date ? \Carbon\Carbon::parse($project->end_date)->format('d-m-Y') : '',
-            'document'    => $project->document ? asset($project->document) : null, // Adjust document url path
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        return response()->json($project);
-    }
-
-    public function update(Request $request, Project $project)
-    {
-        $request->validate([
-            'project_name' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'task' => 'required|string',
-            'category' => 'required|in:task,tweak,bug,custom',
-            'status' => 'required|in:todo,inprogress,hold,completed,reopen',
-            'start_date' => 'required|date',
-            'deadline' => 'required|date|after_or_equal:start_date',
-            //'document' => 'required',
-        ]);
-
-        $statusChanged = $request->has('status') && $project->status !== $request->status;
-
-        $data = [
-            'project_name' => $request->input('project_name', $project->project_name),
-            'user_id' => $request->input('user_id', $project->user_id),
-            'task' => $request->input('task', $project->task),
-            'category' => $request->input('category', $project->category),
-            'status' => $request->input('status', $project->status),
-            'start_date' => $request->input('start_date', $project->start_date),
-            'deadline' => $request->input('deadline', $project->deadline),
-        ];
-
-        if ($request->status === 'reopen') {
-            $data['end_date'] = null;
-        }
-
-        if ($request->hasFile('document')) {
-            $file = $request->file('document');
-            $fileName = time() . '_' . uniqId() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('documents'), $fileName);
-            $data['document'] = 'documents/' . $fileName;
-        }
-
-        $project->update($data);
-
-        if ($statusChanged) {
-            ProjectStatus::create([
-                'project_id' => $project->id,
-                'status' => $request->status,
-                'updated_by' => auth()->id(),
-                'category' => $request->category
-            ]);
-        }
-        // Return success response
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Project updated successfully.',
-            'project' => [
-                'id' => $project->id,
-                'project_name' => $project->project_name,
-                'user_name' => $project->user->name,
-                'task' => $project->task,
-                'category' => $project->category,
-                'status' => $project->status,
-                'start_date_formatted' => $project->start_date,
-                'end_date_formatted' => $project->end_date ? $project->end_date : null,
-                'expected_days' => $project->expected_days,
-                'deadline' => $project->deadline,
-                'days_used' => $project->days_used,
-            ]
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Project $project)
-    {
-        $project = Project::findOrFail($project->id);
-        $project->delete();
-
-        return response()->json(['message' => 'Project deleted successfully']);
-    }
-
-    public function getProjectGraph()
-    {
-        $projectsGraph = Project::select('project_name')
-            ->selectRaw(
-                '
-                sum(status = "inprogress") as inprogress,
-                sum(status = "hold") as hold,
-                sum(deadline < ? and status != "completed") as overdue',
-                [Carbon::now()]
-            )
-            ->groupBy('project_name')
-            ->get()
-            ->map(function ($project) {
-                $project->inprogress = (int) $project->inprogress;
-                $project->hold = (int) $project->hold;
-                $project->overdue = (int) $project->overdue;
-                return $project;
-            });
-
-        return response()->json($projectsGraph);
-    }
-
-    public function getProjectDetails($id)
-    {
-        $project = Project::with(['user', 'statuses', 'assignedBy'])->findOrFail($id);
+        $project->load(['creator', 'tasks.assignee']);
         return response()->json([
             'id' => $project->id,
-            'title' => $project->project_name,
-            'posted_date' => $project->created_at->format('Y-m-d'),
-            'assigned_to' => $project->user->name ?? 'N/A',
-            'assigned_by' => $project->assignedBy->name ?? 'N/A',
-            'task' => $project->task,
-            'deadline' => $project->deadline,
-            'category' => $project->category,
-            'start_date' => $project->start_date ?? 'N/A',
-            'end_date' => $project->end_date ?? 'N/A',
-            'expected_days' => $project->expected_days ?? 'N/A',
-            'days_used' => $project->days_used ?? 'N/A',
-            'status' => $project->status,
-            'status_color' => $this->getStatusColor($project->status),
-            'document' => $project->document ?? 'N/A',
-            'view_count' => $project->view_count,
-
-            'status_history' => $project->statuses->map(function ($status) {
+            'name' => $project->name,
+            'description' => $project->description,
+            'start_date' => $project->start_date ? Carbon::parse($project->start_date)->format('d-m-Y') : null,
+            'end_date' => $project->end_date ? Carbon::parse($project->end_date)->format('d-m-Y') : null,
+            'status' => ucfirst($project->status),
+            'created_by' => $project->creator ? ['id' => $project->creator->id, 'name' => $project->creator->name] : null,
+            'tasks' => $project->tasks->map(function ($task) {
                 return [
-                    'id' => $status->id,
-                    'category' => $status->category,
-                    'status' => $status->status,
-                    'date' => $status->created_at->format('Y-m-d H:i:s'),
-                    'updated_by' => $status->user->name,
-                    'color' => $this->getStatusColor($status->status),
+                    'id' => $task->id,
+                    'title' => $task->title,
+                    'description' => $task->description,
+                    'status' => ucfirst(str_replace('_', ' ', $task->status)),
+                    'priority' => ucfirst($task->priority),
+                    'due_date' => $task->due_date ? Carbon::parse($task->due_date)->format('d-m-Y') : null,
+                    'completed_at' => $task->completed_at ? Carbon::parse($task->completed_at)->format('d-m-Y') : null,
+                    'assignee' => $task->assignee ? ['id' => $task->assignee->id, 'name' => $task->assignee->name] : null,
+                    'expected_days' => $task->due_date && $task->project->start_date
+                        ? Carbon::parse($task->project->start_date)->diffInDays($task->due_date)
+                        : null,
+                    'days_used' => $task->project->start_date
+                        ? Carbon::parse($task->project->start_date)->diffInDays($task->completed_at ?? now())
+                        : null,
                 ];
             }),
         ]);
     }
 
-    private function getStatusColor($status)
+    public function edit(Project $project)
     {
-        return match ($status) {
-            'completed' => 'success',
-            'inprogress' => 'danger',
-            'reopen' => 'warning',
-            'hold' => 'dark',
-            'todo' => 'primary',
-        };
+        $users = User::where('id', '!=', Auth::id())->get();
+        $project->load('tasks');
+        return view('pages.project-edit', compact('project', 'users'));
     }
 
-    public function updateStatus(Request $request)
+    public function update(Request $request, Project $project)
     {
-        $task = Project::find($request->task_id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'required|in:not_started,in_progress,completed',
+            'created_by' => 'required|exists:users,id',
+        ]);
 
-        if (!$task) {
-            return response()->json(['error' => 'Task not found'], 404);
+        $statusChanged = $project->status !== $validated['status'];
+
+        $project->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'status' => $validated['status'],
+            'created_by' => $validated['created_by'],
+        ]);
+
+        if ($statusChanged) {
+            \App\Models\ProjectStatus::create([
+                'project_id' => $project->id,
+                'status' => $validated['status'],
+                'updated_by' => Auth::id(),
+            ]);
         }
-
-        $task->status = $request->status;
-
-        if ($request->status === 'completed' && !$task->end_date) {
-            $task->end_date = Carbon::now();
-        }
-
-        $task->save();
-
-        $completedProjects = Project::where('status', 'completed')->count();
-        $inProgressProjects = Project::where('status', 'inprogress')->count();
-        $holdProjects = Project::where('status', 'hold')->count();
-        $overdueProjects = Project::where('deadline', '<', Carbon::now())->where('status', '!=', 'completed')->count();
 
         return response()->json([
-            'success' => 'Task updated successfully',
-            'completedProjects' => $completedProjects,
-            'inProgressProjects' => $inProgressProjects,
-            'holdProjects' => $holdProjects,
-            'overdueProjects' => $overdueProjects
+            'status' => 'success',
+            'message' => 'Project updated successfully.',
+            'project' => [
+                'id' => $project->id,
+                'name' => $project->name,
+                'description' => $project->description,
+                'start_date' => $project->start_date,
+                'end_date' => $project->end_date,
+                'status' => $project->status,
+                'created_by' => $project->created_by,
+            ],
         ]);
     }
 
-    public function fetchProjects()
+    public function destroy(Project $project)
     {
-        $users = User::where('id', '!=', auth()->id())->get();
-        $projects = Project::with('user')->get();
+        $project->tasks()->delete();
+        $project->delete();
+        return response()->json(['status' => 'success', 'message' => 'Project deleted successfully']);
+    }
 
-        $projects->each(function ($project) {
-            $project->expected_days = $project->expected_days;
-            $project->days_used = $project->days_used;
-        });
-
-        $completedProjects = Project::where('status', 'completed')->count();
-        $inProgressProjects = Project::where('status', 'inprogress')->count();
-        $holdProjects = Project::where('status', 'hold')->count();
-        $overdueProjects = Project::where('deadline', '<', DB::raw('DATE(NOW())'))
-            ->whereIn('status', ['todo', 'inprogress', 'hold'])
-            ->count();
-
+    public function graph()
+    {
         return response()->json([
-            'projects' => $projects,
-            'completedProjects' => $completedProjects,
-            'inProgressProjects' => $inProgressProjects,
-            'holdProjects' => $holdProjects,
-            'overdueProjects' => $overdueProjects
+            'completedTasks' => Task::where('status', 'done')->count(),
+            'inProgressTasks' => Task::where('status', 'in_progress')->count(),
+            'todoTasks' => Task::where('status', 'todo')->count(),
+            'overdueTasks' => Task::where('due_date', '<', now())->where('status', '!=', 'done')->count(),
         ]);
+    }
+
+    public function getUsers()
+    {
+        $users = User::all(['id', 'name']);
+        return response()->json($users);
     }
 }
