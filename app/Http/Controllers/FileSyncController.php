@@ -125,6 +125,7 @@ class FileSyncController extends Controller
                             'id' => $folder->id,
                             'name' => $folderName,
                             'path' => asset("uploads/$folderName"),
+                            'main_path' => "uploads/$folderName",
                             'type' => 'folder',
                             'image_path' => asset('images/folder-icon.png'), // Adjust path as needed
                         ],
@@ -390,8 +391,8 @@ class FileSyncController extends Controller
                     'pdf' => 'pdf',
                     'xlsx' => 'xlsx',
                     'zip' => 'zip',
-                    'doc', 'docx' => 'word',
-                    'ppt', 'pptx' => 'ppt',
+                    'word' => in_array($extension, ['doc', 'docx']) ? 'word' : 'file',
+                    'ppt' => in_array($extension, ['ppt', 'pptx']) ? 'ppt' : 'file',
                     'jpeg', 'jpg', 'png', 'gif', 'bmp', 'svg' => 'image',
                     default => 'file',
                 };
@@ -430,6 +431,7 @@ class FileSyncController extends Controller
 
         // Get all files and subfolders inside the folder
         $files = FileSync::where('parent_id', $folder->id)->get();
+
         $fileList = [];
 
         foreach ($files as $file) {
@@ -486,11 +488,26 @@ class FileSyncController extends Controller
      */
     public function all(Request $request)
     {
-        $files = FileSync::where('user_id', auth()->id())
+        // Get all folders for the user
+        $folders = FileSync::where('user_id', auth()->id())
+            ->where('type', 'folder')
             ->orderByDesc('created_at')
             ->get();
 
-        $result = $files->map(function ($file) {
+        // Get all files for the user that are NOT inside any folder (parent_id is null)
+        $looseFiles = FileSync::where('user_id', auth()->id())
+            ->where(function($q) {
+                $q->where('type', '!=', 'folder')
+                  ->orWhereNull('type'); // fallback if type is null
+            })
+            ->whereNull('parent_id')
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Merge folders and loose files
+        $all = $folders->concat($looseFiles)->values();
+
+        $result = $all->map(function ($file) {
             $type = $file->type === 'folder' ? 'folder' : $this->getFileType($file->name);
             $isImage = $type === 'image';
             return [
@@ -501,6 +518,6 @@ class FileSyncController extends Controller
                 'path' => $file->path,
             ];
         });
-        return response()->json($result);
+        return response()->json(['success' => true, 'files' => $result]);
     }
 }

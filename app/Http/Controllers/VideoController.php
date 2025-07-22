@@ -46,7 +46,6 @@ class VideoController extends Controller
                 'redirect_uri' => $this->redirectUri,
             ]);
 
-        dd($response->body());
         $data = $response->json();
 
         if (isset($data['access_token'])) {

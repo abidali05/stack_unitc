@@ -239,7 +239,7 @@ function deleteEmail(emailId) {
     });
 }
 
-<script>
+
 function submitCreateFolder() {
     const folderName = document.getElementById('folderNameInput').value.trim();
 
@@ -256,17 +256,17 @@ function submitCreateFolder() {
         },
         body: JSON.stringify({ name: folderName }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const folderContainer = document.getElementById('foldersContainer');
-            const newFolder = document.createElement('div');
-            newFolder.className = 'folder';
-            newFolder.setAttribute('data-id', data.folder.id);
-            newFolder.setAttribute('draggable', 'true');
-            newFolder.setAttribute('ondragover', 'event.preventDefault()');
-            newFolder.setAttribute('ondrop', `handleFolderDrop(event, ${data.folder.id})`);
-            newFolder.style = `
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const folderContainer = document.getElementById('foldersContainer');
+                const newFolder = document.createElement('div');
+                newFolder.className = 'folder';
+                newFolder.setAttribute('data-id', data.folder.id);
+                newFolder.setAttribute('draggable', 'true');
+                newFolder.setAttribute('ondragover', 'event.preventDefault()');
+                newFolder.setAttribute('ondrop', `handleFolderDrop(event, ${data.folder.id})`);
+                newFolder.style = `
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -278,39 +278,44 @@ function submitCreateFolder() {
                 cursor: pointer;
             `;
 
-            const folderNameSpan = document.createElement('span');
-            folderNameSpan.textContent = data.folder.name;
+                const folderNameSpan = document.createElement('span');
+                folderNameSpan.textContent = data.folder.name;
 
-            const deleteIcon = document.createElement('span');
-            deleteIcon.innerHTML = '&#10006;';
-            deleteIcon.style = `
+                const deleteIcon = document.createElement('span');
+                deleteIcon.innerHTML = '&#10006;';
+                deleteIcon.style = `
                 color: red;
                 margin-left: 10px;
                 cursor: pointer;
             `;
-            deleteIcon.title = 'Delete folder';
-            deleteIcon.addEventListener('click', (event) => {
-                event.stopPropagation();
-                deleteFolder(data.folder.id, newFolder);
-            });
+                deleteIcon.title = 'Delete folder';
+                deleteIcon.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    deleteFolder(data.folder.id, newFolder);
+                });
 
-            newFolder.appendChild(folderNameSpan);
-            newFolder.appendChild(deleteIcon);
-            folderContainer.appendChild(newFolder);
+                newFolder.appendChild(folderNameSpan);
+                newFolder.appendChild(deleteIcon);
+                folderContainer.appendChild(newFolder);
 
-            // Close modal and clear input
-            const modal = bootstrap.Modal.getInstance(document.getElementById('createFolderModal'));
-            modal.hide();
-            document.getElementById('folderNameInput').value = '';
+                // Close modal and clear input
+                const modal = bootstrap.Modal.getInstance(document.getElementById('createFolderModal'));
+                modal.hide();
+                document.getElementById('folderNameInput').value = '';
 
-            location.reload();
-        } else {
-            alert('An error occurred while creating the folder.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
+                location.reload();
+            } else {
+                alert('An error occurred while creating the folder.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
 }
-</script>
+
+function toggleFolders() {
+    const foldersContainer = document.getElementById('foldersContainer');
+    foldersContainer.style.display =
+        foldersContainer.style.display === 'none' ? 'block' : 'none';
+}
 
 let draggedEmailId = null;
 
@@ -458,12 +463,6 @@ function deleteFolder(folderId, folderElement) {
             }
         })
         .catch(error => console.error('Error:', error));
-}
-
-function toggleFolders() {
-    const foldersContainer = document.getElementById('foldersContainer');
-    foldersContainer.style.display =
-    foldersContainer.style.display === 'none' ? 'block' : 'none';
 }
 
 

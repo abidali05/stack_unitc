@@ -14,9 +14,6 @@ class Project extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'deadline' => 'date',
-        'end_date' => 'date',
-        'deadline' => 'date',
     ];
 
     public function getCategoryColor($category)
@@ -30,11 +27,14 @@ class Project extends Model
         };
     }
 
-    //protected $dates = ['start_date', 'end_date'];
-
-    public function user()
+    public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
     }
 
     public function statuses()
@@ -44,9 +44,9 @@ class Project extends Model
 
     public function getExpectedDaysAttribute()
     {
-        if ($this->start_date && $this->deadline) {
+        if ($this->start_date && $this->end_date) {
             $startDate = Carbon::parse($this->start_date);
-            $endDate = Carbon::parse($this->deadline);
+            $endDate = Carbon::parse($this->end_date);
 
             // Calculate the total number of days between the two dates
             $totalDays = $startDate->diffInDays($endDate);
@@ -78,15 +78,9 @@ class Project extends Model
     {
         if ($this->status === 'completed' && $this->start_date) {
             $startDate = Carbon::parse($this->start_date);
+            $endDate = $this->end_date ? Carbon::parse($this->end_date) : Carbon::now();
 
-            if (!$this->end_date) {
-                $this->end_date = Carbon::now();
-                $this->save();
-            }
-
-            $endDate = Carbon::parse($this->end_date);
-
-            // Calculate the total number of days between start date and current date
+            // Calculate the total number of days between start date and end date (or now)
             $totalDaysUsed = $startDate->diffInDays($endDate);
 
             // Calculate the number of full months used
@@ -109,15 +103,6 @@ class Project extends Model
             return $remainingDaysUsed . ' days';
         }
 
-        if ($this->status === 'reopen') {
-            return null;
-        }
-
         return null;
-    }
-
-    public function assignedBy()
-    {
-        return $this->belongsTo(User::class, 'assigned_by');
     }
 }

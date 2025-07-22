@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CalendarController;
@@ -110,9 +112,18 @@ Route::middleware(['auth'])->group(function () {
 
     //Project
     Route::resource('project', ProjectController::class);
-    Route::get('/project-graph', [ProjectController::class, 'getProjectGraph'])->name('project.graph');
+    Route::get('/projects/graph', [ProjectController::class, 'graph'])->name('project.graph');
+    Route::get('/tasks', [TaskController::class, 'fetchTasks'])->name('fetch.tasks');
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('task.show');
+    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('task.edit');
+    Route::patch('/tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('task.update.status');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('task.store');
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('task.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('task.destroy');
+    Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('comment.store');
     Route::get('/projects/{id}', [ProjectController::class, 'getProjectDetails']);
     Route::post('/update-task-status', [ProjectController::class, 'updateStatus'])->name('update.task.status');
+    Route::get('/get/users', [ProjectController::class, 'getUsers'])->name('get.users');
     Route::get('/get-project-files/{projectId}', function ($taskId) {
         $files = \App\Models\Project::where('id', $taskId)->get();
         return response()->json(['files' => $files]);
@@ -192,4 +203,3 @@ Route::fallback(function () {
         'message' => 'Route not found. Please check the URL and try again'
     ], 404);
 });
-

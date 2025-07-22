@@ -7,6 +7,8 @@ use App\Models\Email;
 use App\Models\Media;
 use App\Models\Folder;
 use Illuminate\Http\Request;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
@@ -30,10 +32,10 @@ class EmailController extends Controller
             case 'starred':
                 $emails = Email::where(function ($query) {
                     $query->where('receiver_id', auth()->id())
-                          ->orWhere('sender_id', auth()->id());
+                        ->orWhere('sender_id', auth()->id());
                 })
-                ->where('is_starred', true)
-                ->get();
+                    ->where('is_starred', true)
+                    ->get();
                 break;
             case 'sent':
                 $emails = Email::where('sender_id', auth()->id())->where('is_draft', false)->get();
@@ -52,7 +54,7 @@ class EmailController extends Controller
                 $emails = Email::where('receiver_id', auth()->id())->get();
                 break;
         }
-        // dd($emails);
+
         return view('pages.email', compact('emails', 'type', 'folders', 'media'));
     }
 
@@ -72,47 +74,73 @@ class EmailController extends Controller
         // Validate input data
         $validatedData = $request->validate([
             'email' => 'required|email|exists:users,email',
+            'cc' => 'nullable|string',
+            'bcc' => 'nullable|string',
             'subject' => 'required|string|max:255',
             'body' => 'required|string',
         ]);
 
         // Find the receiver
         $receiver = User::where('email', $validatedData['email'])->first();
-
         if (!$receiver) {
             return back()->with('error', 'The provided email does not belong to any user.');
         }
 
-        if ($request->draft_id) {
-            // Update the existing draft record
-            $email = Email::find($request->draft_id);
+        // Parse CC and BCC fields (comma separated)
+        $cc = [];
+        $bcc = [];
+        $cc = collect(explode(',', $validatedData['cc'] ?? ''))
+            ->map('trim')
+            ->filter(function ($email) {
+                return filter_var($email, FILTER_VALIDATE_EMAIL);
+            })
+            ->all();
 
-            if ($email) {
-                $email->update([
-                    'sender_id' => auth()->id(),
-                    'receiver_id' => $receiver->id,
-                    'email' => $validatedData['email'],
-                    'subject' => $validatedData['subject'],
-                    'description' => $validatedData['body'],
-                    'is_draft' => false,
-                ]);
+        $bcc = collect(explode(',', $validatedData['bcc'] ?? ''))
+            ->map('trim')
+            ->filter(function ($email) {
+                return filter_var($email, FILTER_VALIDATE_EMAIL);
+            })
+            ->all();
 
-                return back()->with('success', 'Email sent successfully!');
-            }
-
-            return back()->with('error', 'Draft email not found.');
-        }
-
-        // Create a new email record
-        Email::create([
+        // Prepare email data for DB
+        $emailData = [
             'sender_id' => auth()->id(),
             'receiver_id' => $receiver->id,
             'email' => $validatedData['email'],
             'subject' => $validatedData['subject'],
             'description' => $validatedData['body'],
+            'cc' => $validatedData['cc'] ?? null,
+            'bcc' => $validatedData['bcc'] ?? null,
             'is_draft' => false,
-        ]);
+        ];
 
+        // Send the email using Laravel's Mail facade
+        Mail::send([], [], function ($message) use ($validatedData, $cc, $bcc) {
+            $message->to($validatedData['email'])
+                ->subject($validatedData['subject'])
+                ->html($validatedData['body']);
+
+            if (!empty($cc)) {
+                $message->cc($cc);
+            }
+            if (!empty($bcc)) {
+                $message->bcc($bcc);
+            }
+        });
+
+        if ($request->draft_id) {
+            // Update the existing draft record
+            $email = Email::find($request->draft_id);
+            if ($email) {
+                $email->update($emailData);
+                return back()->with('success', 'Email sent successfully!');
+            }
+            return back()->with('error', 'Draft email not found.');
+        }
+
+        // Create a new email record
+        Email::create($emailData);
         return back()->with('success', 'Email sent successfully!');
     }
 
