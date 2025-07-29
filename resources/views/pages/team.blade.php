@@ -47,7 +47,7 @@
                                 <div class="col-md-4">
                                     <img src="{{ $user->profile_image ?? asset('images/avatar.png') }}"
                                         alt="{{ $user->name }}" style="width: 50px; height: 50px; border-radius: 100px;">
-                                    <p  style="color:red; margin-bottom: 0px"><strong>{{ $user->name }}</strong></p>
+                                    <p  style="color:black; margin-bottom: 0px; font-size:14px; font-weight:500">{{ $user->name }}</p>
                                 </div>
                             @endforeach
                         </div>
@@ -97,8 +97,9 @@
                             </div>
                         </div>
                         <div style="    width: 100%;">
-                          <button  class="rounded "
-                            style="font-weight: 500;
+                          <button  class="rounded py-2"
+                            style="font-weight: 400;
+                            font-size:14px;
                              border:1px solid #0C5097;
                                 background: #0C5097;
                                 color:white;

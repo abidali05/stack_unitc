@@ -2,55 +2,80 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/email.css') }}">
+<style>
+    .custom-scroll::-webkit-scrollbar {
+        width: 1px;
+    }
 
+    .custom-scroll::-webkit-scrollbar-track {
+        background: white;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background-color: #F4F4F4;
+        border-radius: 10px;
+    }
+
+    /* Optional Firefox support */
+    .custom-scroll {
+        scrollbar-color: #F4F4F4 white;
+        scrollbar-width: thin;
+    }
+</style>
     @include('pages.main', ['emails' => $emails])
 
     <div class="container" id="email-content" style="position: absolute; top: 190px; left: 85px;">
         <div class="row">
             <div class="col-lg-2 col-md-3"
-                style="background-color:#F4F4F4; border-right: 1px solid #ddd; border-radius: 10px 0px 0px 10px; padding: 15px;">
+                style="background-color:#F4F4F4; border-right: 1px solid #ddd; border-radius: 10px 10px 10px 10px; padding: 15px; overflow-y: auto; height: 540px;">
                 <div class="sidebar-menu" style="display: flex; flex-direction: column; padding-left: 5px; gap: 7px;">
 
-                    <div class="mt-3">
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+                               <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFolderModal"
+                        style="width: 100%; margin-bottom: 10px; color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important">
+                        Create Folder
+                    </button>
+                    </div>
+                    <div class="" style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'inbox') }}"
                             class="{{ request()->is('email/inbox') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-inbox"></i>
-                            <p class="mb-0">Inbox</p>
+                           Inbox
                         </a>
                     </div>
-                    <div>
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'unread') }}"
                             class="{{ request()->is('email/unread') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-envelope-open-text"></i>
-                            <p class="mb-0">Unread</p>
+                            Unread
                         </a>
                     </div>
-                    <div>
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'starred') }}"
                             class="{{ request()->is('email/starred') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-star"></i>
-                            <p class="mb-0">Starred</p>
+                           Starred
                         </a>
                     </div>
-                    <div>
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'sent') }}"
                             class="{{ request()->is('email/sent') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-paper-plane"></i>
-                            <p class="mb-0">Sent</p>
+                            Sent
                         </a>
                     </div>
-                    <div>
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'draft') }}"
                             class="{{ request()->is('email/draft') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-file-alt"></i>
-                            <p class="mb-0">Draft</p>
+                            Draft
                         </a>
                     </div>
-                    <div>
+                    <div  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
                         <a href="{{ route('email.index', 'trash') }}"
                             class="{{ request()->is('email/trash') ? 'active' : '' }} link-item d-flex align-items-center gap-1">
                             <i class="fas fa-trash"></i>
-                            <p class="mb-0">Trash</p>
+                            Trash
                         </a>
                     </div>
 
@@ -63,7 +88,7 @@
                             background-color: #e7e9eb;
                             margin-bottom: 10px;
                             cursor: pointer;">
-                        <span style="font-size: 12px; font-weight: bold;">Folders</span>
+                        <span style="font-size: 12px; font-weight: bold;"  style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">Folders</span>
                         <span
                             style="position: absolute; right: 3px;    top: 10px; font-size: 12px; cursor: pointer;">&#9660;</span>
                     </div>
@@ -169,14 +194,11 @@
             </div>
 
 
-            <div class="col-lg-4 col-md-5">
+            <div class="col-lg-4 col-md-5 custom-scroll" style="overflow-y: auto; height: 540px;">
                 <div style="display: flex; align-items: center; flex-direction: column; " class="mt-3">
 
                     <!-- Create Folder Button -->
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFolderModal"
-                        style="width: 100%; margin-bottom: 10px; color:#0C5097 !important; border:1px solid #0C5097 !important ; background:white !important">
-                        Create Folder
-                    </button>
+             
 
                     <!-- Create Folder Modal -->
                     <div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderModalLabel"
@@ -209,11 +231,17 @@
                     </div>
                     @forelse ($emails as $email)
                         <div style="width: 100%;">
-                            <div style="justify-content: space-between; display: flex;">
+                          
+                            <div class="email-item {{ $email->is_read ? 'read-email' : '' }} {{ $email->is_draft ? 'draft' : '' }}"
+                                data-id="{{ $email->id }}" data-to="{{ $email->receiver?->email ?? 'Unknown' }}"
+                                data-subject="{{ $email->subject }}" data-body="{{ $email->description }}"
+                                data-draft="{{ $email->is_draft ? 'true' : 'false' }}" draggable="true"
+                                ondragstart="handleDragStart(event,{{ $email->id }})">
+                                  <div style="justify-content: space-between; display: flex;">
                                 <div></div>
                                 <div class="dropdown">
                                     <div class="dropdown-toggle" style="cursor: pointer;">
-                                        <svg width="10" height="4" viewBox="0 0 16 4" fill="none"
+                                      {{-- <svg width="10" height="4" viewBox="0 0 16 4" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M4 2C4 3.10449 3.10449 4 2 4C0.895508 4 0 3.10449 0 2C0 0.895508 0.895508 0 2 0C3.10449 0 4 0.895508 4 2Z"
@@ -224,7 +252,7 @@
                                             <path
                                                 d="M14 4C15.1045 4 16 3.10449 16 2C16 0.895508 15.1045 0 14 0C12.8955 0 12 0.895508 12 2C12 3.10449 12.8955 4 14 4Z"
                                                 fill="#1E1E1E" />
-                                        </svg>
+                                        </svg> --}}
                                     </div>
                                     <div class="dropdown-menu">
                                         <button class="dropdown-item star-email" data-id="{{ $email->id }}"
@@ -234,11 +262,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="email-item {{ $email->is_read ? 'read-email' : '' }} {{ $email->is_draft ? 'draft' : '' }}"
-                                data-id="{{ $email->id }}" data-to="{{ $email->receiver?->email ?? 'Unknown' }}"
-                                data-subject="{{ $email->subject }}" data-body="{{ $email->description }}"
-                                data-draft="{{ $email->is_draft ? 'true' : 'false' }}" draggable="true"
-                                ondragstart="handleDragStart(event,{{ $email->id }})">
                                 <div
                                     style="
                                 justify-content: space-between;
