@@ -2,37 +2,104 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/notes.css') }}">
+    <style>
+        .savebtn {
+            background-color: #0C5097;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
 
+        .cancelbtn {
+            background-color: transparent;
+            color: #000000;
+            border: 1px solid #000000;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+
+    </style>
+    <style>
+    #kt_docs_ckeditor_classic + .ck.ck-editor .ck-editor__editable {
+        height: 150px !important;
+        min-height: 150px !important;
+        max-height: 150px !important;
+        background-color: #F2F2F2 !important;
+    }
+</style>
     @include('pages.main', ['emails' => $emails])
 
     <div class="container-fluid" id="notes-content" style="position: absolute; top: 170px; left: 60px; width: 95%;">
         <p style="color: #0C5097;font-size: 20px;font-weight: 700;">Notes</p>
         <div class="row">
-            <div class="col-lg-3 col-md-3 ">
-                <div id="note-add-id" class="add-notes-btn rounded" data-bs-toggle="modal" data-bs-target="#addNotesModal">
-                    <div>
-                        <svg width="20" height="28" viewBox="0 0 27 28" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M17.3867 0.345215H10.7057V10.3667H0.207031V17.0477H10.7057V27.0692H17.3867V17.0477H26.931V10.3667H17.3867V0.345215Z"
-                                fill="black" />
-                        </svg>
-                    </div>
-                    <div style="font-size: 12px; font-weight:bold">
-                        Create New Note
+            <div class=" col-md-3" id="note-col">
+                <div id="note-card-wrapper" class="w-100">
+                    <div id="note-add-id" class="add-notes-btn rounded text-center" onclick="expandNoteForm()"
+                        style="cursor: pointer; background-color: #F0F3F6; padding: 15px;">
+                        <div>
+                            <div>
+                                <svg width="20" height="28" viewBox="0 0 27 28" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M17.3867 0.345215H10.7057V10.3667H0.207031V17.0477H10.7057V27.0692H17.3867V17.0477H26.931V10.3667H17.3867V0.345215Z"
+                                        fill="black" />
+                                </svg>
+                            </div>
+                            <div style="font-size: 12px; font-weight: bold;">
+                                Create New Note
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Inline note form (hidden by default) -->
+                <div id="inlineNoteForm" style="display: none;" class="mt-3">
+                    <form action="{{ route('note.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="mb-2">
+                            <label for="title" class="col-form-label"><strong>Title:</strong></label>
+                            <input type="text" name="title" class="form-control"
+                                style="background-color:#F2F2F2; border:none" placeholder="Enter title" id="title"
+                                value="{{ old('title') }}">
+                            @error('title')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+  <label for="kt_docs_ckeditor_classic" class="col-form-label">Description:</label>
+  <textarea 
+    class="form-control" 
+    name="description" 
+    id="kt_docs_ckeditor_classic"
+    placeholder="Enter description here...">{{ old('description') }}</textarea>
+        @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+</div>
+                 
+                        <div class="text-end">
+                            <button type="button" class="btn cancelbtn me-2" onclick="collapseNoteForm()">Cancel</button>
+                            <button type="submit" class="btn savebtn">Save Note</button>
+                        </div>
+                    </form>
+                </div>
             </div>
+
         </div>
 
         <div class="row my-3 justify-content-between align-items-center rounded" style="background-color:#F4F4F4">
             <div class="col-lg-4 month-div p-0">
-               <p class="ms-2" style="color: #0C5097;font-size: 20px;font-weight: 700;">Filter</p>
-           
+                <p class="ms-2" style="color: #0C5097;font-size: 20px;font-weight: 700;">Filter</p>
+
             </div>
-                  <div class="col-lg-2 month-div d-flex p-0 ">
-         
-                <input id="calendar" type="text" class="form-control my-3" placeholder="Select Date" />  
+            <div class="col-lg-2 month-div d-flex p-0 ">
+
+                <input id="calendar" type="text" class="form-control my-3" placeholder="Select Date" />
                 <div style="display: flex; justify-content: center; position: relative;right: 30px;top:17px">
                     <svg width="20" height="36" viewBox="0 0 31 36" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -41,15 +108,15 @@
                             fill="#0C5097" />
                     </svg>
                 </div>
-          
+
             </div>
-          
+
         </div>
         <div class="row my-3" style="row-gap: 8px" id="notesContainer">
             @forelse ($notes as $note)
-                <div class="col-lg-3 col-md-3 position-relative" >
+                <div class="col-lg-3 col-md-3 position-relative">
                     <div class="notes-container rounded" style="background-color:#F4F4F4 ;color:black">
-                        <div style="display: flex; width: 100%;">
+                        <div style="display: flex; width: 100%; align-items: center;">
                             <div>
                                 <img class="img-fluid"
                                     src="{{ $note->image ? asset($note->image) : asset('images/default-notes.png') }}"
@@ -61,7 +128,8 @@
                                 </p>
                             </div>
                         </div>
-                        <div style="width: 100%;" class="editor-data1">{!! Str::limit($note->description, 50) !!}</div>
+                        <div style="width: 100%; font-weight:400 !important" class="editor-data1">{!! Str::limit($note->description, 50) !!}
+                        </div>
                         <div style="width: 100%;">
                             <p style="float: right; margin-bottom: 0px; font-weight: 500; font-size: 10px;">
                                 {{ $note->created_at->format('d-M-y h:i A') }}
@@ -169,7 +237,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('note.update',['note' =>  '__id__']) }}" method="POST" enctype="multipart/form-data" id="editNoteForm">
+                    <form action="{{ route('note.update', ['note' => '__id__']) }}" method="POST"
+                        enctype="multipart/form-data" id="editNoteForm">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="note_id" id="noteId">
@@ -190,10 +259,53 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/notes.js') }}"></script>
+   <!-- CKEditor CDN (latest version) -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    ClassicEditor
+      .create(document.querySelector('#kt_docs_ckeditor_classic'))
+      .then(editor => {
+        editor.ui.view.editable.element.style.height = '150px';
+        editor.ui.view.editable.element.style.backgroundColor = 'red';
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+</script>
+
+
+
+    <script>
+        function expandNoteForm() {
+            const col = document.getElementById('note-col');
+            const wrapper = document.getElementById('note-card-wrapper');
+
+            col.className = 'col-md-12'; // full width
+            wrapper.className = 'w-100'; // remove centering
+            document.getElementById('note-add-id').style.display = 'none';
+            document.getElementById('inlineNoteForm').style.display = 'block';
+        }
+
+        function collapseNoteForm() {
+            const col = document.getElementById('note-col');
+            const noteAdd = document.getElementById('note-add-id');
+
+            col.className = 'col-md-3 d-flex justify-content-center align-items-center';
+
+            // Show and center the note card
+            noteAdd.style.display = 'flex';
+            noteAdd.style.justifyContent = 'center';
+            noteAdd.style.alignItems = 'center';
+
+            document.getElementById('inlineNoteForm').style.display = 'none';
+        }
+    </script>
 @endpush

@@ -735,156 +735,172 @@
                             <div class="col-md-4 p-0">
                                 <div class="bg-gray-50 p-4" style="border-right: 1px solid #e5e7eb; min-height: 100%;">
                                     <div class="project-details space-y-4">
-                                        <div class="d-flex flex-column align-items-center text-center">
-                                            <label
-                                                class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-user me-2 text-blue-600"
-                                                    style="font-size: 0.875rem;"></i>Created By
-                                            </label>
-                                            <div class="fw-medium createdBy"
-                                                style="font-size: 0.9375rem; color: #1f2937;">--</div>
-                                        </div>
-                                        <div class="d-flex flex-column align-items-center text-center">
-                                            <label
-                                                class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-user-check me-2 text-blue-600"
-                                                    style="font-size: 0.875rem;"></i>Assigned To
-                                            </label>
-                                            <div class="fw-medium assignedTo"
-                                                style="font-size: 0.9375rem; color: #1f2937;">--
-                                            </div>
-                                        </div>
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-6 d-flex flex-column align-items-center text-center">
-                                                <label
-                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                    <i class="far fa-calendar me-2 text-blue-600"
-                                                        style="font-size: 0.875rem;"></i>Start Date
-                                                </label>
-                                                <div class="fw-medium startDate"
-                                                    style="font-size: 0.9375rem; color: #1f2937;">--
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="fas fa-user me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Created By
+                                                    </label>
+                                                    <div class="fw-medium createdBy"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--</div>
                                                 </div>
+
                                             </div>
-                                            <div class="col-6 d-flex flex-column align-items-center text-center">
-                                                <label
-                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                    <i class="far fa-calendar-check me-2 text-blue-600"
-                                                        style="font-size: 0.875rem;"></i>Due Date
-                                                </label>
-                                                <div class="fw-medium dueDate"
-                                                    style="font-size: 0.9375rem; color: #1f2937;">--
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="fas fa-user-check me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Assigned To
+                                                    </label>
+                                                    <div class="fw-medium assignedTo"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-6 d-flex flex-column align-items-center text-center">
-                                                <label
-                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                    <i class="fas fa-clock me-2 text-blue-600"
-                                                        style="font-size: 0.875rem;"></i>Expected Days
-                                                </label>
-                                                <div class="fw-medium expectedDays"
-                                                    style="font-size: 0.9375rem; color: #1f2937;">--
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-6 d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="far fa-calendar me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Start Date
+                                                    </label>
+                                                    <div class="fw-medium startDate"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="far fa-calendar-check me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Due Date
+                                                    </label>
+                                                    <div class="fw-medium dueDate"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6 d-flex flex-column align-items-center text-center">
-                                                <label
-                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                    <i class="fas fa-hourglass-half me-2 text-blue-600"
-                                                        style="font-size: 0.875rem;"></i>Days Used
-                                                </label>
-                                                <div class="fw-medium daysUsed"
-                                                    style="font-size: 0.9375rem; color: #1f2937;">--
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-6 d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="fas fa-clock me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Expected Days
+                                                    </label>
+                                                    <div class="fw-medium expectedDays"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 d-flex flex-column align-items-center text-center">
+                                                    <label
+                                                        class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                        <i class="fas fa-hourglass-half me-2 text-blue-600"
+                                                            style="font-size: 0.875rem;"></i>Days Used
+                                                    </label>
+                                                    <div class="fw-medium daysUsed"
+                                                        style="font-size: 0.9375rem; color: #1f2937;">--
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex flex-column align-items-center text-center">
-                                            <label
-                                                class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-info-circle me-2 text-blue-600"
-                                                    style="font-size: 0.875rem;"></i>Status
-                                            </label>
-                                            <div class="badge projectStatus"
-                                                style="font-size: 0.8125rem; padding: 0.375rem 0.75rem; background-color: #10b981; color: white; border-radius: 16px;">
-                                                --
+                                          <div class="row">
+                                            <div class="col-md-6">
+                                                  <div class="d-flex flex-column align-items-center text-center">
+                                                <label
+                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-info-circle me-2 text-blue-600"
+                                                        style="font-size: 0.875rem;"></i>Status
+                                                </label>
+                                                <div class="badge projectStatus"
+                                                    style="font-size: 0.8125rem; padding: 0.375rem 0.75rem; background-color: #10b981; color: white; border-radius: 16px;">
+                                                    --
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex flex-column align-items-center text-center">
-                                            <label
-                                                class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
-                                                <i class="fas fa-exclamation-circle me-2 text-blue-600"
-                                                    style="font-size: 0.875rem;"></i>Priority
-                                            </label>
-                                            <div class="badge priority"
-                                                style="font-size: 0.8125rem; padding: 0.375rem 0.75rem; background-color: #f59e0b; color: white; border-radius: 16px;">
-                                                --
+                                           
                                             </div>
+                                            <div class="col-md-6">
+ <div class="d-flex flex-column align-items-center text-center">
+                                                <label
+                                                    class="text-gray-500 text-sm mb-2 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-exclamation-circle me-2 text-blue-600"
+                                                        style="font-size: 0.875rem;"></i>Priority
+                                                </label>
+                                                <div class="badge priority"
+                                                    style="font-size: 0.8125rem; padding: 0.375rem 0.75rem; background-color: #f59e0b; color: white; border-radius: 16px;">
+                                                    --
+                                                </div>
+                                            </div>
+                                            </div>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Right Panel: Description and Tabs -->
-                            <div class="col-md-8 p-0">
-                                <div class="p-4 d-flex flex-column h-100">
-                                    <div class="card mb-4"
-                                        style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex-shrink: 0;">
-                                        <div class="card-body p-4">
-                                            <h6 class="text-gray-500 mb-3" style="font-size: 1rem; font-weight: 600;">
-                                                Description</h6>
-                                            <div class="description-content projectDescription"
-                                                style="max-height: 180px; overflow-y: auto; font-size: 0.875rem; line-height: 1.75; color: #4b5563; background: #f9fafb; padding: 0.75rem; border-radius: 8px;">
-                                                <p id="descriptionText" class="mb-0"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ul class="nav nav-tabs" role="tablist"
-                                        style="border-bottom: 1px solid #e5e7eb; margin-bottom: 1.25rem;">
-                                        <li class="nav-item">
-                                            <button class="nav-link active" data-bs-toggle="tab"
-                                                data-bs-target="#TaskComments">
-                                                <i class="fas fa-comments me-2"></i>Comments
-                                            </button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#TaskStatus">
-                                                <i class="fas fa-history me-2"></i>Status History
-                                            </button>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content flex-grow-1" style="min-height: 0; position: relative;">
-                                        <div class="tab-pane fade show active" id="TaskComments"
-                                            style="display: flex; flex-direction: column; height: 100%;">
-                                            <div class="comments-container card" id="commentsContainer"
-                                                style="max-height: 250px; overflow-y: auto; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 0.9375rem; background: #f9fafb; flex-grow: 1;">
-                                            </div>
-                                            <div class="comment-input mt-4" style="flex-shrink: 0;">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control comment-input-field"
-                                                        placeholder="Add a comment..."
-                                                        style="border-radius: 8px 0 0 8px; font-size: 0.875rem; border-color: #d1d5db;">
-                                                    <button class="btn btn-primary submit-comment"
-                                                        style="border-radius: 0 8px 8px 0; font-size: 0.875rem; background: #0C5097; border: none; padding: 0.5rem 1rem; transition: background 0.3s ease;">
-                                                        <i class="fas fa-paper-plane"></i>
-                                                    </button>
+                                <!-- Right Panel: Description and Tabs -->
+                                <div class="col-md-8 p-0">
+                                    <div class="p-4 d-flex flex-column h-100">
+                                        <div class="card mb-4"
+                                            style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex-shrink: 0;">
+                                            <div class="card-body p-4">
+                                                <h6 class="text-gray-500 mb-3" style="font-size: 1rem; font-weight: 600;">
+                                                    Description</h6>
+                                                <div class="description-content projectDescription"
+                                                    style="max-height: 180px; overflow-y: auto; font-size: 0.875rem; line-height: 1.75; color: #4b5563; background: #f9fafb; padding: 0.75rem; border-radius: 8px;">
+                                                    <p id="descriptionText" class="mb-0"></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="TaskStatus"
-                                            style="display: flex; flex-direction: column; height: 100%;">
-                                            <div id="statusHistory" class="table-responsive"
-                                                style="max-height: 250px; overflow-y: auto; flex-grow: 1;">
-                                                <table class="table table-hover table-borderless">
-                                                    <thead
-                                                        style="position: sticky; top: 0; background: #ffffff; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #e5e7eb; z-index: 1;">
-                                                        <tr>
-                                                            <th style="padding: 0.75rem;">Status</th>
-                                                            <th style="padding: 0.75rem;">Priority</th>
-                                                            <th style="padding: 0.75rem;">Date</th>
-                                                            <th style="padding: 0.75rem;">Updated By</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="statusHistoryBody"></tbody>
-                                                </table>
+                                        <ul class="nav nav-tabs" role="tablist"
+                                            style="border-bottom: 1px solid #e5e7eb; margin-bottom: 1.25rem;">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" data-bs-toggle="tab"
+                                                    data-bs-target="#TaskComments">
+                                                    <i class="fas fa-comments me-2"></i>Comments
+                                                </button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" data-bs-toggle="tab"
+                                                    data-bs-target="#TaskStatus">
+                                                    <i class="fas fa-history me-2"></i>Status History
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content flex-grow-1" style="min-height: 0; position: relative;">
+                                            <div class="tab-pane fade show active" id="TaskComments"
+                                                style="display: flex; flex-direction: column; height: 100%;">
+                                                <div class="comments-container card" id="commentsContainer"
+                                                    style="max-height: 250px; overflow-y: auto; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 0.9375rem; background: #f9fafb; flex-grow: 1;">
+                                                </div>
+                                                <div class="comment-input mt-4" style="flex-shrink: 0;">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control comment-input-field"
+                                                            placeholder="Add a comment..."
+                                                            style="border-radius: 8px 0 0 8px; font-size: 0.875rem; border-color: #d1d5db;">
+                                                        <button class="btn btn-primary submit-comment"
+                                                            style="border-radius: 0 8px 8px 0; font-size: 0.875rem; background: #0C5097; border: none; padding: 0.5rem 1rem; transition: background 0.3s ease;">
+                                                            <i class="fas fa-paper-plane"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="TaskStatus"
+                                                style="display: flex; flex-direction: column; height: 100%;">
+                                                <div id="statusHistory" class="table-responsive"
+                                                    style="max-height: 250px; overflow-y: auto; flex-grow: 1;">
+                                                    <table class="table table-hover table-borderless">
+                                                        <thead
+                                                            style="position: sticky; top: 0; background: #ffffff; font-size: 0.875rem; color: #374151; border-bottom: 1px solid #e5e7eb; z-index: 1;">
+                                                            <tr>
+                                                                <th style="padding: 0.75rem;">Status</th>
+                                                                <th style="padding: 0.75rem;">Priority</th>
+                                                                <th style="padding: 0.75rem;">Date</th>
+                                                                <th style="padding: 0.75rem;">Updated By</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="statusHistoryBody"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -895,266 +911,265 @@
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        window.AppRoutes = {
-            graph: @json(route('project.graph')),
-            taskShow: @json(route('task.show', ['task' => ':id'])),
-            taskEdit: @json(route('task.edit', ['task' => ':id'])),
-            taskStore: @json(route('task.store')),
-            taskUpdate: @json(route('task.update', ['task' => ':id'])),
-            taskDelete: @json(route('task.destroy', ['task' => ':id'])),
-            taskUpdateStatus: @json(route('task.update.status', ['task' => ':id'])),
-            commentStore: @json(route('comment.store', ['task' => ':id'])),
-            fetchTasks: @json(route('fetch.tasks')),
-            csrfToken: @json(csrf_token())
-        };
-    </script>
-    <script src="{{ asset('js/project.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            window.AppRoutes = {
+                graph: @json(route('project.graph')),
+                taskShow: @json(route('task.show', ['task' => ':id'])),
+                taskEdit: @json(route('task.edit', ['task' => ':id'])),
+                taskStore: @json(route('task.store')),
+                taskUpdate: @json(route('task.update', ['task' => ':id'])),
+                taskDelete: @json(route('task.destroy', ['task' => ':id'])),
+                taskUpdateStatus: @json(route('task.update.status', ['task' => ':id'])),
+                commentStore: @json(route('comment.store', ['task' => ':id'])),
+                fetchTasks: @json(route('fetch.tasks')),
+                csrfToken: @json(csrf_token())
+            };
+        </script>
+        <script src="{{ asset('js/project.js') }}"></script>
+    @endpush
 
-<style>
-    .nav-tabs {
-        border-bottom: none;
-        gap: 20px;
-    }
-
-    .nav-tabs .nav-link {
-        border: none;
-        background: transparent;
-        font-size: 12px;
-        color: #0C5097;
-        transition: all 0.3s ease;
-    }
-
-    .nav-tabs .nav-link.active {
-        font-size: 15px;
-        font-weight: 600;
-        border-radius: 0px;
-        color: #6D5684 !important;
-        background-color: #0C5097;
-    }
-
-    #statusHistoryModal .modal-content {
-        transition: transform 0.3s ease-in-out;
-        border: none;
-    }
-
-    #statusHistoryModal.show .modal-content {
-        transform: scale(1);
-    }
-
-    #statusHistoryModal .modal-body {
-        max-height: 80vh;
-        overflow-y: auto;
-        background: #ffffff;
-    }
-
-    #statusHistoryModal .nav-tabs .nav-link {
-        color: #6b7280;
-        border: none;
-        border-bottom: 2px solid transparent;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        background-color: transparent;
-        /* Ensure no white bg */
-    }
-
-    #statusHistoryModal .nav-tabs .nav-link.active,
-    #statusHistoryModal .nav-tabs .nav-link:hover {
-        color: #0C5097;
-        /* Dark blue for visibility */
-        border-bottom: 2px solid #0C5097;
-        background-color: transparent;
-        /* Prevent white bg */
-    }
-
-    #statusHistoryModal .table-hover tbody tr:hover {
-        background-color: #f9fafb;
-    }
-
-    #statusHistoryModal .badge {
-        font-weight: 500;
-        border-radius: 16px;
-        transition: all 0.3s ease;
-    }
-
-    #statusHistoryModal .badge.projectStatus {
-        background-color: #10b981;
-        color: white;
-        padding: 0.375rem 0.75rem;
-        font-size: 0.8125rem;
-    }
-
-    #statusHistoryModal .badge.priority {
-        background-color: #f59e0b;
-        color: white;
-        padding: 0.375rem 0.75rem;
-        font-size: 0.8125rem;
-    }
-
-    #statusHistoryModal .badge.bg-warning {
-        background-color: #f59e0b !important;
-    }
-
-    #statusHistoryModal .project-details {
-        text-align: center;
-        /* Center align all content */
-    }
-
-    #statusHistoryModal .project-details label {
-        font-size: 0.8125rem;
-        color: #6b7280;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #statusHistoryModal .project-details .fw-medium {
-        color: #1f2937;
-        word-break: break-word;
-        font-size: 0.9375rem;
-        margin-bottom: 0.25rem;
-        /* Consistent spacing below values */
-    }
-
-    #statusHistoryModal .comments-container,
-    #statusHistoryModal #statusHistory {
-        max-height: 250px;
-        overflow-y: auto;
-    }
-
-    #statusHistoryModal .comment-input .input-group {
-        width: 100%;
-    }
-
-    #statusHistoryModal .tab-content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #statusHistoryModal .tab-pane {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #statusHistoryModal .btn-primary:hover {
-        background: #1A73E8;
-    }
-
-    #statusHistoryModal .card {
-        border-radius: 8px;
-        background: #f9fafb;
-    }
-
-    #statusHistoryModal .text-sm {
-        font-size: 0.8125rem;
-    }
-
-    #statusHistoryModal .space-y-4>*+* {
-        margin-top: 1rem;
-    }
-
-    #statusHistoryModal .bg-gray-50 {
-        background-color: #f9fafb;
-    }
-
-    .modal-lg {
-        max-width: 900px;
-    }
-
-    .modal-body {
-        padding: 0;
-    }
-
-    .modal-header,
-    .modal-footer {
-        padding: 1.5rem;
-    }
-
-    label {
-        margin-bottom: 0.25rem;
-        font-weight: 500;
-    }
-
-    textarea.form-control {
-        resize: vertical;
-    }
-
-    .task-row+.task-row {
-        margin-top: 0.25rem;
-    }
-
-    #statusHistoryModal .tab-pane.fade:not(.show) {
-        display: none !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-        #statusHistoryModal .modal-dialog {
-            max-width: 90%;
+    <style>
+        .nav-tabs {
+            border-bottom: none;
+            gap: 20px;
         }
 
-        #statusHistoryModal .modal-body .d-flex {
-            flex-direction: column;
+        .nav-tabs .nav-link {
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            color: #0C5097;
+            transition: all 0.3s ease;
         }
 
-        #statusHistoryModal .col-md-4,
-        #statusHistoryModal .col-md-8 {
-            flex: 0 0 100%;
-            max-width: 100%;
+        .nav-tabs .nav-link.active {
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 0px;
+            color: #6D5684 !important;
+            background-color: #0C5097;
         }
 
-        #statusHistoryModal .bg-gray-50 {
-            border-right: none;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 1.5rem;
+        #statusHistoryModal .modal-content {
+            transition: transform 0.3s ease-in-out;
+            border: none;
         }
 
-        #statusHistoryModal .comments-container,
-        #statusHistoryModal #statusHistory {
-            max-height: 200px;
+        #statusHistoryModal.show .modal-content {
+            transform: scale(1);
         }
 
-        #statusHistoryModal .card.mb-4 {
-            margin-bottom: 1rem !important;
+        #statusHistoryModal .modal-body {
+            max-height: 80vh;
+            overflow-y: auto;
+            background: #ffffff;
         }
 
         #statusHistoryModal .nav-tabs .nav-link {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-    }
-
-    @media (min-width: 769px) and (max-width: 991px) {
-        #statusHistoryModal .col-md-4 {
-            flex: 0 0 35%;
-            max-width: 35%;
+            color: #6b7280;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background-color: transparent;
+            /* Ensure no white bg */
         }
 
-        #statusHistoryModal .col-md-8 {
-            flex: 0 0 65%;
-            max-width: 65%;
+        #statusHistoryModal .nav-tabs .nav-link.active,
+        #statusHistoryModal .nav-tabs .nav-link:hover {
+            color: #0C5097;
+            /* Dark blue for visibility */
+            border-bottom: 2px solid #0C5097;
+            background-color: transparent;
+            /* Prevent white bg */
+        }
+
+        #statusHistoryModal .table-hover tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        #statusHistoryModal .badge {
+            font-weight: 500;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        #statusHistoryModal .badge.projectStatus {
+            background-color: #10b981;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        #statusHistoryModal .badge.priority {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        #statusHistoryModal .badge.bg-warning {
+            background-color: #f59e0b !important;
+        }
+
+        #statusHistoryModal .project-details {
+            text-align: center;
+            /* Center align all content */
+        }
+
+        #statusHistoryModal .project-details label {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #statusHistoryModal .project-details .fw-medium {
+            color: #1f2937;
+            word-break: break-word;
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+            /* Consistent spacing below values */
         }
 
         #statusHistoryModal .comments-container,
         #statusHistoryModal #statusHistory {
-            max-height: 220px;
+            max-height: 250px;
+            overflow-y: auto;
         }
-    }
-</style>
+
+        #statusHistoryModal .comment-input .input-group {
+            width: 100%;
+        }
+
+        #statusHistoryModal .tab-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #statusHistoryModal .tab-pane {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #statusHistoryModal .btn-primary:hover {
+            background: #1A73E8;
+        }
+
+        #statusHistoryModal .card {
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+
+        #statusHistoryModal .text-sm {
+            font-size: 0.8125rem;
+        }
+
+        #statusHistoryModal .space-y-4>*+* {
+            margin-top: 1rem;
+        }
+
+        #statusHistoryModal .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+
+        .modal-lg {
+            max-width: 900px;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .modal-header,
+        .modal-footer {
+            padding: 1.5rem;
+        }
+
+        label {
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+
+        .task-row+.task-row {
+            margin-top: 0.25rem;
+        }
+
+        #statusHistoryModal .tab-pane.fade:not(.show) {
+            display: none !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #statusHistoryModal .modal-dialog {
+                max-width: 90%;
+            }
+
+            #statusHistoryModal .modal-body .d-flex {
+                flex-direction: column;
+            }
+
+            #statusHistoryModal .col-md-4,
+            #statusHistoryModal .col-md-8 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            #statusHistoryModal .bg-gray-50 {
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 1.5rem;
+            }
+
+            #statusHistoryModal .comments-container,
+            #statusHistoryModal #statusHistory {
+                max-height: 200px;
+            }
+
+            #statusHistoryModal .card.mb-4 {
+                margin-bottom: 1rem !important;
+            }
+
+            #statusHistoryModal .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 991px) {
+            #statusHistoryModal .col-md-4 {
+                flex: 0 0 35%;
+                max-width: 35%;
+            }
+
+            #statusHistoryModal .col-md-8 {
+                flex: 0 0 65%;
+                max-width: 65%;
+            }
+
+            #statusHistoryModal .comments-container,
+            #statusHistoryModal #statusHistory {
+                max-height: 220px;
+            }
+        }
+    </style>
