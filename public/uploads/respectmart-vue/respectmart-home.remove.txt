@@ -1,0 +1,3 @@
+remove networks
+{"id":16, "title": "passport", "image": "https://respectmart.com/img/networks/passport-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"},
+{"id":17, "title": "OrangeDS-logo", "image": "https://respectmart.com/img/networks/OrangeDS-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"}

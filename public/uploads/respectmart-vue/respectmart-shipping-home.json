@@ -1,0 +1,35 @@
+{
+    "local_carriers_heading_text": "Network of Reliable Local Carriers",
+    "local_carriers_footer_text": "",
+    "local_carriers": [
+    	{"id":1, "title": "flatexportrate", "image": "https://respectmart.com/img/networks/flatexporttt.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"},
+    	{"id":2, "title": "dhl", "image": "https://respectmart.com/img/networks/DHL_Logo.png", "url": "", "color": "#fff", "height":"41px", "width": "148px"},
+    	{"id":3, "title": "ups", "image": "https://respectmart.com/img/networks/UPS-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "108px"},
+    	{"id":4, "title": "upss", "image": "https://respectmart.com/img/networks/USPS-Logo.png", "url": "", "color": "#fff", "height":"51px", "width": "148px"},
+    	{"id":5, "title": "fedex", "image": "https://respectmart.com/img/networks/FedEx-Logo.png", "url": "", "color": "#fff", "height":"41px", "width": "148px"},
+    	{"id":6, "title": "aramex", "image": "https://respectmart.com/img/networks/Aramex_logo.png", "url": "", "color": "#fff", "height":"36px", "width": "138px"},
+    	{"id":7, "title": "globalpost", "image": "https://respectmart.com/img/networks/globalposttt.png", "url": "", "color": "#fff", "height":"51px", "width": "148px"},
+    	{"id":8, "title": "sf-express", "image": "https://respectmart.com/img/networks/sf-express-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "128px"},
+    	{"id":9, "title": "apc", "image": "https://respectmart.com/img/networks/apc-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "138px"},
+    	{"id":10, "title": "Canada-Post", "image": "https://respectmart.com/img/networks/Canada-Post-logo.png", "url": "", "color": "#fff", "height":"71px", "width": "118px"},
+    	{"id":11, "title": "Asendia_Organization_Logo", "image": "https://respectmart.com/img/networks/Asendia_Organization_Logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"},
+    	{"id":12, "title": "sendle", "image": "https://respectmart.com/img/networks/sendle-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"},
+    	{"id":13, "title": "apg", "image": "https://respectmart.com/img/networks/apg-ecommerce-solutions-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px"},
+    	{"id":14, "title": "shypmax", "image": "https://respectmart.com/img/networks/shypmax-logo.png", "url": "", "color": "#fff", "height":"41px", "width": "158px"},
+    	{"id":15, "title": "bringer", "image": "https://respectmart.com/img/networks/bringer-BPS-logo.png", "url": "", "color": "#fff", "height":"61px", "width": "138px"}
+
+    ],
+    
+    "as_seen_on_title": "As seen on",
+    "as_seen_on": [
+        {"image": "https://respectmart.com/img/disrupt2.jpeg", "link": "https://disruptmagazine.com/respectmart-bridging-the-gap-between-african-shoppers-and-global-ecommerce-platforms/"},
+        {"image": "https://respectmart.com/img/digital-journal.jpeg", "link": "https://www.digitaljournal.com/pr/respectmart-bridging-the-gap-between-african-shoppers-and-global-ecommerce-platforms"},
+        {"image": "https://respectmart.com/img/collision.jpeg", "link": "https://collisionconf.com/startups/featured-startups?q=eyJtZW51Ijp7ImNvdW50cnkiOiJVbml0ZWQgU3RhdGVzIn0sInBhZ2UiOjEsImNvbmZpZ3VyZSI6eyJoaXRzUGVyUGFnZSI6NDgsInRhZ0ZpbHRlcnMiOlsiY2MyMyJdfX0="}
+    ],
+
+    "footer_logo": "https://respectmart.com/assets/image/logos/white.png",
+    "footer_desc": "Respectmart is a complete suite of innovative technology that allows users to ship, shop and make payments globally. We are also powering the traditional brick and mortar Cargo Companies through our secure and efficient SAAS products.",
+    "secure_checkout_image": "https://respectmart.com/assets/image/secure_checkout.png",
+    "footer_text": "Respectmart offers services in partnership with licensed transmitters and payment processors in their respective jurisdictions. All trademarks and brand names belong to their respective owners. Use of these trademarks and brand names do not represent certification or endorsement by Afridext Technologies Inc.",
+    "footer_credit_text": "© 2024 Afridext Technologies Inc, All Rights Reserved"
+}
