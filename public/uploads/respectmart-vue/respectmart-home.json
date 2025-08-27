@@ -1,0 +1,53 @@
+{
+    "google_play_link": "",
+    "app_store_link": "",
+    "extension_link": "https://chrome.google.com/webstore/detail/respectmart/pimhhmdeebmgehlhncipfkdkpalonphi?hl=en",
+    
+    "features_heading_text": "Welcome to RespectMart",
+    "features_footer_text": "No more barriers to global shopping, your item is a click away!",
+    "features": [
+    	{"key": "unbeatable-offers", "class": "widget__icon--golden-tainoi", "image": "https://respectmart.com/img/offers.svg", "title": "Unbeatable Offers", "description":"With more than 75 international and local courier network, we are home to the best deals for shipping."},
+    	{"key": "seamless-payment", "class": "widget__icon--ice-cold", "image": "https://respectmart.com/img/payment.svg", "title": "Seamless Payment", "description":"When you shop or ship with us, payment flexibility is never an issue! You can bay n more than 120 currencies."},
+    	{"key": "efficient-inspection", "class": "widget__icon--anakiwaap", "image": "https://respectmart.com/img/inspection.svg", "title": "Careful Handling", "description":"We know your items are precious, so we go extra to ensure they are handled carefully, delivery in top condition."},
+    	{"key": "fastest-shipping", "class": "widget__icon--ice-cold", "image": "https://respectmart.com/img/shipping.svg", "title": "Real Time Visibility", "description":"Booking shipment or requesting Buy-4-Me is very easy on Respectmart, real-time tracking is available 24/7."},
+    	{"key": "african-merch", "class": "widget__icon--golden-tainoi", "image": "https://respectmart.com/img/selling.svg", "title": "Fastest Shipping", "description":"Because you can choose how much and how fast you want your item delivered, our partners are swift and efficient."}
+    ],
+    
+    "quote_div_title": "Fast and Cheap Shipping.",
+    "quote_div_link": "https://app.respectmart.com/ng-intl/get-quote",
+    "quote_div_btn_text": "Get Quote",
+
+    "local_carriers_heading_text": "We work with reputable brands",
+    "local_carriers_footer_text": "and 75+ courier options at negotiated rate",
+    "local_carriers": [
+    	{"id":1, "title": "flatexportrate", "image": "https://respectmart.com/img/networks/flatexporttt.png", "url": "", "color": "#fff", "height":"51px", "width": "158px", "alt": "Shipping & freight forwarding company"},
+    	{"id":2, "title": "dhl", "image": "https://respectmart.com/img/networks/DHL_Logo.png", "url": "", "color": "#fff", "height":"41px", "width": "148px", "alt": "Shipping & freight forwarding company"},
+    	{"id":3, "title": "ups", "image": "https://respectmart.com/img/networks/UPS-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "108px", "alt": "Shipping & freight forwarding company"},
+    	{"id":4, "title": "upss", "image": "https://respectmart.com/img/networks/USPS-Logo.png", "url": "", "color": "#fff", "height":"51px", "width": "148px", "alt": "Shipping & freight forwarding company"},
+    	{"id":5, "title": "fedex", "image": "https://respectmart.com/img/networks/FedEx-Logo.png", "url": "", "color": "#fff", "height":"41px", "width": "148px", "alt": "Shipping & freight forwarding company"},
+    	{"id":6, "title": "aramex", "image": "https://respectmart.com/img/networks/Aramex_logo.png", "url": "", "color": "#fff", "height":"36px", "width": "138px", "alt": "Shipping & freight forwarding company"},
+    	{"id":7, "title": "globalpost", "image": "https://respectmart.com/img/networks/globalposttt.png", "url": "", "color": "#fff", "height":"51px", "width": "148px", "alt": ""},
+    	{"id":8, "title": "sf-express", "image": "https://respectmart.com/img/networks/sf-express-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "128px", "alt": ""},
+    	{"id":9, "title": "apc", "image": "https://respectmart.com/img/networks/apc-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "138px", "alt": ""},
+    	{"id":10, "title": "Canada-Post", "image": "https://respectmart.com/img/networks/Canada-Post-logo.png", "url": "", "color": "#fff", "height":"71px", "width": "118px", "alt": ""},
+    	{"id":11, "title": "Asendia_Organization_Logo", "image": "https://respectmart.com/img/networks/Asendia_Organization_Logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px", "alt": ""},
+    	{"id":12, "title": "sendle", "image": "https://respectmart.com/img/networks/sendle-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px", "alt": ""},
+    	{"id":13, "title": "apg", "image": "https://respectmart.com/img/networks/apg-ecommerce-solutions-logo.png", "url": "", "color": "#fff", "height":"51px", "width": "158px", "alt": ""},
+    	{"id":14, "title": "shypmax", "image": "https://respectmart.com/img/networks/shypmax-logo.png", "url": "", "color": "#fff", "height":"41px", "width": "158px", "alt": ""},
+    	{"id":15, "title": "bringer", "image": "https://respectmart.com/img/networks/bringer-BPS-logo.png", "url": "", "color": "#fff", "height":"61px", "width": "138px", "alt": ""}
+
+    ],
+    
+    "next_div_title": "Pocket friendly shipping?",
+    "next_div_desc": "With more than 75 carriers with unmatched negotiated rates, we guarantee swift and affordable shipping!",
+    "next_div_btn_text": "Start Now",
+    "next_div_btn_link": "https://app.respectmart.com/login",
+    "next_div_image": "https://respectmart.com/img/dashboard/mobile.png?v1.0.1",
+    
+    "as_seen_on_title": "As seen on",
+    "as_seen_on": [
+        {"image": "https://respectmart.com/img/disrupt2.jpeg", "link": "https://disruptmagazine.com/respectmart-bridging-the-gap-between-african-shoppers-and-global-ecommerce-platforms/"},
+        {"image": "https://respectmart.com/img/digital-journal.jpeg", "link": "https://www.digitaljournal.com/pr/respectmart-bridging-the-gap-between-african-shoppers-and-global-ecommerce-platforms"},
+        {"image": "https://respectmart.com/img/collision.jpeg", "link": "#"}
+    ]
+}

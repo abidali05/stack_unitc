@@ -1,0 +1,139 @@
+{   
+    "features": [
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/verify.png",
+            "heading": "Customer Verification Management",
+            "desc": "Respectmart's KYC solution verifies IDs, matches faces in real-time with provided ID, ensuring compliance in the regulated logistics industry."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/profile-circle.png",
+            "heading": "User Management",
+            "desc": "Customers create a single profile with shipping addresses, add multiple receivers, and select from the list for quick subsequent shipments."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/setting-3.png",
+            "heading": "Freight Forwarder Business Profile",
+            "desc": "Improve efficiency and profitability with secure data storage, business verification, shipment management, analytics, preferences setup, branding, and a unique domain."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/truck-fast.png",
+            "heading": "Network of Local Carriers ",
+            "desc": "Access 10+ local carriers at pre-negotiated rates, removing geographical barriers and offering up to 90% shipping discounts nationwide."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/3d-cube-scan.png",
+            "heading": "Shipping Labels",
+            "desc": "After payment, verified customers receive shipping labels generated with your hub as the local delivery address, printable for their packages."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/convert-3d-cube.png",
+            "heading": "Pickup and Drop-Off",
+            "desc": "Customers enjoy convenience through pickup arrangements with local carriers and easy drop-off within 5 minutes at nearby partner locations."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/moneys.png",
+            "heading": "Payment",
+            "desc": "Respectmart partners with a leading global payment provider, offering secure transactions in 70+ currencies and a multi-currency wallet for convenience."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/gps.png",
+            "heading": "Tracking Control",
+            "desc": "You control real-time tracking updates with customizable statuses, providing comprehensive shipment progress to customers with one click."
+        },
+        {
+            "icon": "https://respectmart.com/assets/image/business-features/chart.png",
+            "heading": "Shipment and Customers Data",
+            "desc": "Export shipment data with our solution for enhanced visibility. Choose date range or custom criteria to tailor your data exports."
+        }
+    ],
+    "pricing_yearly_discount": "20%",
+    "pricing": [
+        {
+            "name": "STARTERo",
+            "price": "$49",
+            "yearly_price": "$39.2",
+            "desc": "",
+            "features": [
+                {"Annual Fee (Save 20%)": ""},
+                {"% of Transaction": "10"},
+                {"Local Courier": "3"},
+                {"Shipments Month": "200"},
+                {"Routes": "3"},
+                {"Sub-Accounts": "5"},
+                {"Payouts Frequency": "Daily"},
+                {"Currencies": "2"},
+                {"Purchase Request": "Yes"},
+                {"Shipping Module": "Yes"},
+                {"Customer KYC": "Yes"},
+                {"Support (24/7)": "Yes"},
+                {"Shipping Analytics": "Yes"},
+                {"Purchase Request Analytics": "Yes"}
+            ],
+            "payment_link_monthly": "<p pading-button='10px'>https://buy.stripe.com/9AQg2N7XVgpH8YUcNc</p>",
+            "payment_link_yearly": "https://buy.stripe.com/7sI2bX4LJ7Tbeje9B1"
+        },
+        {
+            "name": "INTERMEDIATE",
+            "price": "$99",
+            "yearly_price": "$79.2",
+            "desc": "",
+            "features": [
+                {"Annual Fee (Save 20%)": ""},
+                {"% of Transaction": "7"},
+                {"Local Courier": "5"},
+                {"Shipments Month": "1000"},
+                {"Routes": "3"},
+                {"Sub-Accounts": "5"},
+                {"Payouts Frequency": "Daily"},
+                {"Currencies": "3"},
+                {"Purchase Request": "Yes"},
+                {"Shipping Module": "Yes"},
+                {"Customer KYC": "Yes"},
+                {"Support (24/7)": "Yes"},
+                {"Shipping Analytics": "Yes"},
+                {"Purchase Request Analytics": "Yes"}
+            ],
+            "payment_link_monthly": "https://buy.stripe.com/14k5o9ceb6P74IEaEZ",
+            "payment_link_yearly": "https://buy.stripe.com/00g17Temjddvgrm6oG"
+        },
+        {
+            "name": "ADVANCE",
+            "price": "$199",
+            "yearly_price": "$159.2",
+            "desc": "",
+            "features": [
+                {"Annual Fee (Save 20%)": ""},
+                {"% of Transaction": "5"},
+                {"Local Courier": "10"},
+                {"Shipments Month": "&infin;"},
+                {"Routes": "10"},
+                {"Sub-Accounts": "10"},
+                {"Payouts Frequency": "Anytime"},
+                {"Currencies": "5"},
+                {"Shipping Module": "Yes"},
+                {"Purchase Request": "Yes"},
+                {"Customer KYC": "Yes"},
+                {"Support (24/7)": "Yes"},
+                {"Shipping Analytics": "Yes"},
+                {"Purchase Request Analytics": "Yes"}
+            ],
+            "payment_link_monthly": "https://buy.stripe.com/fZedUFgurehz7UQ4gz",
+            "payment_link_yearly": "https://buy.stripe.com/fZe17Temj3CVa2Y6oI"
+        },
+        {
+            "name": "ENTERPRISE",
+            "price": "Contact Us",
+            "desc": "For enterprise solution contact us for better pricing",
+            "features": [
+                
+            ],
+            "payment_link_monthly": "",
+            "payment_link_yearly": ""
+        }
+    ],
+    "footer_logo": "https://respectmart.com/assets/image/logos/white.png",
+    "footer_desc": "Respectmart is a complete suite of innovative technology that allows users to ship, shop and make payments globally. We are also powering the traditional brick and mortar Cargo Companies through our secure and efficient SAAS products.",
+    "secure_checkout_image": "https://respectmart.com/assets/image/secure_checkout.png",
+    "footer_text": "Respectmart offers services in partnership with licensed transmitters and payment processors in their respective jurisdictions. All trademarks and brand names belong to their respective owners. Use of these trademarks and brand names do not represent certification or endorsement by Afridext Technologies Inc.",
+    "footer_credit_text": "© 2024 Afridext Technologies Inc, All Rights Reserved"
+}

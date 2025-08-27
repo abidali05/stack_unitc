@@ -185,8 +185,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/meetings/{id}/edit', [MeetingController::class, 'edit'])->name('meetings.edit');
     Route::post('/meetings/{id}/update', [MeetingController::class, 'update'])->name('meetings.update');
 
+
+    // Google Meet Routes
+    Route::get('google/authorize', [MeetingController::class, 'authorizeGoogle'])->name('google.authorize');
+    Route::get('/google-meet-callback', [MeetingController::class, 'handleCallback'])->name('google.callback');
+    Route::resource('meetings', MeetingController::class)->except(['show', 'create']);
+    Route::get('/meetings', [MeetingController::class, 'index'])->name('meetings.index');
+
     //Video Meeting
-    Route::get('public/video/authorize', [VideoController::class, 'authorizeZoom'])->name('video.authorize');
+    Route::get('video/authorize', [VideoController::class, 'authorizeZoom'])->name('video.authorize');
     Route::get('public/video-meeting-create', [VideoController::class, 'handleCallback'])->name('video.callback');
     Route::get('/public/video/create-meeting', [VideoController::class, 'createMeeting'])->name('video.create');
 });
