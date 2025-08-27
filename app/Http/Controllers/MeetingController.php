@@ -47,6 +47,8 @@ class MeetingController extends Controller
             'has_error' => $request->has('error'),
         ]);
 
+
+
         if ($request->has('error')) {
             $error = $request->error;
             $errorDescription = $request->error_description ?? 'Unknown error';
