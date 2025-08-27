@@ -8,55 +8,86 @@ use App\Models\Email;
 use App\Models\Media;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
+use Google\Client as GoogleClient;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Google\Service\Calendar as GoogleCalendar;
+use Google\Service\Calendar\Event as GoogleEvent;
+use Google\Service\Calendar\EventDateTime as GoogleEventDateTime;
 
 class MeetingController extends Controller
 {
-    protected $clientId;
-    protected $clientSecret;
-    protected $redirectUri;
+    protected $client;
+    protected $calendarService;
 
     public function __construct()
     {
-        $this->clientId = config('setting.zoom.client_id');
-        $this->clientSecret = config('setting.zoom.client_secret');
-        $this->redirectUri = config('setting.zoom.redirect_uri');
+        $this->client = new GoogleClient();
+        $this->client->setClientId(config('services.google.client_id'));
+        $this->client->setClientSecret(config('services.google.client_secret'));
+        $this->client->setRedirectUri(config('services.google.redirect_uri'));
+        $this->client->addScope(GoogleCalendar::CALENDAR_EVENTS);
+        $this->client->setAccessType('offline');
+        $this->client->setPrompt('select_account consent');
     }
 
-    public function authorizeZoom()
+    public function authorizeGoogle()
     {
-        $authUrl = 'https://zoom.us/oauth/authorize?' . http_build_query([
-            'response_type' => 'code',
-            'client_id' => $this->clientId,
-            'redirect_uri' => route('zoom.callback'),
-        ]);
-
+        $authUrl = $this->client->createAuthUrl();
         return redirect($authUrl);
     }
 
     public function handleCallback(Request $request)
     {
-        $response = Http::asForm()
-            ->withHeaders([
-                'Authorization' => 'Basic ' . base64_encode("{$this->clientId}:{$this->clientSecret}"),
-            ])
-            ->post('https://zoom.us/oauth/token', [
-                'grant_type' => 'authorization_code',
-                'code' => $request->code,
-                'redirect_uri' => route('zoom.callback'),
-            ]);
+        Log::info('Google OAuth Callback', [
+            'query_params' => $request->all(),
+            'has_code' => $request->has('code'),
+            'has_error' => $request->has('error'),
+        ]);
 
-        $data = $response->json();
-
-        if (isset($data['access_token'])) {
-            Session::put('zoom_access_token', $data['access_token']);
-            Session::put('zoom_refresh_token', $data['refresh_token']);
-            return redirect()->route('meetings.index');
+        if ($request->has('error')) {
+            $error = $request->error;
+            $errorDescription = $request->error_description ?? 'Unknown error';
+            return redirect()->route('meetings.index')
+                ->with('error', "Google authorization failed: $error - $errorDescription");
         }
 
-        return back()->with('error', 'Zoom authorization failed.');
+        if (!$request->has('code')) {
+            return redirect()->route('meetings.index')
+                ->with('error', 'Authorization code not received from Google.');
+        }
+
+        try {
+            $token = $this->client->fetchAccessTokenWithAuthCode($request->code);
+
+            if (isset($token['access_token'])) {
+                Session::put('google_access_token', $token['access_token']);
+
+                // Store refresh token if provided
+                if (isset($token['refresh_token'])) {
+                    Session::put('google_refresh_token', $token['refresh_token']);
+                }
+
+                // Store token expiration time
+                if (isset($token['expires_in'])) {
+                    $expiresAt = now()->addSeconds($token['expires_in'] - 60); // 1 minute buffer
+                    Session::put('google_token_expires', $expiresAt);
+                }
+
+                return redirect()->route('meetings.index')
+                    ->with('success', 'Google authorization successful.');
+            } else {
+                $error = $token['error'] ?? 'Unknown error';
+                $errorDescription = $token['error_description'] ?? 'No description';
+                return redirect()->route('meetings.index')
+                    ->with('error', "Failed to get access token: $error - $errorDescription");
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('meetings.index')
+                ->with('error', 'Error during authentication: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -70,63 +101,68 @@ class MeetingController extends Controller
         $media = Media::where('user_id', $userId)->get();
         $users = User::get();
 
-        $accessToken = Session::get('zoom_access_token');
-        $refreshToken = Session::get('zoom_refresh_token');
+        $accessToken = Session::get('google_access_token');
+        $refreshToken = Session::get('google_refresh_token');
 
-        if (!$accessToken || !$refreshToken) {
-            return redirect()->route('zoom.authorize')->with('error', 'Zoom not authorized.');
+        // If not authorized, redirect to Google authorization
+        if (!$accessToken) {
+            return redirect()->route('google.authorize')->with('error', 'Google not authorized.');
         }
 
         $meetings = [];
 
-        // 1. Get meetings hosted by the user
-        $hostedMeetingsResponse = Http::withToken($accessToken)
-            ->get("https://api.zoom.us/v2/users/me/meetings");
+        try {
+            // Set the access token
+            $this->client->setAccessToken($accessToken);
 
-        if ($hostedMeetingsResponse->successful()) {
-            foreach ($hostedMeetingsResponse->json()['meetings'] as $meeting) {
-                $meetings[] = $this->addMeetingStatus($meeting);
-            }
-        }
+            // Create Calendar service
+            $this->calendarService = new GoogleCalendar($this->client);
 
-        // 2. Get meetings assigned to the user
-        $assignedMeetingIds = DB::table('zoom_meeting_users')
-            ->where('user_id', $userId)
-            ->pluck('zoom_meeting_id')
-            ->toArray();
+            // Get meetings from Google Calendar
+            $calendarId = 'primary';
+            $optParams = array(
+                'maxResults' => 20,
+                'orderBy' => 'startTime',
+                'singleEvents' => true,
+                'timeMin' => date('c', strtotime('-1 month')),
+                'timeMax' => date('c', strtotime('+3 months')),
+            );
 
-        // Avoid duplication: filter out meetings already in $meetings
-        $existingIds = collect($meetings)->pluck('id')->toArray();
+            $results = $this->calendarService->events->listEvents($calendarId, $optParams);
+            $googleEvents = $results->getItems();
 
-        foreach ($assignedMeetingIds as $meetingId) {
-            if (in_array($meetingId, $existingIds)) continue;
-
-            $response = Http::withToken($accessToken)
-                ->get("https://api.zoom.us/v2/meetings/{$meetingId}");
-
-            if ($response->status() === 401) {
-                $tokenResponse = Http::asForm()->withHeaders([
-                    'Authorization' => 'Basic ' . base64_encode(config('services.zoom.client_id') . ':' . config('services.zoom.client_secret')),
-                ])->post('https://zoom.us/oauth/token', [
-                    'grant_type' => 'refresh_token',
-                    'refresh_token' => $refreshToken,
-                ]);
-
-                if ($tokenResponse->successful()) {
-                    $tokens = $tokenResponse->json();
-                    Session::put('zoom_access_token', $tokens['access_token']);
-                    Session::put('zoom_refresh_token', $tokens['refresh_token']);
-                    $accessToken = $tokens['access_token'];
-
-                    $response = Http::withToken($accessToken)
-                        ->get("https://api.zoom.us/v2/meetings/{$meetingId}");
-                } else {
-                    continue;
+            foreach ($googleEvents as $googleEvent) {
+                if ($this->isGoogleMeetEvent($googleEvent)) {
+                    $meetings[] = $this->formatGoogleEvent($googleEvent);
                 }
             }
 
-            if ($response->successful()) {
-                $meetings[] = $this->addMeetingStatus($response->json());
+            // Also get meetings from database
+            $dbMeetings = Meeting::with(['user', 'participants'])
+                ->where('user_id', $userId)
+                ->orWhereHas('participants', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
+                ->get();
+
+            foreach ($dbMeetings as $dbMeeting) {
+                $meetings[] = $this->formatDatabaseMeeting($dbMeeting);
+            }
+        } catch (\Exception $e) {
+            // Token might be expired, try to refresh
+            if ($refreshToken) {
+                try {
+                    $newToken = $this->client->refreshToken($refreshToken);
+                    Session::put('google_access_token', $newToken['access_token']);
+                    Session::put('google_refresh_token', $newToken['refresh_token'] ?? $refreshToken);
+
+                    // Retry the request
+                    return $this->index();
+                } catch (\Exception $refreshException) {
+                    return redirect()->route('google.authorize')->with('error', 'Session expired. Please reauthorize.');
+                }
+            } else {
+                return redirect()->route('google.authorize')->with('error', 'Google authorization required.');
             }
         }
 
@@ -134,123 +170,171 @@ class MeetingController extends Controller
     }
 
     /**
-     * Add readable status to a meeting (waiting, started, ended)
+     * Check if event is a Google Meet event
      */
-    private function addMeetingStatus(array $meeting)
+    private function isGoogleMeetEvent($event)
     {
-        if (isset($meeting['start_time']) && isset($meeting['duration'])) {
-            $start = Carbon::parse($meeting['start_time'])->timezone(config('app.timezone', 'Asia/Karachi'));
-            $end = $start->copy()->addMinutes($meeting['duration']);
-            $now = Carbon::now(config('app.timezone', 'Asia/Karachi'));
-
-            if (isset($meeting['status']) && $meeting['status'] === 'cancelled') {
-                $meeting['status'] = 'cancelled';
-            } elseif ($now->lt($start)) {
-                $meeting['status'] = 'waiting';
-            } elseif ($now->between($start, $end)) {
-                $meeting['status'] = 'started';
-            } else {
-                $meeting['status'] = 'ended'; // Assuming ended meetings are considered finished
-            }
-        } else {
-            $meeting['status'] = 'unknown';
-        }
-
-        return $meeting;
+        return !empty($event->getHangoutLink()) ||
+            (strpos($event->getDescription() ?? '', 'meet.google.com') !== false);
     }
 
+    /**
+     * Format Google Calendar event for display
+     */
+    private function formatGoogleEvent($googleEvent)
+    {
+        $start = $googleEvent->getStart();
+        $end = $googleEvent->getEnd();
 
+        $startTime = $start->getDateTime() ? Carbon::parse($start->getDateTime()) : Carbon::parse($start->getDate());
+        $endTime = $end->getDateTime() ? Carbon::parse($end->getDateTime()) : Carbon::parse($end->getDate());
 
+        $duration = $startTime->diffInMinutes($endTime);
 
+        $now = Carbon::now(config('app.timezone', 'Asia/Karachi'));
+
+        if ($googleEvent->getStatus() === 'cancelled') {
+            $status = 'cancelled';
+        } elseif ($now->lt($startTime)) {
+            $status = 'waiting';
+        } elseif ($now->between($startTime, $endTime)) {
+            $status = 'started';
+        } else {
+            $status = 'ended';
+        }
+
+        return [
+            'id' => $googleEvent->getId(),
+            'topic' => $googleEvent->getSummary(),
+            'start_time' => $startTime,
+            'duration' => $duration,
+            'agenda' => $googleEvent->getDescription(),
+            'join_url' => $googleEvent->getHangoutLink(),
+            'status' => $status,
+            'type' => 'google',
+            'host' => $googleEvent->getCreator() ? $googleEvent->getCreator()->getEmail() : 'Unknown'
+        ];
+    }
 
     /**
-     * Show the form for creating a new resource.
+     * Format database meeting for display
      */
-    public function create() {}
+    private function formatDatabaseMeeting($meeting)
+    {
+        $startTime = Carbon::parse($meeting->start_time);
+        $endTime = $startTime->copy()->addMinutes($meeting->duration);
+        $now = Carbon::now(config('app.timezone', 'Asia/Karachi'));
+
+        if ($meeting->cancelled_at) {
+            $status = 'cancelled';
+        } elseif ($now->lt($startTime)) {
+            $status = 'waiting';
+        } elseif ($now->between($startTime, $endTime)) {
+            $status = 'started';
+        } else {
+            $status = 'ended';
+        }
+
+        return [
+            'id' => $meeting->id,
+            'topic' => $meeting->topic,
+            'start_time' => $startTime,
+            'duration' => $meeting->duration,
+            'agenda' => $meeting->agenda,
+            'join_url' => $meeting->meeting_url,
+            'status' => $status,
+            'type' => 'database',
+            'host' => $meeting->user->name
+        ];
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $accessToken = Session::get('zoom_access_token');
-        $refreshToken = Session::get('zoom_refresh_token');
+        $accessToken = Session::get('google_access_token');
+        $refreshToken = Session::get('google_refresh_token');
 
-        if (!$accessToken || !$refreshToken) {
-            return redirect()->route('zoom.authorize')->with('error', 'Zoom not authorized.');
+        if (!$accessToken) {
+            return redirect()->route('google.authorize')->with('error', 'Google not authorized.');
         }
 
-        $userTimezone = 'Asia/Karachi'; // Instead of America/Los_Angeles
+        $request->validate([
+            'topic' => 'required|string|max:255',
+            'start_time' => 'required|date',
+            'duration' => 'required|integer|min:1',
+            'agenda' => 'nullable|string',
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id'
+        ]);
 
-        $startTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->start_time, $userTimezone);
-        $startTimeUTC = $startTime->setTimezone('UTC');
-        $formattedTime = $startTimeUTC->format('Y-m-d\TH:i:s\Z');
+        try {
+            $this->client->setAccessToken($accessToken);
+            $this->calendarService = new GoogleCalendar($this->client);
 
-
-        // Define meeting payload
-        $meetingPayload = [
-            'topic'      => $request->topic,
-            'type'       => 2,
-            'start_time' => $formattedTime,
-            'duration'   => (int)$request->duration,
-            'agenda'     => $request->agenda,
-            'settings'   => [
-                'join_before_host' => true,
-                'mute_upon_entry'  => true,
-                'waiting_room'     => true,
-            ],
-        ];
-
-        // Attempt meeting creation
-        $response = Http::withToken($accessToken)->post('https://api.zoom.us/v2/users/me/meetings', $meetingPayload);
-
-        // Refresh token if expired
-        if ($response->status() === 401) {
-            $newTokens = Http::asForm()->withHeaders([
-                'Authorization' => 'Basic ' . base64_encode(config('services.zoom.client_id') . ':' . config('services.zoom.client_secret')),
-            ])->post('https://zoom.us/oauth/token', [
-                'grant_type'    => 'refresh_token',
-                'refresh_token' => $refreshToken,
+            // Create Google Calendar event with Google Meet
+            $event = new GoogleEvent([
+                'summary' => $request->topic,
+                'description' => $request->agenda,
+                'start' => [
+                    'dateTime' => Carbon::parse($request->start_time)->toRfc3339String(),
+                    'timeZone' => config('app.timezone', 'Asia/Karachi'),
+                ],
+                'end' => [
+                    'dateTime' => Carbon::parse($request->start_time)->addMinutes($request->duration)->toRfc3339String(),
+                    'timeZone' => config('app.timezone', 'Asia/Karachi'),
+                ],
+                'conferenceData' => [
+                    'createRequest' => [
+                        'requestId' => uniqid(),
+                        'conferenceSolutionKey' => [
+                            'type' => 'hangoutsMeet'
+                        ]
+                    ]
+                ],
+                'attendees' => array_map(function ($userId) {
+                    $user = User::find($userId);
+                    return ['email' => $user->email];
+                }, $request->user_ids),
             ]);
 
-            if ($newTokens->successful()) {
-                $tokens = $newTokens->json();
-                Session::put('zoom_access_token', $tokens['access_token']);
-                Session::put('zoom_refresh_token', $tokens['refresh_token']);
+            $calendarId = 'primary';
+            $event = $this->calendarService->events->insert($calendarId, $event, [
+                'conferenceDataVersion' => 1
+            ]);
 
-                // Retry meeting creation with new token
-                $response = Http::withToken($tokens['access_token'])->post('https://api.zoom.us/v2/users/me/meetings', $meetingPayload);
+            // Also store in our database
+            $meeting = Meeting::create([
+                'user_id' => auth()->id(),
+                'google_event_id' => $event->getId(),
+                'topic' => $request->topic,
+                'start_time' => $request->start_time,
+                'duration' => $request->duration,
+                'agenda' => $request->agenda,
+                'meeting_url' => $event->getHangoutLink(),
+            ]);
+
+            $meeting->participants()->attach($request->user_ids);
+
+            return redirect()->route('meetings.index')->with('success', 'Google Meet created successfully.');
+        } catch (\Exception $e) {
+            // Token might be expired, try to refresh
+            if ($refreshToken) {
+                try {
+                    $newToken = $this->client->refreshToken($refreshToken);
+                    Session::put('google_access_token', $newToken['access_token']);
+                    Session::put('google_refresh_token', $newToken['refresh_token'] ?? $refreshToken);
+
+                    // Retry the request
+                    return $this->store($request);
+                } catch (\Exception $refreshException) {
+                    return redirect()->route('google.authorize')->with('error', 'Session expired. Please reauthorize.');
+                }
             } else {
-                return redirect()->route('zoom.authorize')->with('error', 'Zoom session expired. Please authorize again.');
+                return redirect()->route('google.authorize')->with('error', 'Google authorization required.');
             }
         }
-
-        // On success, store user assignments
-        if ($response->successful()) {
-            $meeting = $response->json(); // Contains Zoom meeting details like 'id'
-
-            foreach ($request->user_ids as $userId) {
-                DB::table('zoom_meeting_users')->insert([
-                    'zoom_meeting_id' => $meeting['id'],
-                    'user_id'         => $userId,
-                    'created_at'      => now(),
-                    'updated_at'      => now(),
-                ]);
-            }
-
-            return redirect()->route('meetings.index')->with('success', 'Meeting created and users assigned.');
-        }
-
-        return back()->with('error', 'Failed to create Zoom meeting.');
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Meeting $meeting)
-    {
-        //
     }
 
     /**
@@ -259,69 +343,125 @@ class MeetingController extends Controller
     public function edit($id)
     {
         $users = User::all();
+        $meeting = Meeting::with('participants')->findOrFail($id);
 
-        $accessToken = Session::get('zoom_access_token');
-        $response = Http::withToken($accessToken)->get("https://api.zoom.us/v2/meetings/{$id}");
+        $assignedUserIds = $meeting->participants->pluck('id')->toArray();
 
-        if ($response->successful()) {
-            $meeting = $response->json();
-
-            $assignedUserIds = DB::table('zoom_meeting_users')
-                ->where('zoom_meeting_id', $id)
-                ->pluck('user_id')
-                ->toArray();
-
-            return view('pages.meeting_edit', compact('meeting', 'users', 'assignedUserIds'));
-        }
-
-        return redirect()->route('meetings.index')->with('error', 'Unable to fetch meeting details.');
+        return view('pages.meeting_edit', compact('meeting', 'users', 'assignedUserIds'));
     }
-
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $accessToken = Session::get('zoom_access_token');
+        $accessToken = Session::get('google_access_token');
+        $refreshToken = Session::get('google_refresh_token');
 
-        $userTimezone = 'Asia/Karachi'; // Instead of America/Los_Angeles
-
-        $startTime = Carbon::createFromFormat('Y-m-d\TH:i', $request->start_time, $userTimezone);
-        $startTimeUTC = $startTime->setTimezone('UTC');
-        $formattedTime = $startTimeUTC->format('Y-m-d\TH:i:s\Z');
-
-        $response = Http::withToken($accessToken)->patch("https://api.zoom.us/v2/meetings/{$id}", [
-            'topic'      => $request->topic,
-            'start_time' => $formattedTime,
-            'duration'   => (int) $request->duration,
-            'agenda'     => $request->agenda,
-        ]);
-
-        if ($response->successful()) {
-
-            DB::table('zoom_meeting_users')->where('zoom_meeting_id', $id)->delete();
-
-            foreach ($request->user_ids as $userId) {
-                DB::table('zoom_meeting_users')->insert([
-                    'zoom_meeting_id' => $id,
-                    'user_id' => $userId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-            return redirect()->route('meetings.index')->with('success', 'Meeting updated.');
+        if (!$accessToken) {
+            return redirect()->route('google.authorize')->with('error', 'Google not authorized.');
         }
 
-        return back()->with('error', 'Failed to update meeting.');
-    }
+        $request->validate([
+            'topic' => 'required|string|max:255',
+            'start_time' => 'required|date',
+            'duration' => 'required|integer|min:1',
+            'agenda' => 'nullable|string',
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id'
+        ]);
 
+        $meeting = Meeting::findOrFail($id);
+
+        try {
+            $this->client->setAccessToken($accessToken);
+            $this->calendarService = new GoogleCalendar($this->client);
+
+            // Update Google Calendar event
+            if ($meeting->google_event_id) {
+                $event = $this->calendarService->events->get('primary', $meeting->google_event_id);
+
+                $event->setSummary($request->topic);
+                $event->setDescription($request->agenda);
+                $event->setStart([
+                    'dateTime' => Carbon::parse($request->start_time)->toRfc3339String(),
+                    'timeZone' => config('app.timezone', 'Asia/Karachi'),
+                ]);
+                $event->setEnd([
+                    'dateTime' => Carbon::parse($request->start_time)->addMinutes($request->duration)->toRfc3339String(),
+                    'timeZone' => config('app.timezone', 'Asia/Karachi'),
+                ]);
+
+                // Update attendees
+                $attendees = array_map(function ($userId) {
+                    $user = User::find($userId);
+                    return ['email' => $user->email];
+                }, $request->user_ids);
+                $event->setAttendees($attendees);
+
+                $this->calendarService->events->update('primary', $event->getId(), $event);
+            }
+
+            // Update local database
+            $meeting->update([
+                'topic' => $request->topic,
+                'start_time' => $request->start_time,
+                'duration' => $request->duration,
+                'agenda' => $request->agenda,
+            ]);
+
+            $meeting->participants()->sync($request->user_ids);
+
+            return redirect()->route('meetings.index')->with('success', 'Meeting updated successfully.');
+        } catch (\Exception $e) {
+            // Token might be expired, try to refresh
+            if ($refreshToken) {
+                try {
+                    $newToken = $this->client->refreshToken($refreshToken);
+                    Session::put('google_access_token', $newToken['access_token']);
+                    Session::put('google_refresh_token', $newToken['refresh_token'] ?? $refreshToken);
+
+                    // Retry the request
+                    return $this->update($request, $id);
+                } catch (\Exception $refreshException) {
+                    return redirect()->route('google.authorize')->with('error', 'Session expired. Please reauthorize.');
+                }
+            } else {
+                return redirect()->route('google.authorize')->with('error', 'Google authorization required.');
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Meeting $meeting)
+    public function destroy($id)
     {
-        //
+        $accessToken = Session::get('google_access_token');
+        $refreshToken = Session::get('google_refresh_token');
+
+        $meeting = Meeting::findOrFail($id);
+
+        try {
+            // Delete from Google Calendar if it exists
+            if ($meeting->google_event_id && $accessToken) {
+                $this->client->setAccessToken($accessToken);
+                $this->calendarService = new GoogleCalendar($this->client);
+
+                $this->calendarService->events->delete('primary', $meeting->google_event_id);
+            }
+
+            // Delete from local database
+            $meeting->participants()->detach();
+            $meeting->delete();
+
+            return redirect()->route('meetings.index')->with('success', 'Meeting deleted successfully.');
+        } catch (\Exception $e) {
+            // If Google deletion fails, still delete from local database
+            $meeting->participants()->detach();
+            $meeting->delete();
+
+            return redirect()->route('meetings.index')->with('success', 'Meeting deleted from local database.');
+        }
     }
 }
